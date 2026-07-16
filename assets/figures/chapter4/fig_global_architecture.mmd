@@ -1,0 +1,13 @@
+graph TB
+    DASH[Streamlit Dashboard<br/>Frontend] --> API[FastAPI Backend<br/>REST API]
+    API --> DB[SQLite Database]
+    API --> AI[AI Engine<br/>Isolation Forest]
+    AI --> DB
+    AUTH[Authentication<br/>JWT + bcrypt] --> API
+    DASH --> AUTH
+    
+    style DASH fill:#9999ff
+    style API fill:#ff9999
+    style DB fill:#99ff99
+    style AI fill:#ffff99
+    style AUTH fill:#ffcc99

@@ -1,0 +1,35 @@
+erDiagram
+    USER {
+        int id PK
+        string username
+        string email
+        string password_hash
+        string role
+    }
+    FLIGHT_SESSION {
+        int id PK
+        int user_id FK
+        datetime start_time
+        datetime end_time
+        string status
+    }
+    TELEMETRY_READING {
+        int id PK
+        int flight_session_id FK
+        datetime timestamp
+        float current
+        float temperature
+        int rpm
+    }
+    ANOMALY_EVENT {
+        int id PK
+        int flight_session_id FK
+        datetime timestamp
+        string anomaly_type
+        string severity
+        string description
+    }
+    
+    USER ||--o{ FLIGHT_SESSION : "has"
+    FLIGHT_SESSION ||--o{ TELEMETRY_READING : "contains"
+    FLIGHT_SESSION ||--o{ ANOMALY_EVENT : "has"

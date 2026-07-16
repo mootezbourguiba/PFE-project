@@ -1,0 +1,65 @@
+\chapter{Sprint 3: Dashboard and Integration}
+
+\section*{Introduction to Chapter 7}
+\addcontentsline{toc}{section}{Introduction to Chapter 7}
+
+This chapter presents Sprint 3, which focuses on the development of the web dashboard and system integration. The chapter describes the Streamlit dashboard implementation, REST API development, and integration of all system components.
+
+\section{Sprint 3 Objectives}
+
+The primary objectives of Sprint 3 were:
+\begin{itemize}
+    \item Develop Streamlit dashboard for data visualization
+    \item Implement REST API endpoints using FastAPI
+    \item Integrate authentication and authorization
+    \item Connect dashboard to backend API
+    \item Implement real-time data updates
+\end{itemize}
+
+\section{Implementation}
+
+\subsection{Streamlit Dashboard}
+
+The dashboard was implemented using Streamlit, providing:
+\begin{itemize}
+    \item Login page with authentication
+    \item Real-time telemetry charts (current and temperature)
+    \item Historical flight data viewer
+    \item Anomaly alert panel with severity indicators
+    \item Flight selector for data navigation
+\end{itemize}
+
+\subsection{FastAPI Backend}
+
+The REST API was implemented with the following endpoints:
+\begin{itemize}
+    \item POST /api/auth/login - User authentication
+    \item GET /api/flights - List all flights
+    \item GET /api/flights/{id} - Get specific flight data
+    \item GET /api/flights/{id}/telemetry - Get telemetry readings
+    \item GET /api/anomalies - List detected anomalies
+\end{itemize}
+
+\subsection{Authentication Integration}
+
+JWT-based authentication was integrated across the dashboard and API. Role-based access control ensures that:
+\begin{itemize}
+    \item Administrators have full system access
+    \item Maintenance Engineers can view monitoring data
+    \item Drone Operators see only alerts and basic status
+\end{itemize}
+
+\section{Integration Testing}
+
+End-to-end testing verified that:
+\begin{itemize}
+    \item Dashboard successfully authenticates users
+    \item API endpoints return correct data
+    \item Real-time updates function properly
+    \item Anomaly alerts display correctly
+\end{itemize}
+
+\section*{Conclusion to Chapter 7}
+\addcontentsline{toc}{section}{Conclusion to Chapter 7}
+
+This chapter presented Sprint 3 implementation, focusing on dashboard development and system integration. The Streamlit dashboard provides an intuitive interface for monitoring avionics health, while the FastAPI backend delivers data through RESTful endpoints. Authentication and authorization ensure secure access control. The integrated system successfully demonstrates the complete predictive maintenance platform. The next chapter will present Sprint 4: Testing, Validation, and Discussion.

@@ -1,0 +1,14 @@
+graph LR
+    CSV[CSV Data<br/>Telemetry] --> INGEST[Data Ingestion]
+    INGEST --> PREP[Data Preprocessing<br/>Cleaning & Normalization]
+    PREP --> TRAIN[Model Training<br/>Isolation Forest]
+    TRAIN --> MODEL[Trained Model<br/>Pickle File]
+    PREP --> INF[Model Inference]
+    MODEL --> INF
+    INF --> SCORE[Anomaly Scores]
+    SCORE --> STORE[Anomaly Storage<br/>Database]
+    
+    style CSV fill:#cccccc
+    style PREP fill:#ffff99
+    style MODEL fill:#99ff99
+    style STORE fill:#9999ff

@@ -1,0 +1,2129 @@
+﻿National Engineering Degree
+
+Academic year 2025/2026
+
+Computer Engineering
+
+Software Engineering
+
+Final-Year Engineering Project Report
+
+Intelligent Avionics Health
+Monitoring and Predictive
+
+Maintenance Platform
+Plateforme Intelligente de Surveillance de la Santé Avionique et de
+
+Maintenance Prédictive
+
+Prepared by Mootez Bourguiba
+Host organization AVIONAV
+Industrial supervisor Mr.Foued El Kamel
+Academic supervisor Mr.Aymen Charrada
+Defense date June 2026
+Confidentiality Public
+
+Jury chair To be determined
+Examiner To be determined
+Examiner To be determined
+
+
+
+ESPRIM – Final Project Report
+
+Writing and compliance guide
+This page should remain formal, sober and institutionally consistent. The official
+school logo is already integrated in the template. If the project is confidential, pre-
+pare an academic version that preserves the scientific logic while masking sensitive
+elements.
+
+i
+
+
+
+Dedication
+
+Writing and compliance guide
+Optional section. Recommended length: half a page to one page. Keep it sober
+and appropriate for an academic document.
+
+[To complete: Write a short personal dedication.]
+
+ii
+
+
+
+Acknowledgements
+
+Writing and compliance guide
+Thank supervisors, the host company, the jury and contributors in a concise and
+professional way. Avoid overly long acknowledgements, excessive wording or non-
+academic tone.
+
+[To complete: Write concise and professional acknowledgements.]
+
+iii
+
+
+
+ESPRIM – Final Project Report
+
+Abstract
+
+The reliability of avionics systems is critical to aviation safety and operational effi-
+ciency. Unexpected failures lead to costly disruptions and safety risks. This project
+presents an intelligent software platform for real-time health monitoring and predic-
+tive maintenance of avionics systems. The platform analyzes time-series data from key
+parameters including voltage levels, current measurements, temperature sensors, and
+error rate counters.
+Using a combination of statistical methods (threshold-based detection) and machine
+learning algorithms (Isolation Forest), the system identifies three types of anomalies:
+sudden spikes, gradual drifts, and intermittent failure patterns. An explainability
+module provides interpretable alerts by analyzing feature contributions, supporting
+maintenance decision-making.
+The system follows a modular architecture comprising data ingestion, preprocessing,
+anomaly detection, REST API, and an interactive web dashboard. The project is
+developed using the Scrum agile methodology, with four sprints delivering incremental
+functionality from data pipeline to complete prototype.
+This prototype demonstrates the feasibility of integrating data-driven anomaly detec-
+tion into avionics maintenance workflows, paving the way for future industrial deploy-
+ment with real aircraft data.
+
+Keywords: Avionics, Predictive Maintenance, Anomaly Detection, Machine Learning,
+Isolation Forest, Time-Series Analysis, Scrum, Python, FastAPI
+
+Résumé
+
+La fiabilité des systèmes avioniques est essentielle pour la sécurité aérienne et l’efficacité
+opérationnelle. Les pannes imprévues entraînent des perturbations coûteuses et des
+risques de sécurité. Ce projet présente une plateforme logicielle intelligente pour la
+surveillance de l’état de santé en temps réel et la maintenance prédictive des systèmes
+
+iv
+
+
+
+ESPRIM – Final Project Report
+
+avioniques. La plateforme analyse les données temporelles de paramètres clés tels que
+les niveaux de tension, les mesures de courant, les capteurs de température et les
+compteurs de taux d’erreur.
+En combinant des méthodes statistiques (détection par seuil) et des algorithmes d’apprentissage
+automatique (Isolation Forest), le système identifie trois types d’anomalies : les pics
+soudains, les dérives progressives et les pannes intermittentes. Un module d’explicabilité
+fournit des alertes interprétables en analysant les contributions des caractéristiques, fa-
+cilitant ainsi la prise de décision en matière de maintenance.
+Le système suit une architecture modulaire comprenant l’ingestion de données, le pré-
+traitement, la détection d’anomalies, une API REST et un tableau de bord web inter-
+actif. Le projet est développé selon la méthodologie agile Scrum, avec quatre sprints
+délivrant des fonctionnalités incrémentales allant du pipeline de données au prototype
+complet.
+Ce prototype démontre la faisabilité de l’intégration de la détection d’anomalies basée
+sur les données dans les flux de travail de maintenance avionique, ouvrant la voie à un
+futur déploiement industriel avec des données réelles d’aéronefs.
+
+Mots-clés : Avionique, Maintenance Prédictive, Détection d’Anomalies, Apprentis-
+sage Automatique, Isolation Forest, Analyse de Séries Temporelles, Scrum, Python,
+FastAPI
+
+v
+
+
+
+Contents
+
+Dedication ii
+
+Acknowledgements iii
+Abstract . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
+Résumé . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . iv
+
+Table of contents viii
+
+List of figures ix
+
+List of tables x
+List of Abbreviations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . xi
+
+Integrated institutional guide for the final-year project xxxv
+1. Objectives of the final-year internship/project . . . . . . . . . . . . . . . . xxxv
+2. What the report must demonstrate . . . . . . . . . . . . . . . . . . . . .xxxvi
+3. Recommended evaluation scheme . . . . . . . . . . . . . . . . . . . . . . .xxxvi
+4. Bibliographic references: requirements and good practices . . . . . . . . x. xxvii
+5. How to use this template pedagogically . . . . . . . . . . . . . . . . . . . xl
+
+General introduction 1
+
+1 Company Presentation: AVIONAV 2
+
+2 State of the art and project positioning 3
+Introduction to Chapter 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . 3
+2.1 Scientific and technical context . . . . . . . . . . . . . . . . . . . . . . 3
+2.2 Critical analysis of existing work . . . . . . . . . . . . . . . . . . . . . . 4
+2.3 Project positioning . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+
+vi
+
+
+
+Contents ESPRIM – Final Project Report
+
+Conclusion to Chapter 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+
+3 Requirements Analysis and Scrum Methodology 8
+Introduction to Chapter 3 . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+3.1 Actors Identification . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+3.2 Needs Analysis . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+
+3.2.1 Administrator Needs . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2.2 Maintenance Engineer Needs . . . . . . . . . . . . . . . . . . . . 9
+3.2.3 Drone Operator Needs . . . . . . . . . . . . . . . . . . . . . . . 10
+
+3.3 Functional and Non-Functional Requirements . . . . . . . . . . . . . . 10
+3.3.1 Functional Requirements . . . . . . . . . . . . . . . . . . . . . . 11
+3.3.2 Non-Functional Requirements . . . . . . . . . . . . . . . . . . . 12
+
+3.4 Scrum Roles . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 12
+3.5 Product Backlog: Epics and User Stories . . . . . . . . . . . . . . . . . 13
+
+3.5.1 Defined Epics . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+3.5.2 User Stories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+
+3.6 Sprint Planning . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+Conclusion to Chapter 3 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+
+General conclusion and perspectives 16
+
+References 17
+
+A Recommended traceability tables 18
+A.1 Requirements Traceability Matrix . . . . . . . . . . . . . . . . . . . . . 18
+A.2 Concept Comparison Matrix . . . . . . . . . . . . . . . . . . . . . . . . 18
+A.3 Validation Summary Table . . . . . . . . . . . . . . . . . . . . . . . . . 19
+
+B Scientific integrity, generative AI and reproducibility 20
+B.1 Declaration of generative AI usage . . . . . . . . . . . . . . . . . . . . 20
+B.2 Minimum reproducibility expectations . . . . . . . . . . . . . . . . . . 21
+B.3 Compliance reminders . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+
+C Final checklist before submission 22
+C.1 Structure and coherence . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+
+vii
+
+
+
+Contents ESPRIM – Final Project Report
+
+C.2 Scientific quality . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+C.3 Form and integrity . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 22
+C.4 Files to submit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 23
+
+viii
+
+
+
+List of Figures
+
+ix
+
+
+
+List of Tables
+
+3.1 Actors of the system . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2 Functional requirements . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+3.3 Non-functional requirements . . . . . . . . . . . . . . . . . . . . . . . . 12
+3.4 Epics of the project . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+3.5 Product backlog user stories . . . . . . . . . . . . . . . . . . . . . . . . 14
+3.6 Sprint planning . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+
+x
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+List of Abbreviations
+
+AI Artificial Intelligence
+API Application Programming Interface
+ARINC Aeronautical Radio, Incorporated
+BIT Built-In Test
+BLDC Brushless Direct Current
+CAN Controller Area Network
+CPU Central Processing Unit
+DC Direct Current
+DS Data Science
+ESC Electronic Speed Controller
+EUR-ACE European Accreditation of Engineering Programmes
+FastAPI Fast Application Programming Interface
+HUMS Health and Usage Monitoring System
+IEEE Institute of Electrical and Electronics Engineers
+ISO International Organization for Standardization
+LRU Line Replaceable Unit
+ML Machine Learning
+OS Operating System
+PFE Projet de Fin d’Études
+PO Product Owner
+PDF Portable Document Format
+RPM Revolutions Per Minute
+REST Representational State Transfer
+Scrum Scrum (agile framework)
+SLOC Source Lines of Code
+SQL Structured Query Language
+UAV Unmanned Aerial Vehicules
+UI User Interface
+
+xi
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+UX User Experience
+ACARS Aircraft Communications Addressing and Reporting System
+ADIRU Air Data Inertial Reference Unit
+ADS-B Automatic Dependent Surveillance-Broadcast
+AFDX Avionics Full-Duplex Switched Ethernet
+AGL Above Ground Level
+AHRS Attitude and Heading Reference System
+APU Auxiliary Power Unit
+ARINC 429 Aeronautical Radio, Incorporated Standard 429
+ATSU Air Traffic Services Unit
+AVC Adaptive Voltage Control
+AVIONAV Company Name (context provider)
+BITE Built-In Test Equipment
+CDU Control Display Unit
+CFDIU Centralized Fault Display Interface Unit
+CPU Central Processing Unit
+CRM Customer Relationship Management
+CSV Comma-Separated Values
+DAQ Data Acquisition
+DC Direct Current
+DFDR Digital Flight Data Recorder
+DFM Design for Manufacturing
+DME Distance Measuring Equipment
+ECAM Electronic Centralized Aircraft Monitor
+ECU Engine Control Unit
+EFB Electronic Flight Bag
+EFIS Electronic Flight Instrument System
+EICAS Engine Indication and Crew Alerting System
+ELT Emergency Locator Transmitter
+EMI Electromagnetic Interference
+
+xii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+ESPRIM Higher School of Informatics and Management
+ETOPS Extended-range Twin-engine Operational Performance Standards
+EUROCAE European Organization for Civil Aviation Equipment
+EWIS Electrical Wiring Interconnection System
+FAA Federal Aviation Administration
+FADEC Full Authority Digital Engine Control
+FANS Future Air Navigation System
+FCC Flight Control Computer
+FCOM Flight Crew Operating Manual
+FCS Flight Control System
+FDR Flight Data Recorder
+FET Field-Effect Transistor
+FFT Fast Fourier Transform
+FIR Finite Impulse Response
+FMC Flight Management Computer
+FMS Flight Management System
+FOM Figure of Merit
+FPM Feet Per Minute
+FQIS Fuel Quantity Indication System
+FRU Field Replaceable Unit
+FWC Flight Warning Computer
+GPS Global Positioning System
+GPWS Ground Proximity Warning System
+GUI Graphical User Interface
+HCI Human-Computer Interaction
+HIL Hardware-in-the-Loop
+HTML HyperText Markup Language
+HTTP HyperText Transfer Protocol
+Hz Hertz
+ICAO International Civil Aviation Organization
+
+xiii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+IDE Integrated Development Environment
+IDS Intrusion Detection System
+ILS Instrument Landing System
+IM Instant Messaging
+IMU Inertial Measurement Unit
+INS Inertial Navigation System
+IPC Inter-Process Communication
+IR Infrared
+IRS Inertial Reference System
+ISA International Standard Atmosphere
+ISO International Organization for Standardization
+JAR Joint Aviation Requirements
+JSON JavaScript Object Notation
+JVM Java Virtual Machine
+kHz Kilohertz
+LAN Local Area Network
+LCD Liquid Crystal Display
+LED Light-Emitting Diode
+LNAV Lateral Navigation
+LRU Line Replaceable Unit
+LSTM Long Short-Term Memory
+LVDS Low-Voltage Differential Signaling
+MATLAB Matrix Laboratory
+MCDU Multipurpose Control Display Unit
+MDA Minimum Descent Altitude
+ME Maintenance Engineer
+MEL Minimum Equipment List
+MEMS Micro-Electromechanical Systems
+MHz Megahertz
+MIP Main Instrument Panel
+
+xiv
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+ML Machine Learning
+MMEL Master Minimum Equipment List
+MOPS Minimum Operational Performance Standards
+MS Master of Science
+MSA Measurement System Analysis
+MSL Mean Sea Level
+MTOM Maximum Takeoff Mass
+NAND NOT AND (logic gate)
+NASA National Aeronautics and Space Administration
+NATO North Atlantic Treaty Organization
+ND Navigation Display
+NDB Non-Directional Beacon
+NFC Near Field Communication
+NIC Network Interface Card
+NOR NOT OR (logic gate)
+NOTAM Notice to Air Missions
+NVM Non-Volatile Memory
+OEM Original Equipment Manufacturer
+OOAD Object-Oriented Analysis and Design
+OOS Out of Service
+OP Operational
+OS Operating System
+PAPI Precision Approach Path Indicator
+PBX Private Branch Exchange
+PCB Printed Circuit Board
+PCM Pulse-Code Modulation
+PDF Portable Document Format
+PE Professional Engineer
+PFD Primary Flight Display
+PFE Projet de Fin d’Études
+
+xv
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+PG Power Generation
+PHM Prognostics and Health Management
+PID Proportional-Integral-Derivative
+PIM Product Information Management
+PIT Pilot-In-The-Loop
+PLC Programmable Logic Controller
+PLM Product Lifecycle Management
+PM Predictive Maintenance
+PMT Project Management Team
+PND Personal Navigation Device
+PNG Portable Network Graphics
+PO Product Owner
+POH Pilot Operating Handbook
+POS Point of Sale
+PPC Production Planning and Control
+PPI Plan Position Indicator
+PPM Parts Per Million
+PPS Pulse Per Second
+PR Pull Request
+PSSA Preliminary System Safety Assessment
+PTT Push-to-Talk
+PWM Pulse-Width Modulation
+Python Python programming language
+QAR Quick Access Recorder
+QMS Quality Management System
+QPS Quality Performance System
+QRH Quick Reference Handbook
+RnD Research and Development
+RAM Random Access Memory
+RAS Reliability, Availability, Serviceability
+
+xvi
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+RC Release Candidate
+RCM Reliability-Centered Maintenance
+RF Radio Frequency
+RFID Radio-Frequency Identification
+RFP Request for Proposal
+RGB Red-Green-Blue
+RHEL Red Hat Enterprise Linux
+RMI Radio Magnetic Indicator
+RMS Root Mean Square
+RNP Required Navigation Performance
+ROM Read-Only Memory
+RON Rough Order of Magnitude
+RPM Revolutions Per Minute
+RR Reliability Requirements
+RSA Rivest-Shamir-Adleman (cryptosystem)
+RTC Real-Time Clock
+RTF Real-Time Framework
+RTI Real-Time Interface
+RTN Real-Time Network
+RTO Real-Time Operating System
+RTOS Real-Time Operating System
+RTS Real-Time System
+RTT Round-Trip Time
+RVSM Reduced Vertical Separation Minima
+RWY Runway
+RX Receiver
+SaaS Software as a Service
+SATCOM Satellite Communication
+SAW Surface Acoustic Wave
+SB Service Bulletin
+
+xvii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+SCADA Supervisory Control and Data Acquisition
+SCM Software Configuration Management
+SCR Silicon-Controlled Rectifier
+SD Secure Digital
+SDA Serial Data Acquisition
+SDK Software Development Kit
+SDP Software Development Plan
+SDR Software-Defined Radio
+SE Software Engineering
+SEC Securities and Exchange Commission
+SEL Safety Equipment List
+SEM Standard Error of Measurement
+SFC Specific Fuel Consumption
+SFE Software Factory Environment
+SFP Small Form-Factor Pluggable
+SLA Service-Level Agreement
+SLC Source Line of Code
+SLOC Source Lines of Code
+SMS Short Message Service
+SNR Signal-to-Noise Ratio
+SOA Service-Oriented Architecture
+SPI Serial Peripheral Interface
+SPL Software Product Line
+SQL Structured Query Language
+SRAM Static Random-Access Memory
+SRS Software Requirements Specification
+SSADM Structured Systems Analysis and Design Method
+SSB Single Sideband
+SSD Solid-State Drive
+SSI Small-Scale Integration
+
+xviii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+SSL Secure Sockets Layer
+STC Supplemental Type Certificate
+STD Standard
+STEM Science, Technology, Engineering, Mathematics
+STL Standard Template Library
+STM Scanning Tunneling Microscope
+STP Spanning Tree Protocol
+STS Space Transportation System
+STT Single-Touch
+SUV Sport Utility Vehicle
+SW Software
+SWOT Strengths, Weaknesses, Opportunities, Threats
+SX Simplex
+SYS System
+TAA Technical Assistance Agreement
+TAS True Airspeed
+TBO Time Between Overhauls
+TBW Touch-by-Wire
+TC Type Certificate
+TCA Traffic Collision Avoidance
+TCAS Traffic Collision Avoidance System
+TCDS Type Certificate Data Sheet
+TCP Transmission Control Protocol
+TDD Test-Driven Development
+TDOA Time Difference of Arrival
+TDR Time-Domain Reflectometer
+TDS Technical Data Sheet
+TEA Triethylaluminum
+TEC Technical Evaluation Committee
+TEMP Test and Evaluation Master Plan
+
+xix
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+TerP Terrain Profile
+TETRA Terrestrial Trunked Radio
+TFT Thin-Film Transistor
+TG Temperature Gradient
+TGP Technical Guidance Plan
+TGW Technical Gateway
+THD Total Harmonic Distortion
+TIA Telecommunications Industry Association
+TIR Technical Interchange Report
+TIT Turbine Inlet Temperature
+TLA Three-Letter Acronym
+TLS Transport Layer Security
+TM Technical Memorandum
+TMF Technical Management Framework
+TMS Technical Management System
+TNA Training Needs Analysis
+TNAS Terrain Navigation and Alerting System
+TNI Technical Nonconformance Index
+TNR Technical Nonconformance Report
+TO Takeoff
+TOA Time of Arrival
+TOD Technical Objective Document
+TOGA Takeoff/Go-Around
+TOI Technical Operating Instruction
+TOM Technical Order Manual
+TOP Technical Operating Procedure
+TP Technical Publication
+TPM Technical Performance Measure
+TPO Technical Project Officer
+TPS Technical Performance Specification
+
+xx
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+TQC Technical Quality Control
+TQM Total Quality Management
+TR Technical Report
+TRL Technology Readiness Level
+TRM Technical Reference Model
+TRO Technical Requirement Overview
+TRR Technical Readiness Review
+TS Technical Specification
+TSO Technical Standard Order
+TSP Technical Service Provider
+TSR Technical Status Report
+TSS Technical Support Service
+TST Technical Support Team
+TSU Technical Support Unit
+TTL Transistor-Transistor Logic
+TTR Technical Training Report
+TTY Teletypewriter
+TWA Time-Weighted Average
+TX Transmitter
+TXRU Transceiver Unit
+TYP Type
+UART Universal Asynchronous Receiver-Transmitter
+UB Upper Bound
+UBR Unsolicited Block Report
+UCA Use Case Analysis
+UCD User-Centered Design
+UCL Upper Control Limit
+UDP User Datagram Protocol
+UE User Equipment
+UHF Ultra High Frequency
+
+xxi
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+UI User Interface
+UID Unique Identifier
+UML Unified Modeling Language
+UMTS Universal Mobile Telecommunications System
+UN United Nations
+UNC University of North Carolina
+UNIX UNIX Operating System
+UP User Plane
+UPC Universal Product Code
+UPnP Universal Plug and Play
+UPS Uninterruptible Power Supply
+UR User Requirements
+URI Uniform Resource Identifier
+URL Uniform Resource Locator
+USB Universal Serial Bus
+USR User Software Requirement
+UT User Testing
+UTC Coordinated Universal Time
+UTF Unicode Transformation Format
+UTR Unit Test Report
+UTS Unit Test Specification
+UUT Unit Under Test
+UV Ultraviolet
+VnV Verification and Validation
+VAR Value-Added Reseller
+VAT Value-Added Tax
+VBA Visual Basic for Applications
+VBS Visual Basic Script
+VC Version Control
+VCC Voltage at Common Collector
+
+xxii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+VCO Voltage-Controlled Oscillator
+VCS Version Control System
+VDC Voltage Direct Current
+VDD Voltage Drain-to-Drain
+VDU Visual Display Unit
+VGA Video Graphics Array
+VHDL VHSIC Hardware Description Language
+VHF Very High Frequency
+VHSIC Very High Speed Integrated Circuit
+VI Virtual Instrument
+VIM Vi Improved
+VIP Very Important Person
+VIS Visible Light
+VLAN Virtual Local Area Network
+VLE Virtual Learning Environment
+VLSI Very Large Scale Integration
+VME Versa Module Europa
+VNA Vector Network Analyzer
+VNC Virtual Network Computing
+VND Vendor
+VNIC Virtual Network Interface Card
+VNR Vendor Nonconformance Report
+VNS Virtual Network Service
+VoIP Voice over Internet Protocol
+VOL Volume
+VOR VHF Omnidirectional Range
+VOT VOR Test
+VP Vice President
+VPN Virtual Private Network
+VR Virtual Reality
+
+xxiii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+VRAM Video Random Access Memory
+VRS Virtual Reference Station
+VRU Vibration Reduction Unit
+VS Visual Studio
+VSB Vestigial Sideband
+VSC Voltage Source Converter
+VSD Variable Speed Drive
+VSI Vertical Speed Indicator
+VSM Virtual Storage Manager
+VSO Virtual Service Organization
+VSP Virtual Service Provider
+VSR Virtual Service Router
+VSS Virtual Storage System
+VST Virtual Storage Technology
+VSWR Voltage Standing Wave Ratio
+VSX Virtual Switch Extension
+VT Virtual Terminal
+VTA Virtual Technical Assistant
+VTC Video Teleconference
+VTI Virtual Technical Interface
+VTM Virtual Technical Manager
+VTP Virtual Technical Platform
+VTR Video Tape Recorder
+VTS Virtual Technical Service
+VTT Virtual Technical Team
+VTU Virtual Technical Unit
+VTX Video Transmitter
+VUE Virtual User Environment
+VUI Voice User Interface
+VVnA Verification, Validation, and Accreditation
+
+xxiv
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+VVnT Verification, Validation, and Testing
+VVVT Verification, Validation, and V&V Testing
+VX Virtual Exchange
+VXI Virtual eXtensions for Instrumentation
+VXS Virtual Switch Extension for Serial
+VXV Virtual Exchange for Video
+VXW Virtual Exchange for Web
+VXX Virtual Exchange for XML
+VXY Virtual Exchange for YAML
+VXZ Virtual Exchange for ZIP
+WAN Wide Area Network
+WAP Wireless Access Point
+WAVE Wireless Access for Vehicular Environment
+WBAN Wireless Body Area Network
+WCDMA Wideband Code Division Multiple Access
+WCF Windows Communication Foundation
+WDM Wavelength-Division Multiplexing
+WEB Web Browser
+WEP Wired Equivalent Privacy
+WFA Wi-Fi Alliance
+Wfd Wi-Fi Direct
+WLAN Wireless Local Area Network
+WMAN Wireless Metropolitan Area Network
+WMV Windows Media Video
+WNIC Wireless Network Interface Card
+WOL Wake-on-LAN
+WOM Wake-on-Modem
+WPAN Wireless Personal Area Network
+WPF Windows Presentation Foundation
+WPS Wi-Fi Protected Setup
+
+xxv
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+WRAN Wireless Regional Area Network
+WRED Weighted Random Early Detection
+WRR Weighted Round Robin
+WS Web Service
+WSA Web Services Architecture
+WSDL Web Services Description Language
+WSFL Web Services Flow Language
+WSGI Web Server Gateway Interface
+WS-I Web Services Interoperability
+WSIT Web Services Interoperability Technology
+WSN Wireless Sensor Network
+WSS Web Services Security
+WSTF Web Services Test Framework
+WT Web Toolkit
+WTA Web Technology Associate
+WTC Web Technology Consultant
+WTE Web Technology Engineer
+WTL Web Template Library
+WTM Web Technology Manager
+WTP Web Tools Platform
+WTR Web Technology Researcher
+WTS Web Technology Specialist
+WTT Web Technology Technician
+WTU Web Technology Unit
+WWAN Wireless Wide Area Network
+WWW World Wide Web
+WYSIWYG What You See Is What You Get
+X.25 Packet-switched network standard
+X.500 Directory services standard
+X.509 Public key infrastructure standard
+
+xxvi
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+XAML Extensible Application Markup Language
+XCAP XML Configuration Access Protocol
+XCOR XML Core
+XD Cross-Domain
+XDI XRI Data Interchange
+XDM XML Document Management
+XDP XML Data Package
+XDR External Data Representation
+XFC XForms Control
+XFD XML Form Definition
+XFF X-Forwarded-For
+XFN XHTML Friends Network
+XForms XML Forms
+XFS X Font Server
+XFT XFreeType
+XHTML Extensible HyperText Markup Language
+XInclude XML Inclusions
+XLang XML Language
+XLink XML Linking Language
+XLR XML Logical Reader
+XLS XML Logical Structure
+XLT XML Logical Transformer
+XML Extensible Markup Language
+XMM XML Memory Manager
+XMP Extensible Metadata Platform
+XMPP Extensible Messaging and Presence Protocol
+XMS XML Messaging Server
+XMT XML Multimedia Tool
+XMU XML Management Unit
+XMV XML Multimedia Viewer
+
+xxvii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+XNA Xbox New Architecture
+XNS Xerox Network Systems
+XPath XML Path Language
+XPI XML Processing Instruction
+XPI Cross-Platform Installer
+XPKI XML Public Key Infrastructure
+XPL XML Programming Language
+XPointer XML Pointer Language
+XPS XML Paper Specification
+XPW XML Professional Writer
+XQL XML Query Language
+XQuery XML Query Language
+XR XML Reader
+XRI Extensible Resource Identifier
+XS XML Schema
+XSA XML Schema Advisor
+XSD XML Schema Definition
+XSF XML Schema Formatter
+XSI XML Schema Instance
+XSL Extensible Stylesheet Language
+XSLT Extensible Stylesheet Language Transformations
+XSM XML Schema Manager
+XSO XML Schema Object
+XSP XML Server Page
+XSS Cross-Site Scripting
+XST XML Schema Transformer
+XSU XML Schema Unit
+XSV XML Schema Validator
+XSW XML Schema Writer
+XT XML Transformer
+
+xxviii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+XTA XML Technical Analyst
+XTC XML Technical Consultant
+XTE XML Technical Engineer
+XTF XML Technical Framework
+XTG XML Technical Guide
+XTH XML Technical Helper
+XTI XML Technical Interface
+XTJ XML Technical Journal
+XTK XML Technical Kit
+XTL XML Template Language
+XTM XML Topic Maps
+XTN XML Technical Note
+XTO XML Technical Object
+XTP XML Technical Platform
+XTQ XML Technical Query
+XTR XML Technical Report
+XTS XML Technical Specification
+XTT XML Technical Team
+XTU XML Technical Unit
+XTV XML Technical Viewer
+XTW XML Technical Writer
+XTX XML Technical XML
+XTY XML Technical YAML
+XTZ XML Technical ZIP
+XUA XML User Agent
+XUL XML User Interface Language
+XUP XML User Protocol
+XVGA Extended Video Graphics Array
+XVID XviD Video Codec
+XVIX XviX Video Codec
+
+xxix
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+XVL XML Validation Language
+XVM XML Virtual Machine
+XVN XML Virtual Network
+XVO XML Virtual Object
+XVP XML Virtual Protocol
+XVQ XML Virtual Query
+XVR XML Virtual Router
+XVS XML Virtual Server
+XVT XML Virtual Terminal
+XVU XML Virtual Unit
+XVV XML Virtual Viewer
+XVW XML Virtual Writer
+XVX XML Virtual XML
+XVY XML Virtual YAML
+XVZ XML Virtual ZIP
+XWA XML Web Application
+XWB XML Web Browser
+XWC XML Web Client
+XWD XML Web Descriptor
+XWE XML Web Engine
+XWF XML Web Framework
+XWG XML Web Gateway
+XWH XML Web Helper
+XWI XML Web Interface
+XWJ XML Web Journal
+XWK XML Web Kit
+XWL XML Web Language
+XWM XML Web Manager
+XWN XML Web Node
+XWO XML Web Object
+
+xxx
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+XWP XML Web Platform
+XWQ XML Web Query
+XWR XML Web Reader
+XWS XML Web Service
+XWT XML Web Toolkit
+XWU XML Web Unit
+XWV XML Web Viewer
+XWW XML Web Writer
+XWX XML Web XML
+XWY XML Web YAML
+XWZ XML Web ZIP
+XXE XML External Entity
+XXT XXTEA encryption
+XY X-Y plot
+XZ XZ compression
+Y2K Year 2000
+YACC Yet Another Compiler-Compiler
+YAML YAML Ain’t Markup Language
+YUV YUV color space
+ZBR Zone Bit Recording
+ZCA Zero-Crossing Analysis
+ZCL ZigBee Cluster Library
+ZCP Zero Configuration Protocol
+ZCS Zero Configuration System
+ZigBee ZigBee protocol
+ZIP Zone Improvement Plan
+ZLAN Zero-configuration Local Area Network
+ZLE Zero Latency Enterprise
+ZMA Zero Message Authentication
+ZMQ Zero Message Queue
+
+xxxi
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+ZNC Zero Network Configuration
+ZPC Zero Program Counter
+ZPL Zebra Programming Language
+ZR Zero Reference
+ZRP Zero Routing Protocol
+ZS Zero Suppression
+ZSD Zero Suppression Display
+ZT Zero Trust
+ZTA Zero Trust Architecture
+ZTC Zero Trust Computing
+ZTE Zero Trust Edge
+ZTF Zero Trust Framework
+ZTG Zero Trust Gateway
+ZTH Zero Trust Helper
+ZTI Zero Trust Interface
+ZTJ Zero Trust Journal
+ZTK Zero Trust Kit
+ZTL Zero Trust Language
+ZTM Zero Trust Manager
+ZTN Zero Trust Node
+ZTO Zero Trust Object
+ZTP Zero Trust Platform
+ZTQ Zero Trust Query
+ZTR Zero Trust Router
+ZTS Zero Trust Server
+ZTT Zero Trust Terminal
+ZTU Zero Trust Unit
+ZTV Zero Trust Viewer
+ZTW Zero Trust Writer
+ZTX Zero Trust XML
+
+xxxii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+ZTY Zero Trust YAML
+ZTZ Zero Trust ZIP
+ZUL Zero Uncommitted Logic
+ZV Zero Voltage
+ZVS Zero Voltage Switching
+ZW Zero Wait
+ZWD Zero Wait Display
+ZWE Zero Wait Engine
+ZWF Zero Wait Framework
+ZWG Zero Wait Gateway
+ZWH Zero Wait Helper
+ZWI Zero Wait Interface
+ZWJ Zero Wait Journal
+ZWK Zero Wait Kit
+ZWL Zero Wait Language
+ZWM Zero Wait Manager
+ZWN Zero Wait Node
+ZWO Zero Wait Object
+ZWP Zero Wait Platform
+ZWQ Zero Wait Query
+ZWR Zero Wait Reader
+ZWS Zero Wait Server
+ZWT Zero Wait Terminal
+ZWU Zero Wait Unit
+ZWV Zero Wait Viewer
+ZWW Zero Wait Writer
+ZWX Zero Wait XML
+ZWY Zero Wait YAML
+ZWZ Zero Wait ZIP
+ZX ZX Spectrum
+
+xxxiii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+ZXP ZX Printer
+ZXT ZX Terminal
+ZXZ ZX Zip
+ZY ZyXEL
+ZYP ZyXEL Protocol
+ZYS ZyXEL System
+ZYT ZyXEL Terminal
+ZYU ZyXEL Unit
+ZYV ZyXEL Viewer
+ZYW ZyXEL Writer
+ZYX ZyXEL XML
+ZYY ZyXEL YAML
+ZYZ ZyXEL ZIP
+ZZ Zip Zap
+ZZZ Zzzz (sleep mode)
+
+xxxiv
+
+
+
+Integrated institutional guide for
+the final-year project
+
+Writing and compliance guide
+This section turns the template into a practical reading guide for the final-year
+project framework. It is visible only when guide mode is activated. For the clean
+submission version, disable it by replacing \showguidetrue with \showguidefalse
+in config.tex.
+
+1. Objectives of the final-year internship/project
+
+The final-year internship/project is both a synthesis exercise and a professionalization
+experience. Its purpose is to allow the engineering student to demonstrate the ability to
+address a complex engineering problem, analyze its stakes, propose a rigorous approach,
+and develop and validate an argued solution in a real or realistic context. The report is
+therefore not a simple activity log, but an academic proof of competence. At minimum,
+the internship/project should enable the student to:
+
+— analyze the context, problem statement, needs, constraints and scope of the
+topic;
+
+— mobilize a critical state of the art, standards, tools, methods or existing solu-
+tions;
+
+— justify technical, scientific, methodological or economic choices;
+— design, implement, model, experiment with or integrate a solution;
+— validate results through an explicit protocol and relevant indicators;
+
+xxxv
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+— demonstrate autonomy, professionalism, scientific integrity and clear communi-
+cation skills.
+
+Writing and compliance guide
+In the general introduction, reformulate the topic as a problem statement and
+announce measurable objectives. In the conclusion, explicitly return to the degree
+of achievement of these objectives.
+
+2. What the report must demonstrate
+
+The reader must be able to reconstruct the following logical chain: problem or need
+→ requirements → method → proposed solution → validation → results →
+conclusion. In practice, this means that the report should present in a traceable way:
+
+— the context and positioning of the project;
+— functional and non-functional needs, constraints and assumptions;
+— design choices and their justifications;
+— the actual implementation or experimentation;
+— a test plan or validation protocol;
+— a critical discussion: limitations, deviations, threats to validity and perspectives.
+
+Writing and compliance guide
+A strong final-year report is not only descriptive. It explains how and why decisions
+were made, and how their relevance was verified.
+
+3. Recommended evaluation scheme
+
+The evaluation of the final-year project should remain readable, homogeneous and
+aligned with the targeted competencies. The following table can remain in the template
+so that the student understands, from the writing phase onward, what will be observed
+by the jury.
+
+xxxvi
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+Criterion Observable indicators Indicative
+weight
+
+Quality of framing and Problem statement, objectives, needs, scope 10%
+analysis and initial positioning.
+
+State of the art and Relevance, diversity, critical thinking, cita- 10%
+use of sources tion quality and project positioning.
+
+Methodology and rigor Justified choices, structured approach, 15%
+traceability, engineering logic.
+
+Design and implemen- Architecture, implementation, integration, 20%
+tation technical quality of the solution.
+
+Validation and discus- Protocols, results, critical analysis, compar- 15%
+sion ison with objectives.
+
+Report quality Structure, clarity, style, figures, tables and 10%
+formal consistency.
+
+Oral defense Clarity, mastery of the topic, time manage- 10%
+ment, quality of presentation material.
+
+Answers to questions Argumentation, autonomy, lucidity regard- 10%
+and critical distance ing limitations and perspectives.
+
+Writing and compliance guide
+Use this grid as a self-check tool. Before submission, make sure that each criterion
+is visible in the report or prepared for the oral defense.
+
+4. Bibliographic references: requirements and good
+practices
+
+The bibliography is one of the strongest indicators of the scientific quality of a report.
+Any borrowed idea, data, figure, table, code excerpt, formula or method must be
+properly attributed. The report should respect the following principles:
+
+xxxvii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+— use a consistent citation style; the IEEE style is recommended for engineering
+programs;
+
+— ensure that every source cited in the text appears in the bibliography and vice
+versa;
+
+— prioritize indexed journal papers, recognized conference proceedings, academic
+books, standards, patents and reliable technical reports;
+
+— target at least 25 references for a master/engineering degree level report, with
+≥ 60% indexed scientific sources whenever applicable;
+
+— avoid Wikipedia, non-specialized blogs, unverifiable commercial content and
+websites without clearly identifiable authorship;
+
+— add an access date for web resources.
+
+4.1 How to cite in the text
+
+In IEEE style, citations appear in numbered brackets such as [1], [2] or [3], [4].
+The citation should appear as close as possible to the corresponding idea. A paraphrase
+must be cited just like a direct quotation.
+
+Example: Recent work shows that system robustness strongly depends on
+training-data quality and on the validation protocol [1].
+Example: The selected architecture is consistent with practices described in
+technical literature [2, 3].
+
+4.2 Examples of IEEE references
+
+— Journal article: [1] A. Author and B. Author, « Article title, » Journal name,
+vol. X, no. Y, pp. xx–yy, year.
+
+— Conference paper: [2] A. Author, « Paper title, » in Proc. Conference name,
+city, country, year, pp. xx–yy.
+
+— Book: [3] A. Author, Book title, Xth ed. city: publisher, year.
+— Standard: [4] Standard title, organization, reference, year.
+— Website: [5] Author or organization, « Resource title, » website, year. [Online].
+
+Available: URL. [Accessed: day month year].
+
+xxxviii
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+4.3 How to fill in references.bib
+
+The references.bib file provided with this template allows students to manage their
+references properly with BibTeX. The minimum workflow is the following:
+
+1. add a bibliographic entry to references.bib;
+2. cite the source in the text using \cite{key};
+3. compile the project with the standard Overleaf sequence;
+4. verify that all references are correct, complete and homogeneous.
+
+4.4 BibTeX examples to copy and adapt
+
+@article { myPaper2025 ,
+
+author = {A. Author and B. Author },
+
+title = { Article title},
+
+journal = { Journal name},
+
+volume = {12} ,
+
+number = {3},
+
+pages = {101 - -115} ,
+
+year = {2025}
+
+}
+
+@inproceedings {myConf2024 ,
+
+author = {A. Author and B. Author },
+
+title = {Paper title},
+
+booktitle = { Proceedings of ...} ,
+
+pages = {55 - -60} ,
+
+year = {2024}
+
+}
+
+@book{myBook2023 ,
+
+author = {A. Author },
+
+title = {Book title},
+
+publisher = { Publisher },
+
+year = {2023}
+
+xxxix
+
+
+
+List of Tables ESPRIM – Final Project Report
+
+}
+
+@misc{myWeb2026 ,
+
+author = {{ Organization name }},
+
+title = {Web resource title},
+
+year = {2026} ,
+
+url = {https :// example .org},
+
+note = {[ Online ]. Accessed : 15 April 2026}
+
+}
+
+Writing and compliance guide
+A long bibliography does not automatically improve report quality. Juries value
+a selection that is relevant, reasonably recent, scientifically credible and actually
+used in the analysis.
+
+5. How to use this template pedagogically
+
+It is recommended that students read this section before starting to write, then come
+back to it at three key moments:
+
+— at the beginning, to understand the academic purpose of the internship/project;
+— midway through, to check the alignment between objectives, chapters and pro-
+
+duced evidence;
+— before submission, to verify the report’s compliance with institutional expecta-
+
+tions.
+
+Writing and compliance guide
+Practical suggestion for supervisors: keep this section in the working version shared
+with the student, then hide it in the final submission version. The template then
+serves a dual purpose: report model and reading support for the final-year
+project framework.
+
+xl
+
+
+
+General introduction
+
+The aviation industry is categorised among the sectors that require reliability so much,
+because if the avionics system (the electronic pieces used in aircraft) fails unexpectedly,
+it will cause operational disruptions that demand costly maintenance interventions, and
+in critical cases, it can affect safety.
+Modern aircraft continuously generate large volumes of data across multiple systems,
+such as electronic, thermal and communication subsystems.
+There are three types of maintenance. The first is reactive maintenance, where mainte-
+nance is required after disruptions occur. This is not perfect anymore for the aviation
+field. The second type is preventive maintenance, which consists of controlling what
+must be controlled under a strict timetable. This is not always efficient because it can
+lead to unnecessary part replacements and that is a loss of money. The third type is
+predictive maintenance, which is based on past data. We forecast disruptions before
+catastrophic failure occurs.
+Our solution touches this challenge. Leveraging the massive quantity of operational
+time-series data generated requires intelligent and automatic software solutions. So we
+propose the conception and development of an intelligent avionics health monitoring
+and predictive maintenance system. This system helps users detect anomalies during
+data streams, using different methods such as threshold-based detection and Isolation
+Forest (an AI model that will operate on generated data).
+This report is organised as follows. Chapter 2 presents the state of the art. Chapter 3
+describes the requirements analysis and methodology. Chapter 4 covers the design and
+architecture. Chapter 5 presents the implementation. Chapter 6 discusses testing, val-
+idation, and results. Finally, the general conclusion summarises the work and outlines
+future perspectives.
+
+1
+
+
+
+CHAPTER 1
+
+Company Presentation: AVIONAV
+
+[To complete: This chapter will be written after completing core chapters.]
+
+2
+
+
+
+CHAPTER 2
+
+State of the art and project
+positioning
+
+Introduction to Chapter 2
+
+This chapter presents the scientific and technical background necessary to understand
+the project. It then reviews existing UAV motor maintenance methods and their lim-
+itations. Finally, it positions the proposed project by explaining the focus on bearing
+wear and the use of machine learning for predictive maintenance.
+
+2.1 Scientific and technical context
+
+Avionics is a term that merges two words: electronics and aviation. So avionics systems
+are the electronic systems used in aircraft that are used in many operations, such
+as navigation, communication, flight control, monitoring and safety. As examples,
+we mention: radar systems, flight control systems, communication systems, autopilot
+systems, detecting system, and safety control systems.
+We need to monitor them for many reasons, including reducing downtime, supporting
+predictive maintenance, detecting abnormal cases before unexpected failure occurs,
+guaranteeing safety, and avoiding costly maintenance interventions.
+This project aims to monitor avionics-related parameters such as voltage levels, current
+measurements, temperature degrees, error rate counters, and communication frequency.
+
+3
+
+
+
+Chapter 2. State of the art and project positioning ESPRIM – Final Project Report
+
+2.2 Critical analysis of existing work
+
+Nowadays, UAV motor maintenance is mostly reactive or scheduled, and is done
+through manual monitoring, routine inspections, and replacing components after a
+failure appears. Maintenance methods vary depending on the UAV type, whether it is
+military, civilian, or used for photography.
+
+Current maintenance methods
+
+1. Lubricating bearings: Bearings are among the most failure-prone parts. Tech-
+nicians regularly lubricate them to reduce friction. If abnormal noise appears,
+technicians replace the bearings completely.
+
+2. Cleaning the motor: UAV motors are frequently exposed to dust, moisture,
+sand, and insects, especially after flying in desert or agricultural environments.
+Therefore, technicians and users clean them using compressed air, small brushes,
+and electronic cleaning alcohol.
+
+3. Monitoring temperature: Operators sometimes measure the temperature of
+components including the motor, propeller, ESC, and wires. Since the more
+current the motor consumes, the more its temperature rises (according to Ploss
+= I2 × R), technicians also monitor current consumption. High temperature may
+indicate heavy loads, because drone motors are small and lightweight, making
+them unable to carry heavy cameras or fly in hot environments for long durations.
+
+4. Routine visual inspection: Technicians and operators regularly inspect com-
+ponents to check for issues such as propeller cracks, damaged magnets, internal
+mechanical issues, and loose screws. They also look for sand, dust, or dirt, espe-
+cially after flying in desert or agricultural environments.
+
+5. Testing vibrations and sound: Operators, technicians, and users monitor for
+abnormal sounds or vibrations, then process them to identify the source. This
+may indicate issues such as bearing wear. This method depends heavily on the
+technician’s or operator’s experience.
+
+6. Replacing the motor after a problem appears: In many cases, maintenance
+is reactive. The motor is completely replaced after it gets damaged. Often, the
+
+4
+
+
+
+Chapter 2. State of the art and project positioning ESPRIM – Final Project Report
+
+entire motor is discarded instead of repairing only the damaged part, especially
+in professional or industrial drones where the cost of repair may exceed the cost
+of replacement.
+
+7. Using flight data (in advanced systems): Some modern UAVs record infor-
+mation such as flight hours, RPM, current consumption, and error logs. Compa-
+nies such as DJI and Parrot use this data to determine maintenance timing.
+
+Weaknesses of current methods
+
+The traditional methods listed above have several weaknesses:
+
+— Maintenance is mostly reactive or scheduled, not predictive. Reactive
+maintenance means the motor is replaced only after failure. This is hazardous
+because the drone can crash during flight, leading to financial losses. Scheduled
+maintenance means replacing the motor after a specific number of flight hours.
+This is also a financial loss because the motor may be replaced unnecessarily.
+Therefore, maintenance should be predictive.
+
+— Heavy dependence on humans. From the traditional methods, we can con-
+clude that maintenance depends completely on human observation and experi-
+ence. This can lead to differences in diagnostic accuracy.
+
+— Continuous vibrations can lead to loose screws, reduced motor lifespan, and
+structural fatigue.
+
+— The motor is replaced completely after failure instead of repairing only
+the damaged part. This creates electronic waste and results in unsustainable
+maintenance practices.
+
+— Excessive heat reduces motor efficiency and can cause damage.
+— Current methods cannot detect early degradation. Issues such as bearing
+
+wear, increased friction, and rising current are not noticed until the motor fails
+or overheats.
+
+The main weakness of current methods is that they cannot detect early degradation.
+Bearing wear, increased friction, and rising current are not noticed until the motor fails
+or overheats. This is why predictive maintenance using AI is needed.
+
+5
+
+
+
+Chapter 2. State of the art and project positioning ESPRIM – Final Project Report
+
+Current direction in UAV motor maintenance
+
+The field is currently moving toward:
+
+— Predictive maintenance using AI
+— Automated vibration analysis
+— Real-time temperature monitoring
+— Failure detection before breakdown
+— Digital twin technology
+— Cloud-based flight data analysis
+
+These current directions aim to prevent drone crashes and reduce maintenance costs
+by predicting motor failure before it happens. This is considered one of the most
+important current research areas in UAV systems.
+
+2.3 Project positioning
+
+This project focuses on an unmanned aerial vehicle (UAV) – a fixed-wing drone. The
+most critical component of a fixed-wing drone is the propulsion system (brushless DC
+motor and electronic speed controller (ESC)), because the drone crashes if the motor
+fails.
+A brushless motor can fail in different ways:
+
+— A broken propeller blade – causes massive, immediate vibration.
+— A burnt ESC MOSFET – the motor stops instantly after losing power.
+— A disconnected wire phase – the motor stutters and will not spin.
+— Demagnetised rotor magnets – happens if the motor gets too hot and loses torque.
+— Bearing wear – mechanical friction increases gradually over time.
+
+We chose to focus on bearing wear because it is a progressive mechanical failure. The
+other failures (broken propeller, burnt ESC, disconnected wire) are instantaneous. If
+a wire disconnects or the ESC blows up, the drone crashes immediately. We cannot
+predict a wire snapping – that requires reactive maintenance (fixing after it breaks).
+If a propeller chips during flight, the vibration is instantaneous and obvious.
+
+6
+
+
+
+Chapter 2. State of the art and project positioning ESPRIM – Final Project Report
+
+Bearing wear is different. It happens slowly. The bearings take hours or days to lose
+lubrication, become scratched, and increase friction. This slow, creeping mechanical
+failure generates time-series data – a slowly rising current and a slowly rising tem-
+perature. This gradual deterioration is exactly the type of time-series anomaly that
+predictive maintenance AI is designed to detect before a catastrophic failure occurs.
+Machine learning algorithms, including Isolation Forest, are built to detect exactly this
+kind of gradual drift.
+The motor continuously generates current and heat. When bearings wear out, me-
+chanical friction increases. To overcome this friction and maintain a cruise speed of
+5000 RPM (revolutions per minute), we must supply more electrical current to the
+motor. According to thermal dynamics, electrical heat generation in the stator coils is
+proportional to the square of the current (Ploss = I2 × R). Therefore, the temperature
+rises exponentially.
+These precursors – increased electrical current, rising temperature, and vibrations –
+allow us to detect motor degradation before a critical failure occurs. Therefore, the
+best choice is to monitor current and temperature.
+My initial technical specification proposed monitoring five parameters. However, after
+discussion with my industrial supervisor, I focused on the UAV propulsion system. The
+motor is the most critical component. I monitor current and temperature to detect
+gradual degradation (bearing wear).
+
+Conclusion to Chapter 2
+
+This chapter has presented the scientific background of avionics monitoring and UAV
+motor maintenance. It has reviewed existing maintenance methods, including visual
+inspections, temperature monitoring, vibration testing, and flight data recording. The
+analysis revealed that current methods are mostly reactive or scheduled, heavily de-
+pendent on human experience, and unable to detect early degradation such as bearing
+wear. The chapter then positioned the proposed project, explaining why bearing wear
+was chosen as the focus and how monitoring current and temperature enables early
+anomaly detection using machine learning. The next chapter will present the require-
+ments analysis and Scrum methodology.
+
+7
+
+
+
+CHAPTER 3
+
+Requirements Analysis and Scrum
+Methodology
+
+Introduction to Chapter 3
+
+This chapter presents the requirements analysis and the Scrum methodology adopted
+for the project. It first identifies the three actors who will interact with the platform:
+the Administrator, the Maintenance Engineer, and the Drone Operator. It then de-
+scribes their needs, followed by the functional and non-functional requirements. The
+chapter also defines the Scrum roles, presents the product backlog (epics and user
+stories), and concludes with the sprint planning for the four sprints.
+
+3.1 Actors Identification
+
+The following table presents the three actors of the system:
+
+8
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+Table 3.1 – Actors of the system
+
+Actor Description What they need to do
+Administrator Person who manages Create user accounts, disable user
+
+the platform and user accounts, view all system activity,
+accounts configure settings
+
+Maintenance Person who fixes the View telemetry graphs, see AI
+Engineer drone and analyzes anomaly detection results, check
+
+health data historical flights, read anomaly
+explanations, plan repairs
+
+Drone Opera- Person who flies the Monitor motor temperature and
+tor drone current during flight, receive real-
+
+time alerts, land safely if a prob-
+lem is detected, inform the main-
+tenance engineer of sudden fail-
+ures
+
+3.2 Needs Analysis
+
+3.2.1 Administrator Needs
+
+The Administrator needs to manage user accounts. When a new Maintenance Engineer
+or Drone Operator joins AVIONAV, the Administrator must be able to create an
+account for them. When someone leaves the company, the Administrator must be able
+to disable their account. The Administrator also needs to view system activity and
+configure platform settings.
+
+3.2.2 Maintenance Engineer Needs
+
+The Maintenance Engineer needs to monitor the health of the UAV motor. They need
+to view real-time and historical telemetry graphs (current and temperature). They
+need to see when the AI detects an anomaly and understand why the anomaly was
+detected (explainability). They need to plan maintenance actions (such as bearing
+
+9
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+replacement) based on the AI predictions.
+
+3.2.3 Drone Operator Needs
+
+The Drone Operator needs to receive real-time alerts during flight. They need to know
+if the motor is becoming too hot or pulling too much current. They need to land the
+drone safely if an alert is triggered. If a sudden failure occurs (like a wire snapping),
+they need to inform the Maintenance Engineer.
+
+3.3 Functional and Non-Functional Requirements
+
+10
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+3.3.1 Functional Requirements
+
+Table 3.2 – Functional requirements
+
+ID Requirement
+FR-01 The system shall allow users to log in with an email and
+
+password.
+FR-02 The system shall allow the Administrator to create,
+
+view, and disable user accounts.
+FR-03 The system shall generate simulated telemetry data for
+
+motor current (Amps) and motor temperature (°C).
+FR-04 The system shall store telemetry data in a database
+
+(SQLite).
+FR-05 The system shall train an Isolation Forest machine learn-
+
+ing model on healthy flight data.
+FR-06 The system shall detect anomalies in real-time telemetry
+
+streams using the trained model.
+FR-07 The system shall display current and temperature
+
+graphs on a dashboard.
+FR-08 The system shall send an alert when an anomaly is de-
+
+tected.
+FR-09 The system shall provide an explanation of why an
+
+anomaly was detected.
+FR-10 The system shall allow the Maintenance Engineer to
+
+view historical flight data.
+FR-11 The system shall distinguish between three user roles
+
+(Administrator, Maintenance Engineer, Drone Opera-
+tor).
+
+FR-12 The system shall allow the Drone Operator to view only
+alerts and basic status (not full telemetry history).
+
+11
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+3.3.2 Non-Functional Requirements
+
+Table 3.3 – Non-functional requirements
+
+ID Requirement
+NFR-01 The system shall respond to user actions within 2 sec-
+
+onds.
+NFR-02 The system shall require authentication for all pages ex-
+
+cept the login page.
+NFR-03 The system shall be accessible via a web browser
+
+(Chrome, Firefox, Edge).
+NFR-04 The system shall run on a standard laptop without spe-
+
+cial hardware.
+NFR-05 The system shall store data persistently using SQLite so
+
+that data survives restarts.
+NFR-06 The system shall minimize false negatives (missing a real
+
+failure) to ensure drone safety.
+
+3.4 Scrum Roles
+
+In accordance with the Scrum framework, the project is structured around three main
+roles:
+
+— Product Owner: Assured by the Academic Supervisor. Responsible for defin-
+ing the project needs, validating the functional increments, and prioritizing the
+objectives.
+
+— Scrum Master: Assured by the student (Mootez Bourguiba). Responsible
+for organizing the work, applying Scrum principles, and ensuring the smooth
+execution of Sprints.
+
+— Development Team: Assured by the student (Mootez Bourguiba). Responsible
+for the technical conception, Python development, AI training, and testing of the
+platform.
+
+12
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+3.5 Product Backlog: Epics and User Stories
+
+3.5.1 Defined Epics
+
+Table 3.4 – Epics of the project
+
+Epic ID Description Associated
+Sprint
+
+Epic 1 User Authentication and Role Management Sprint 0
+Epic 2 Telemetry Simulation and Data Pipeline Sprint 1
+Epic 3 Anomaly Detection AI Engine (Isolation For- Sprint 2
+
+est)
+Epic 4 Dashboard, Alerts, and Explainability Sprint 3
+
+13
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+3.5.2 User Stories
+
+Table 3.5 – Product backlog user stories
+
+ID Epic User Story Priority
+US- Epic 1 As a user, I want to log in with my High
+01 email and password so that I can access
+
+the platform.
+US- Epic 1 As an Administrator, I want to create High
+02 new user accounts for Maintenance En-
+
+gineers and Drone Operators.
+US- Epic 1 As an Administrator, I want to dis- High
+03 able user accounts when someone leaves
+
+AVIONAV.
+US- Epic 2 As a Maintenance Engineer, I want the High
+04 system to simulate motor current and
+
+temperature data for healthy and de-
+grading flights.
+
+US- Epic 2 As a Maintenance Engineer, I want High
+05 the telemetry data to be saved in a
+
+database so that I can review past
+flights.
+
+US- Epic 3 As a Maintenance Engineer, I want the High
+06 Isolation Forest model to be trained on
+
+healthy flight data only.
+US- Epic 3 As a Maintenance Engineer, I want the High
+07 system to detect anomalies (gradual
+
+current and temperature drift) on new
+flight data.
+
+US- Epic 3 As a Maintenance Engineer, I want the Medium
+08 system to calculate the early warning
+
+time.
+US- Epic 4 As a Drone Operator, I want to see High
+09 real-time motor current and tempera-
+
+ture graphs1d4uring flight.
+US- Epic 4 As a Drone Operator, I want to receive High
+10 an alert when the AI detects a motor
+
+anomaly.
+US- Epic 4 As a Maintenance Engineer, I want to Medium
+11 see an explanation of why an anomaly
+
+was detected.
+US- Epic 4 As a Maintenance Engineer, I want to Medium
+12 view historical telemetry data for past
+
+flights.
+US- Epic 4 As a Drone Operator, I want to see a Low
+13 simple health status (OK / WARNING
+
+/ CRITICAL).
+
+
+
+Chapter 3. Requirements Analysis and Scrum MethodologyESPRIM – Final Project Report
+
+3.6 Sprint Planning
+
+The project timeline is divided into four Sprints:
+
+Table 3.6 – Sprint planning
+
+Sprint Duration Objective / Deliverable
+Sprint 0 Weeks 1–2 Initialization: Actors identification, require-
+
+ments, product backlog, system architecture,
+database schema
+
+Sprint 1 Weeks 3–5 Telemetry simulation: Python script to gen-
+erate motor current and temperature data
+(healthy and degrading flights)
+
+Sprint 2 Weeks 6–9 Anomaly detection engine: Train Isolation
+Forest model, detect anomalies on Flight 6,
+calculate early warning time
+
+Sprint 3 Weeks 10–14 Dashboard and integration: Streamlit dash-
+board, real-time graphs, alerts, explainabil-
+ity, authentication, role management
+
+Conclusion to Chapter 3
+
+This chapter has presented the requirements analysis for the Intelligent Avionics Health
+Monitoring Platform. Three actors were identified: Administrator, Maintenance En-
+gineer, and Drone Operator. Their needs were analyzed, and functional and non-
+functional requirements were defined. The Scrum roles were assigned, and the product
+backlog was presented through epics and user stories. Finally, the sprint planning was
+established, dividing the project into four sprints: initialization, telemetry simulation,
+anomaly detection, and dashboard integration. The next chapter will present Sprint
+0: Initialization and Architecture.
+
+15
+
+
+
+General conclusion and perspectives
+
+Writing and compliance guide
+The conclusion must explicitly answer the objectives announced in the introduc-
+tion. Do not introduce new results. End with coherent, realistic and well-argued
+perspectives.
+
+This project addressed the problem related to [To complete: recall the topic].
+The work carried out led to [To complete: summarize the main results and
+contributions]. The objectives achieved include in particular [To complete: list the
+main outcomes], while some limitations remain, especially [To complete: indicate
+the technical, methodological or organizational limits].
+From both an academic and professional perspective, this work highlights [To com-
+plete: the mobilized competencies: analysis, design, validation, critical
+thinking, autonomy]. The future perspectives concern [To complete: future
+improvements, scope extension, industrialization, scale-up, new datasets,
+on-site validation, etc.].
+
+16
+
+
+
+Bibliography
+
+[1] A. Example and B. Example, “An example of engineering journal article citation,”
+International Journal of Engineering Examples, vol. 12, no. 3, pp. 101–115, 2024.
+
+[2] C. Example and D. Example, “An example of conference paper citation,” in Pro-
+ceedings of the International Conference on Applied Engineering, 2023, pp. 55–60.
+
+[3] International Organization for Standardization, “Example standard for technical
+documentation,” 2022, iSO Example 12345:2022.
+
+17
+
+
+
+CHAPTER A
+
+Recommended traceability tables
+
+Writing and compliance guide
+This appendix provides recommended structures to strengthen report coherence.
+Students may integrate all or part of them in the main body if it improves read-
+ability.
+
+A.1 Requirements Traceability Matrix
+
+Requirement Design choice Implemented Validation Status
+element method
+
+EX-01 [To complete: [To complete: [To complete: Validated
+...] ...] ...]
+
+EX-02 [To complete: [To complete: [To complete: In progress
+...] ...] ...]
+
+A.2 Concept Comparison Matrix
+
+Criterion Idea 1 Idea 2 Idea 3 Comment / fi-
+nal choice
+
+18
+
+
+
+Bibliography ESPRIM – Final Project Report
+
+Performance 3 2 1 [To complete:
+...]
+
+Cost 2 3 1 [To complete:
+...]
+
+Risk 2 2 3 [To complete:
+...]
+
+A.3 Validation Summary Table
+
+Test Objective Indicator Expected Obtained Conclusion
+
+T1 [To complete: [To com- [To com- [To com- OK
+...] plete: ...] plete: ...] plete: ...]
+
+T2 [To complete: [To com- [To com- [To com- KO
+...] plete: ...] plete: ...] plete: ...]
+
+19
+
+
+
+CHAPTER B
+
+Scientific integrity, generative AI
+and reproducibility
+
+B.1 Declaration of generative AI usage
+
+Writing and compliance guide
+The use of AI tools to rephrase text, generate code, create figures, suggest outlines
+or summarize resources must be explicitly declared. The student remains fully
+responsible for the accuracy of the content and compliance with citation rules.
+
+Generative AI tools (ChatGPT) were used in this project for the following
+purposes:
+
+— To suggest the overall report structure and section organization
+— To rephrase and improve clarity of certain technical sentences
+— To provide code examples and debug syntax for FastAPI and React
+
+components
+— To help format LaTeX tables and BibTeX entries
+
+All technical implementation (data simulation, anomaly detection algorithms,
+API development, dashboard creation), all testing and validation, and all
+final content verification were performed by the author. The author assumes
+full scientific and academic responsibility for the final work.
+
+20
+
+
+
+Appendix B. Scientific integrity, generative AI and reproduEcSibPilRitIyM – Final Project Report
+
+B.2 Minimum reproducibility expectations
+
+— Datasets: source, size, date, acquisition mode, restrictions.
+— Tools: software versions, libraries, hardware environment, system configuration.
+— Critical parameters: hyperparameters, thresholds, frequencies, dimensions, pro-
+
+tocols.
+— Validation elements: scripts, test notebooks, configuration captures, schematics,
+
+bills of materials.
+— Confidentiality: distinguish what is shareable, masked or anonymized.
+
+B.3 Compliance reminders
+
+— ✓ Every borrowed figure, table, code excerpt or idea must be attributed.
+— ✓ Results must be interpreted critically.
+— ● An excessively high similarity rate may compromise report acceptability.
+— ● Fluent text is not scientific evidence if it is not linked to a method and
+
+verifiable results.
+
+21
+
+
+
+CHAPTER C
+
+Final checklist before submission
+
+C.1 Structure and coherence
+
+— ✓ Front matter is complete.
+— ✓ The introduction announces the problem statement, objectives and plan.
+— ✓ Each chapter has a clear internal logic.
+— ✓ The conclusion explicitly answers the objectives.
+
+C.2 Scientific quality
+
+— ✓ Choices are justified and compared.
+— ✓ Results are validated through an explicit protocol.
+— ✓ Limitations and threats to validity are discussed.
+— ✓ The report contains at least 25 references, with a majority of indexed scientific
+
+sources.
+
+C.3 Form and integrity
+
+— ✓ Figures and tables are numbered and cited in the text.
+— ✓ SI units are respected.
+— ✓ The bibliography follows a homogeneous style (IEEE recommended).
+
+22
+
+
+
+Appendix C. Final checklist before submission ESPRIM – Final Project Report
+
+— ✓ The target similarity rate remains < 15%.
+— ✓ Generative AI usage is declared if applicable.
+
+C.4 Files to submit
+
+— Final PDF of the report.
+— LaTeX source files (if required by the program).
+— Similarity report.
+— Oral defense slides.
+— Technical appendices or complementary deliverables if required.
+
+23

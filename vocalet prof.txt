@@ -1,0 +1,524 @@
+﻿My supervisor:  “Good morning, Mootez, I have just found time to take a look at your  2 
+PDFs that you sent. 
+
+As for the code, if you send me the code, what will I do with it? Normally, you use the code 
+and prepare a demonstration that I can see.  
+
+I will not talk about the code now. I will talk about something wrong in the documents that 
+you sent. I will be serious, and I’ll try to soften the phrases, but really, I feel very anxious if I 
+find a student at the 3D level who normally has acquired knowledge and skills, but is 
+working on a PFE without taking advantage of the opportunity, and is counting on the AI 
+agent 100% in generating his documents. It means that the 2 documents you sent, I don’t 
+need to put them on a controller to check whether they are 100% generated with AI or not, 
+it’s an obvious case. 
+
+I don’t have a problem with the AI and generating documents with AI if the student helps 
+themselves with AI. But if he counts on the AI 100%, we don’t need to give you the final year 
+projects to you to work on them; we can address ChatGPT to work on the PFE for you, and in 
+this case, we don’t have any evaluation criteria at that time.  On the defence day, when you 
+stand in front of the jury, we will not hold any AI assistant accountable for the work that he 
+did for you and the documentation he wrote for you, because that is illogical. 
+
+Really, I have been thinking all morning, not even from the morning from yesterday, I have 
+been thinking what I will say to you. So I decided to say that I got mad at you. Because we 
+are today, 01/05/2026, I received from you a document that you did not write in them any 
+word by yourself and generated with AI, and you didn’t even try to hide that.  
+
+I can detect from the first look I can detect whether the document is generated with AI or not. 
+It’s a final year project, it isn’t a module project or a subject project, so there is no reason to 
+think of using AI, because time is enough for you in this period, because it’s dedicated only 
+to your PFE.  
+
+The AI generated an empty document for you. It’s illogical that a PFE report contains only 24 
+pages. I’m supervising people from another university that they didnn’t complete their 
+project, and they exceeded 100 pages. 
+
+Let’s not talk about the number of the page; let’s talk about the content of the document, 
+which is empty. Why that? Because IA don’t give you all the details,  and if you don’t deal 
+with him well, he will not elevate your level of details, so the output will be the report you 
+sent.  
+
+I wonder if you master every point in the technical specifications and the report, regardless of 
+the fact of counting on yourself. Suppose that I neglected that, although I can’t do that 
+because there is nothing, when you stand in front of the jury, do you know what you will talk 
+to them? Did you understand the criteria that he gave you and the types of anomalies he gave 
+you, and did you understand the parameters he gave you and their impact on the drone 
+avionics, and did you understand their logical representation?  
+
+
+
+In your PFE, you are talking about an Intelligent Avionics Health Monitoring and Predictive 
+Maintenance Platform. We understood that the monitoring would be done with detectors that 
+would send you values of temperature, voltage and current. But where is the prediction that 
+you talked about in the title of the project,” Intelligent Avionics Health Monitoring and 
+Predictive Maintenance Platform”? There is nothing. 
+
+I wonder if you understood the 3 anomaly types he proposed. If yes, you can proceed to the 
+next step, which is optimising and updating them depending on your understanding. And if 
+not, you ask him to explain for you to know what to say to the jury. Because on the defence 
+day, we will not talk to any AI assistant, we will ask you and hold you accountable for the 
+function that AI did to you, which I’m sure that you did not understand how it works. 
+
+Really, it’s heart-wrenching!  
+
+I’m not talking only about you because all people use AI. But some people exploit AI in their 
+favour and understand what they do, and some people don’t understand to the point that they 
+don’t know how to exploit an AI agent.  
+
+The objective is not that he did the work for you, even if you reached the point where you 
+can’t write code manually in a PFE. That is a project that students must work hard on to learn 
+many technical and soft skills. 
+
+It's unfortunate that you count on the AI in all issues, including reports, presentations, and all 
+deliverables and on the defence day, you present a work that you didn’t influence by even 
+1%.   
+
+I didn’t find what to correct. There is nothing. There is no harmony, no continuity. It seems 
+that you didn’t open the email of Mr Abdelkarim Mars that contained the home page of the 
+report and guide with all the details, because at least there is 40% or 50% of the content of the 
+guide about the structure of the report doesn’t match your report.  
+
+Because you didn’t give the guide to the AI assistant to follow when you asked him to work 
+for you, and you didn’t tell him that your report must follow the guide.  
+
+The guide contains the steps and parts that should be included in the report.  
+
+The redaction should be rich; it’s illogical that a chapter contains only one page. The chapter 
+1 introduction and system context should not be composed of only 1 page. 
+
+Really, I’m talking to you seriously, because it’s the first time that I find myself in a situation 
+like that.  
+
+The chapter should contain an introduction and a conclusion. There is no report structure. I 
+don’t have the willingness to read the report because I know that the content of the report 
+isn’t written by you, it isn’t your production, and it isn’t your vision. Should I evaluate the 
+vision of the AI assistant? 
+
+
+
+ You didn’t give AI the technical details, the AI don’t have the complete vision of your 
+project. He doesn’t know what you want to do. And you didn’t tell him what is required of 
+you.   
+
+You did not give him the information, so he will give you an incomplete, invalid, and 
+shallow. So nothing allows me to open the document, read it, evaluate it and correct it, neither 
+my Professional conscience nor my convictions.  
+
+It's bad, I tried so much not to hurt you with any word, and like that, I think that I didn’t 
+exceed my limits.  
+
+Because really bad that we deal with a PFE with this negativity,  laziness, and dependence on 
+IA. It’s painful! It’s heart-wrenching.  
+
+Independent of the politics, circumstances and approach of ESPRIM, I won’t talk about it. 
+
+If you want that we carry on working on this project, I have to see your impact, your efforts, 
+your touch and your production. 
+
+As for the code, I don’t care if it is written by you or AI. But you have to be able to exploit 
+the work that he will do AI for you. 
+
+Nowadays, nobody can prevent you from using AI, but at least you have to master how to 
+guide the AI assistant because by himself, he doesn’t know how to work correctly the project 
+from A to Z. 
+
+So you have to guide it by asking him to do a particular thing, then he will give you block A 
+and block B, and you have to link block A with block B, and then when he gives you block C, 
+you have to know how to link C to A and B together, to finally obtain a functional and 
+coherent product that it don’t present any breakup between blocks. 
+
+You have to be able to connect a product to another product to appear coherent, harmonious 
+and harmonic, and then I can believe that you did an effort and you understand what he gave 
+you to connect it with what he gave you before. 
+
+A student must know how to connect one idea to another idea and use AI correctly and 
+wisely, not stupidly. 
+
+So, I can’t correct this report because its content isn’t complete. I will talk about things 
+inexistent whether about the form or the content of chapters. 
+
+First thing, open the guide and read it carefully, and understand what they ask you to do. 
+
+Then you compare the demand to your deliverables. Then, we can talk about the content, 
+whether it’s done by you or someone else. 
+
+It’s really painful. 
+
+You said that you will develop a web platform, and you talked about 2 actors, which are the 
+drone operator and the maintenance engineer. But then you didn’t talk about authentication. 
+In fact, you have to tell the AI that you need access to the platform by identifying roles, as it 
+
+
+
+is clear in the report that there is no authentication in the functional requirements, and even in 
+the user stories, there is no authentication. 
+
+So your system can’t be able to differentiate between the user who is an engineer and the user 
+who is a drone operator.  
+
+To differentiate between the engineer and the drone operator, there is 2 solutions:  
+
+Solution 1: For each user, you have to develop a specific platform and to link the two 
+platforms.  
+
+ 
+
+By the way, there is another issue you didn’t talk about: the database. 
+
+There is no web application without a database. 
+
+I saw that you are talking about a CSV file, and the data can’t be saved in a CSV file.  
+
+The platform should have an administrator, but your platform hasn’t. If the platform doesn’t 
+have an administrator, it can’t be parameterised. For example, if an engineer were working in 
+our society and he left the society, he shouldn’t be allowed to access our platform again 
+because he can work with other competitors after leaving our society. So the platform must 
+have an administrator who will be able to manage user accounts. But you didn’t even talk 
+about user accounts. You didn’t even say that access to user accounts should be with 
+coordinates. No distributed web application can be accessed without accounts nowadays.  
+How will the application know who the user is connected to?  
+
+You are talking about a dashboard and the access to it, but how will the application know 
+whether the connected user is an engineer or a drone operator? 
+
+If you are talking about the same actor, you have to call them always with the same name, 
+because if not, the person who will read the report will think that you are talking about 
+another actor. 
+
+But you named one of your actors an engineer once, and a maintenance engineer once, and 
+that can impress the reader that there is 2 actors, one named an engineer and the other named 
+a maintenance engineer, so you must name him in each context as an engineer or name him in 
+each context as a maintenance engineer.  
+
+So there is no fluidity, no synchronisation, no idea thread that I can follow to understand what 
+you are doing or the AI that generated this document for you, what it wants to say.  
+
+There is no logic that you can follow.  
+
+It’s really grave! 
+
+You also didn’t have a correct nomination for the product backlog, user stories and epics. The 
+product backlog is an object that is composed of user stories and every user story is affected 
+to an epic. 
+
+
+
+Normally, 2.3.2 is your product backlog, which contains epics, user stories and 
+priorities…etc. 
+
+I can’t blame IA because he works with the medium board that he learned to work with. 
+
+But that doesn’t mean that everything he is doing is correct. 
+
+There are a lot of missing parts. There are a lot of illogical things. There is a lot of fluidity 
+lacking. It lacks a lot of coordination with ideas. There are a lot of ideas that aren’t linked 
+with each other. There are a lot of differences between the ideas in the technical 
+specifications and the report.  
+
+The sprint planning is after the product backlog in your report, and that isn’t correct.  
+
+There is sincerely nothing. 
+
+I tried to follow, but I couldn’t. Some things are correct that we can talk about them, but not 
+well explained because not you who redacted, but the IA who redacted. 
+
+And  IA is limited to a specific number of words in generating paragraphs. 
+
+So, you don’t understand, the reader of the report will not understand because not you who 
+did the redaction, but IA, who did that, and nobody will understand what IA is talking about, 
+and you who asked him to generate this content.  
+
+So if you have the desire to correct, you are not young, and you are the owner of the decision, 
+not me, because you are of legal age and vaccinated, and I just gave you my remarks. Really, 
+I didn’t expect that from you. Because I saw you wanting me to see your deliverables, read 
+them and give you feedback, I thought that I had oriented you to the correct path after 
+meeting you 3 times. I expected that you would make an effort.  It’s acceptable to do wrong 
+things.  But don’t say  “it’s my work and tell me what to do” if you send me something from 
+AI 100% because not you who is doing things, and in that case, it’s better to give me the 
+conversation between you and the IA and let me tell him to say to you what you should do.  
+
+It’s really grave, so I suggest that you, if you really want to improve the conditions a little bit, 
+because I can’t imagine that conditions will change a lot, either from now to July, or from 
+now to September.  
+
+First thing, take a look at the guide, and see which parts should exist in your work.  
+
+Second thing, the guide is written in general;  it doesn’t follow a specific methodology. So the 
+methodology that you want to implement, which is Agile Scrum,  obliges you to write one or 
+two introductory chapters like IA proposed, because here, among the correct things that IA 
+proposes, which you use, the 2 first two chapters are titled correctly, even for the other 
+chapters, their distribution is correct, and their titles are correct. But their contents are 
+shallow and lack a lot of things.  
+
+Why is their content not complete? Because, as I told you, IA is limited to a specific quantity 
+of information that it will generate for you, and it isn’t capable of linking logically with ideas 
+that are outside the part that it is generating.  
+
+
+
+Linking ideas is a skill that IAs haven’t mastered yet. 
+
+And that is clear to us as supervisors without making any effort. 
+
+I don’t know which level you reached, I don’t know which point you attended, or which 
+realisation you did. But, in the report, some parts must be included, clear and done by you, 
+not another person, not a problem if someone else assists you or helps you, but redacting for 
+you 100% isn’t acceptable.  
+
+That isn’t acceptable because in that case, you can’t say that the deliverables are worked on 
+by you, and the errors will appear and will be blatant, as in your report, the mistakes are too 
+grave.  
+
+So take a look at the guide, look at what is required from you, take a look at your report and 
+compare it to the guide. That’s the first thing. 
+
+The second thing is to read the report before sending it to me to correct it, to check whether 
+you understand its content or not, and to be able to answer me in the next meeting if I ask you 
+about something.   
+
+Because I shouldn’t correct something that isn't correctable, which isn’t generated well with 
+AI. 
+
+Or me, who will be assigned to work on the project instead of him, which isn’t the mission of 
+the pedagogic supervisor. 
+
+So, I expect that you hear these vocal messages, I’ll see your reaction, and I’ll wish that we 
+can correct, no matter when you are planning to present your project, I wish that you change 
+your behaviour, and that you decide to work manually. 
+
+It doesn’t matter to what extent you will work by yourself, either by 20%, or 40% or 80% or 
+100%, that’s your choice.  
+
+With the condition that even if you resort to someone to help you, whether he is a human or a 
+machine, you know how to implement the output that he’ll give you, you know how to place 
+it in the principal context of your project, and you know how to install it, to obtain at the end 
+a complete puzzle piece which isn’t sampled, isn’t decomposed, isn’t full of holes, isn’t full 
+of incoherence, and isn’t full of problems.” 
+
+Me: “Hello Mr, I don’t know from what I will start. First, I want to tell you that I’m engaged 
+not only on the PFE, but I’m also engaged with an international organisation called AIESEC, 
+and the last time I was engaged with it was because I had a national conference that lasted 4 
+days.  
+
+For my project and my report, I want to tell you that I really understand the first part of the 
+report and the step of researching via YouTube to understand the electrical and mechanical 
+functioning of the drone.  
+
+Because I wrote the transcript of the YouTube videos manually, and I read them loudly, even 
+the same thing for the first part of the report that I showed you at the last physical meeting we 
+
+
+
+did. So, I’ll assert for you that I understood them, even if I forgot some information about 
+them because of the long period of time, but I made a big effort to understand them. 
+
+But I didn’t implement anything from what I learned through YouTube videos and all the 
+research tools. I was unable to synchronise, which means to research, work and redact the 
+report at the same time. And I wasn’t able to distinguish between what I should add to the 
+report and what I shouldn’t. 
+
+I want to be honest, I won’t tell you a lie, my report is really generated 100% with AI, but as I 
+told you, the first part of the report is clear to me, and I understood it well. 
+
+But the other part of the report, I read it, but I didn’t give myself time to write it manually, as 
+the first part, because I didn’t send you any deliverables, and I didn’t meet you or call you for 
+a long time.   
+
+And I didn’t hear about the guide of Mr Abdelkarim because I didn’t connect to Outlook for a 
+long time from the beginning. I heard about it only now. But I’ll ensure that if I had heard 
+about it from the beginning, the report would be better than this version. Me also unsatisfied 
+with the deliverables, I also felt that it isn’t completed, and it isn’t coherent. 
+
+I also didn’t accept its length.  
+
+And I felt that my report had many parts. I felt that the content wasn’t harmonious. 
+
+I sent you early because I don’t know which parts are lacking, because I didn’t hear about the 
+guide, and I didn’t see any template of an old PFE report, and I don’t know where I can find 
+some report templates, so I’ll be unable to guide AI well without having the guide and a PFE 
+report template.  
+
+I wanted to tell you that I don’t master prompt engineering, which is a skill which consist on 
+knowing how to guide AI well. 
+
+Without having the guide and a PFE report template, I’ll be obliged to resort to IA. 
+
+I gave the IA the technical specifications and the Scrum.pdf, and I developed my platform 
+and the AI assistant that I worked with, which is called Google AI Studio. And as long as I 
+don’t master prompt engineering well and without the guide, he thought that the report was 
+complete, but I felt that it was incomplete.  
+
+I’m ready to restart from scratch, and I’m ready for rewriting the report from the beginning, 
+and I’m even ready to rewatch YouTube videos. And I want to apologise to you because I 
+made you mad at me, you are right to be mad at me.  
+
+I found the guide, and I opened it, and I found scattered .tex files, and I didn’t find a complete 
+report. And I want to ask you if you have an old report template that my report should follow, 
+or if their topic is similar to my project topic, or their structure is like the structure that should 
+be implemented in my report. If it is possible, can you send me a comparison to compare and 
+see which parts my report is missing to add them? And which parts aren’t useful to omit, and 
+which parts are good to save them to know from what I start in my report.”  
+
+
+
+My supervisor: “Mootez, the scattered files compose a LaTeX project, which is a tool to 
+replace Microsoft Word, and it is useful in the redaction of the reports. 
+
+It seems that ESPRIM wants you to use LaTeX to redact your reports. No matter whether you 
+have an idea about LaTeX or not, among the scattered files, there is a PDF document that you 
+should open to find the details of the template of the report.  
+
+For me, the problem isn’t there, but the problem for me is the fact that I already gave you a 
+document of a guide named Scrum.pdf of a project in the first physical meeting we did, 
+which is a guide that I took an example of another project to show you all the details of the 
+work from A to Z.  
+
+And the details are: how to start the report, identification of the problem, analysis of the 
+existing situation, what the problem is that the project is treating, what exists, and what 
+people are doing nowadays. 
+
+Before you suggested your solution, did anybody think about the problem that you are 
+treating in your PFE? 
+
+You should analyse  the existing situation, which consists of the methods that they are using 
+in the monitoring of the avionics health and in the maintenance, what are the advantages and 
+the disadvantages of these methods, and whether there are developed applications for the 
+same issue that your project is about. 
+
+You should do a study about that, and I told you that since the first meeting. 
+
+After talking about the existing solutions, you criticise them, and you tell what you will do 
+and what solution you will propose.  
+
+After that, you should talk about the methodology that you will use. 
+
+If you decide to use the Scrum methodology, you should declare that and give the Scrum 
+details, and after that, you start implementing the Scrum methodology. 
+
+With what does the Scrum methodology start? 
+
+The first thing you need to start with is needs analysis, and I also gave you the identification 
+of actors and the needs analysis of the project in Scrum.pdf. 
+
+If you give these things to IA to do, he will commit numerous mistakes and you’ll not 
+discover them. 
+
+And effectively, since I opened your report, I discovered many mistakes. 
+
+There is no logic, no fluidity, no synchronisation in your document. 
+
+Your document is illegible because it isn’t synchronised and isn’t homogeneous. 
+
+You have to write manually; you don’t have a choice. 
+
+You can ask IA to help you to redact a paragraph or correct and optimise a paragraph that you 
+wrote.   
+
+
+
+But if you give him the technical specifications that he already wrote for you,  and you ask 
+him to redact a report for you. That is not acceptable. 
+
+So, I will repeat, go back to Scrum.pdf, take a look at the guide, and open only the PDF 
+document; don’t open the other files. 
+
+Why are there many files? The guide that Mr Abdelkarim sent you is a guide following the 
+form of a LaTeX project. 
+
+You have the choice whether to redact your report with LaTeX or Microsoft Word. 
+
+And it seems that you don’t know LaTeX because you didn’t know that the guide is a LaTeX 
+project. 
+
+But the most important thing is that the content should be written by you. 
+
+You have to draw your diagrams by yourself. You have to analyse the needs by yourself. 
+
+You have to identify who your actors by yourself. 
+
+You said that you have 2 actors, who are the maintenance engineer and the drone operator, 
+and you didn’t say that you have an admin. 
+
+If you have an admin, you have to identify their functional requirements and non-functional 
+requirements.  
+
+After that, you need to draw the global use-case diagram.  
+
+You give your product backlog. 
+
+The product backlog doesn’t contain only 4 user stories because the product backlog belongs 
+to a web application that doesn’t contain only 4 user stories. 
+
+If you don’t do that by yourself, the AI agent won’t give you. 
+
+You have a use case named authenticate, but you didn’t talk about it because if you have 3 
+actors: which are a maintenance engineer, a drone operator and an administrator, who you 
+didn’t talk about, and you should add them to your actors, and when the 3 actors have access 
+to the application, they will access across an identificatory interface.  
+
+You should add the inscription, update the profile, modifying the password. 
+
+Your product backlog is empty. Have you done a product backlog before? (we haven’t 
+already done), That is the problem that you are not focused on professors, not only you, all 
+ESPRIM students, but they are also completely demotivated, and that is the cause of the 
+situation that you got stuck in, and then you justify that with the fact that it is the first time 
+that you write a PFE report, which is a logical statement because that’s the first time that you 
+work on a PFE project. 
+
+But, normally, you have been using the tools for 5 years, so you should learn to be able to 
+write a PFE report, work on a PFE project and draw your diagrams. 
+
+
+
+But you didn’t draw class diagrams, the sequence diagrams aren’t clear,  and the use-case 
+diagrams are terrible. 
+
+I didn’t find what to correct.  I can’t correct something not constructed. 
+
+So you have the guide, you have your application, which AI helped you develop. That’s it it’s 
+a snowball, you don’t work by yourself your technical part of the project. 
+
+  And the logical thing is that you don’t start with the development, but with conception. 
+
+You should do the functional and non-functional requirements. 
+
+You should identify your actors, and then you should do your product backlog. 
+
+Then you move to the sprint planning, and then in each sprint, you talk about what you did. 
+
+Sprint planning first, then the sprint backlog. 
+
+ Each sprint should hold at least 3 diagram types: functional diagram, static diagram, and 
+dynamic diagram.   
+
+And the content should be logical and consistent. 
+
+In your case, there is no content. I haven’t seen anything about the technical part. 
+
+And you are not obliged to send me if you didn’t work. You said that you sent me a message 
+because you hadn’t contacted me for a long time. 
+
+I don’t require you to send me an incomplete document because I will do nothing with, did 
+you think that I’m satisfied that you sent me a report? 
+
+I’d rather that you don’t send me anything, than you send me something that has no 
+relationship with the subject, I can’t correct it, and unreadable. 
+
+Because if you send me a document like this, for me, you disrespect me because I’m 
+supervising you, I’m not supervising ChatGPT, or Claude, or another AI assistant. 
+
+As long as I’m supervising you, you have to send me your work, your realisation, your 
+redaction, your development and your conception not of AI. 
+
+And as for AI, I want to say, “Your goods have been returned to you”  
+
+If you ask him well, he’ll answer you well. 
+
+If you ask him badly, he’ll answer you badly. 
+
+If you ask him at an average level, he’ll answer you at an average level. 
+
+And AI doesn’t do anything by itself. 
+
+Isn’t logic that you said AI do for me whatever to give you a report, and the proof that he 
+gave you an empty report

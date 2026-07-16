@@ -1,0 +1,12 @@
+graph LR
+    BATT[Battery<br/>4S Li-Ion<br/>14.8V] --> ESC[Electronic Speed<br/>Controller]
+    ESC -->|PWM Signal| MOTOR[Brushless DC<br/>Motor<br/>3548-class<br/>900W]
+    MOTOR --> PROP[Propeller]
+    ESC -->|Current Sensing| CS[Hall-Effect<br/>Current Sensor<br/>0-30A]
+    MOTOR -->|Temperature Sensing| TS[Digital Temperature<br/>Sensor<br/>Motor Stator]
+    CS --> DATA[Telemetry Data]
+    TS --> DATA
+    
+    style CS fill:#ff9999
+    style TS fill:#ff9999
+    style DATA fill:#99ff99

@@ -1,0 +1,25 @@
+sequenceDiagram
+    participant User
+    participant Dashboard
+    participant API
+    participant DB
+    participant AI
+    
+    User->>Dashboard: Login
+    Dashboard->>API: POST /api/auth/login
+    API->>DB: Verify credentials
+    DB-->>API: User data
+    API-->>Dashboard: JWT token
+    
+    User->>Dashboard: Select flight
+    Dashboard->>API: GET /api/flights/{id}
+    API->>DB: Query flight data
+    DB-->>API: Telemetry data
+    API-->>Dashboard: Flight data
+    
+    Dashboard->>API: POST /api/anomalies/detect
+    API->>AI: Send telemetry
+    AI->>AI: Run Isolation Forest
+    AI-->>API: Anomaly scores
+    API->>DB: Store anomalies
+    API-->>Dashboard: Anomaly results

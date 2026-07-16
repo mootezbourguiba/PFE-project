@@ -1,0 +1,553 @@
+﻿Plan de travail selon la méthodologie Scrum 
+
+ 
+
+Scrum est un cadre de travail agile utilisé pour la réalisation de projets informatiques. Il repose sur 
+un cycle de développement itératif et incrémental, ainsi que sur une gestion de projet productive et 
+collaborative. Scrum met l’accent sur les individus, leurs interactions et leur collaboration, plutôt que 
+sur les processus et les outils. Il favorise une adaptation continue aux changements, une livraison 
+progressive de fonctionnalités opérationnelles et une amélioration continue de la qualité du produit. 
+
+ 
+
+Dans la suite de ce document, les différentes étapes de réalisation d’un projet PFE seront présentées, 
+ainsi que l’ordre de travail à suivre conformément à Scrum. 
+
+Notez bien :  
+Les exemples présentés dans ce document sont appliqués au projet PFE suivant : une application 
+mobile de gestion intégrée destinée à un atelier de confection, permettant de gérer efficacement les 
+modèles (photos, couleurs, tailles, prix, quantités disponibles), assurer le suivi des stocks en temps 
+réel, centraliser la gestion des commandes provenant des réseaux sociaux de manière centralisée et 
+structurée, suivre l’état des commandes (en cours, confirmée, annulée, livrée, retournée), gérer les 
+coordonnées et l’historique des clients et fournir des indicateurs et statistiques pour l’aide à la 
+décision. 
+
+1. Analyse du contexte 
+
+La première étape du projet consiste à bien comprendre le problème à résoudre. Cette phase est 
+essentielle, car elle permet de définir clairement les besoins et d’orienter correctement le 
+développement de la solution. 
+L’analyse commence par l’étude du contexte général du projet et de la problématique associée. Il 
+s’agit de comprendre l’environnement dans lequel le système sera utilisé, les acteurs concernés et les 
+difficultés rencontrées dans la gestion actuelle. 
+
+1 
+ 
+
+
+
+Dans le cadre du projet exemple, on doit analyser en détail les problèmes rencontrés par l’atelier de 
+confection, notamment : 
+
+• La gestion manuelle des commandes, qui peut entraîner des erreurs ou des pertes 
+d’informations; 
+
+• La dispersion des données sur différents réseaux sociaux tels que Facebook, Instagram et 
+WhatsApp ; 
+
+• La gestion manuelle et non centralisée du stock ; 
+
+• L’absence d’un système structuré pour le suivi des clients et des commandes ; 
+
+• Les difficultés de suivi et d’analyse de l’activité de l’atelier ; 
+
+Ensuite, on doit étudier et analyser les solutions existantes. Cette analyse consiste à identifier les 
+applications ou systèmes similaires disponibles sur le marché et à examiner leurs fonctionnalités, 
+leurs avantages et leurs inconvénients. Cette étape permet de mieux comprendre les bonnes pratiques 
+et d’identifier les limites des solutions actuelles. 
+Enfin, sur la base de cette analyse, on doit présenter brièvement la solution à développer. Cette 
+présentation doit décrire les principaux objectifs de l’application, les fonctionnalités principales 
+envisagées et la valeur ajoutée apportée par la solution proposée. 
+
+2. Identification des acteurs  
+
+Après avoir compris le contexte du projet et analysé la problématique, la deuxième étape consiste à 
+identifier les acteurs du système ainsi que leurs besoins. Cette étape est essentielle, car elle permet de 
+déterminer les utilisateurs de l’application et de comprendre leurs attentes. 
+Un acteur est une personne ou un groupe de personnes qui interagit avec le système ou qui est 
+concerné par son fonctionnement. L’identification des acteurs permet de déterminer qui utilisera 
+l’application et quelles seront leurs interactions avec celle-ci. 
+Dans le cadre du projet exemple, le système comporte deux acteurs principaux : l’Administrateur et 
+les Employés de l’atelier. 
+
+• L’employé de l’atelier est un utilisateur principal de l’application. Il utilise le système pour 
+assurer la gestion quotidienne des activités de l’atelier de confection. L’application doit lui 
+permettre de centraliser les informations et de faciliter le suivi des modèles, des clients et des 
+commandes. 
+
+• L’administrateur est un utilisateur ayant des privilèges supplémentaires. En plus des 
+fonctionnalités accessibles aux employés, il dispose de droits de gestion avancés permettant 
+d’assurer l’administration du système et le suivi global de l’activité de l’atelier. 
+
+3. Identification des besoins 
+
+Après avoir identifié les acteurs du système, il est nécessaire d’identifier leurs besoins et les classifier 
+en deux catégories : des besoins fonctionnels et des besoins non fonctionnels. Cette étape permet de 
+définir clairement ce que le système doit faire (besoins fonctionnels) et comment il doit le faire 
+(besoins non fonctionnels). 
+
+2 
+ 
+
+
+
+a. Les besoins fonctionnels 
+
+Les besoins fonctionnels décrivent les fonctionnalités que le système doit fournir pour répondre aux 
+attentes des utilisateurs. Ils définissent les services que l’application doit offrir. Les besoins 
+fonctionnels doivent être identifiés par acteur. 
+
+Dans le cadre du projet exemple, l’application doit assurer à l’employé de l’atelier les fonctionnalités 
+suivantes : 
+
+Gestion des clients : 
+
+• Ajouter un nouveau client ; 
+
+• Modifier les informations d’un client ; 
+
+• Supprimer un client ; 
+
+• Consulter la liste des clients ; 
+
+• Consulter le niveau de sérieux d’un client ; 
+
+• Consulter l’historique des commandes d’un client. 
+
+Gestion des modèles : 
+
+• Ajouter un nouveau modèle ; 
+
+• Modifier les informations d’un modèle ; 
+
+• Supprimer un modèle ; 
+
+• Ajouter et consulter les photos des modèles ; 
+
+Gestion du stock : 
+
+• Consulter les quantités disponibles ; 
+
+• Mettre à jour les quantités en stock ; 
+
+• Être alerté en cas de stock faible ou de rupture de stock. 
+
+Gestion des commandes : 
+
+• Enregistrer une nouvelle commande ; 
+
+• Associer une commande à un client et à un ou plusieurs modèles ; 
+
+• Consulter la liste des commandes ; 
+
+• Mettre à jour le statut d’une commande (en cours, confirmée, annulée, livrée, retournée) ; 
+
+• Consulter l’historique des commandes. 
+
+Notifications et suivi : 
+
+• Recevoir des notifications lors du changement de statut d’une commande ; 
+
+• Recevoir des alertes en cas de stock faible ; 
+
+• Consulter les informations nécessaires au suivi des activités quotidiennes. 
+
+D’autre part, l’application doit assurer à l’administrateur les fonctionnalités suivantes : 
+
+Gestion des comptes employés : 
+
+• Créer un compte employé ; 
+
+• Modifier les informations d’un employé ; 
+
+• Supprimer un compte employé ; 
+
+• Activer ou désactiver un compte employé ; 
+
+• Consulter la liste des employés. 
+
+3 
+ 
+
+
+
+Suivi et analyse de l’activité de l’atelier : 
+
+• Consulter le nombre total de commandes ; 
+
+• Consulter les ventes par période ; 
+
+• Consulter les modèles les plus vendus ; 
+
+• Consulter l’évolution du stock. 
+
+ 
+
+Statistiques et indicateurs : 
+
+• Consulter les statistiques des ventes ; 
+
+• Consulter les revenus générés ; 
+
+• Consulter les indicateurs de performance de l’atelier ; 
+
+• Visualiser les données sous forme de tableaux ou de graphiques. 
+
+Ces fonctionnalités permettent à l’administrateur de suivre l’activité de l’atelier, d’analyser les 
+performances et de prendre des décisions pour améliorer la gestion et la productivité. 
+
+b. Les besoins non fonctionnels 
+
+Les besoins non fonctionnels décrivent les contraintes et les exigences de qualité que le système doit 
+respecter. Ils définissent comment le système doit fonctionner. 
+
+Dans le cadre du projet exemple, on peut citer les besoins suivants :  
+
+• Performance : Le système doit : 
+- Répondre rapidement aux actions de l’utilisateur ; 
+- Charger les données dans un délai raisonnable ; 
+- Supporter un nombre important de clients, de commandes et de modèles. 
+
+• Sécurité : Le système doit : 
+- Assurer l’authentification des utilisateurs ; 
+- Protéger les données contre les accès non autorisés ; 
+- Garantir que seuls les administrateurs peuvent gérer les comptes employés ; 
+- Garantir la confidentialité des données. 
+
+• Utilisabilité : Le système doit : 
+- Offrir une interface simple et facile à utiliser ; 
+- Être adapté à une utilisation sur smartphone ; 
+- Permettre une navigation intuitive ; 
+- Réduire les erreurs d’utilisation. 
+
+• Fiabilité : Le système doit : 
+- Garantir la disponibilité des données ; 
+- Éviter la perte des données ; 
+- Assurer la cohérence des informations. 
+
+• Maintenabilité : Le système doit : 
+- Être conçu de manière modulaire ; 
+- Être facilement modifiable ; 
+- Être évolutif pour intégrer de nouvelles fonctionnalités. 
+
+4 
+ 
+
+
+
+• Compatibilité : Le système doit : 
+- Fonctionner sur les appareils de différents OSs mobiles ; 
+- Être compatible avec les différentes tailles d’écran ; 
+- Fonctionner avec ou sans (« Mode Offline ») une connexion Internet. 
+
+4. Identification des rôles Scrum 
+
+Dans la méthodologie Scrum, un projet est structuré autour de trois rôles principaux : le Product 
+Owner, le Scrum Master et l’équipe de développement. Chaque rôle a des responsabilités spécifiques 
+qui contribuent à la réussite du projet. 
+
+• Scrum Master : Il est responsable de l’application correcte de la méthodologie Scrum. Il veille 
+au bon déroulement du projet et aide l’équipe à respecter les principes Scrum. Ses 
+responsabilités incluent : 
+
+- Organiser les réunions Scrum ; 
+- Assurer le respect de la méthodologie Scrum ; 
+- Aider à résoudre les obstacles ; 
+- Améliorer l’organisation du travail. 
+
+Dans un projet PFE, ce rôle est généralement assuré par : 
+- L’étudiant, ou 
+- L’encadrant. 
+
+• Product Owner : Il est responsable de la définition des besoins et de la gestion du Product 
+Backlog. Il représente les intérêts des utilisateurs et s’assure que le produit développé répond 
+aux besoins. Ses responsabilités incluent : 
+
+- Définir les fonctionnalités du système ; 
+- Rédiger les User Stories ; 
+- Prioriser les fonctionnalités ; 
+- Valider les fonctionnalités développées. 
+
+Dans un projet PFE, le rôle de Product Owner peut être assuré par : 
+- L’encadrant, ou 
+- Le client (responsable de l’atelier), ou 
+- L’étudiant lui-même (sous supervision de l’encadrant). 
+
+• Development Team : Elle est responsable de la conception, du développement et des tests de 
+l’application. Ses responsabilités incluent : 
+
+- Analyser les User Stories ; 
+- Concevoir la solution ; 
+- Développer les fonctionnalités ; 
+- Tester le système ; 
+- Livrer des incréments fonctionnels. 
+
+Dans le cadre d’un PFE, l’équipe de développement est composée d’un ou plusieurs étudiants. 
+
+5. Transformation des besoins en Epics et User Stories et création du Product 
+Backlog 
+
+Après avoir identifié les acteurs et les besoins fonctionnels et non fonctionnels, l’étape suivante 
+consiste à transformer ces besoins en éléments exploitables dans le cadre de la méthodologie Scrum. 
+
+5 
+ 
+
+
+
+Cette transformation se fait à travers la définition des Epics et des User Stories, qui seront ensuite 
+organisées dans le Product Backlog. 
+Le Product Backlog constitue la base de travail principale dans Scrum. Il contient l’ensemble des 
+fonctionnalités du système à développer, décrites du point de vue des utilisateurs. 
+
+Un Epic est une fonctionnalité majeure du système qui regroupe un ensemble de fonctionnalités liées. 
+Il correspond généralement à un grand module ou une grande partie du système. Un Epic est trop 
+général pour être développé directement. Il doit être décomposé en plusieurs User Stories plus petites, 
+qui seront développées progressivement au cours des sprints. 
+
+Dans le cadre du projet exemple, les Epics peuvent être les suivants : 
+
+• Epic 1 : Authentification et gestion des comptes 
+
+• Epic 2 : Gestion des clients 
+
+• Epic 3 : Gestion des modèles 
+
+• Epic 4 : Gestion du stock 
+
+• Epic 5 : Gestion des commandes 
+
+• Epic 6 : Notifications 
+
+• Epic 7 : Statistiques et tableau de bord 
+
+Chaque Epic regroupe un ensemble de fonctionnalités liées à un domaine spécifique du système. 
+
+Une User Story est une description simple et concise d’une fonctionnalité du système, exprimée du 
+point de vue de l’utilisateur. Elle permet de décrire ce que l’utilisateur souhaite faire avec le système 
+et pourquoi. Le format standard d’une User Story est le suivant : 
+
+En tant que [acteur], je veux [fonctionnalité], afin de [objectif] 
+
+Ce format permet de garder une approche centrée sur l’utilisateur. 
+
+Les besoins identifiés précédemment sont transformés en User Stories et associés à leurs Epics 
+respectifs. 
+
+Le Product Backlog est une liste ordonnée contenant l’ensemble des Epics et des User Stories du 
+projet. Il représente toutes les fonctionnalités qui doivent être développées. Chaque élément du 
+Product Backlog contient généralement : 
+
+• Un identifiant ; 
+
+• Un Epic associé ; 
+
+• Une description (User Story) ; 
+
+• Une priorité ; 
+
+Exemple : 
+
+Identifiant Epic User Stroy Priorité 
+En tant qu’employé, je veux ajouter un nouveau 
+
+US1 Gestion des clients client, afin d’enregistrer ses informations dans le Haute 
+système. 
+
+En tant qu’employé, je veux consulter la liste des 
+US2 Gestion des clients clients, afin de gérer les informations des clients. Haute 
+
+6 
+ 
+
+
+
+En tant qu’employé, je veux consulter 
+
+US3 Gestion des clients l’historique des commandes d’un client, afin de Haute 
+suivre ses activités. 
+
+En tant qu’employé, je veux créer une nouvelle 
+Gestion des 
+
+US4 commande, afin d’enregistrer une commande Haute 
+commandes client. 
+
+En tant qu’employé, je veux modifier mon mot 
+Authentification et 
+
+US5 de passe, afin de mettre à jours mes coordonnées Faible 
+gestion des comptes d’accès. 
+
+En tant qu’administrateur, je veux consulter les 
+Statistiques et tableau 
+
+US6 statistiques des ventes, afin d’analyser les Moyenne 
+de bord performances de l’atelier. 
+
+Le Product Backlog est géré par le Product Owner et mis à jour régulièrement pendant toute la durée 
+du projet. 
+
+6. Sprint Planning (Planification du Sprint) 
+
+Un Sprint est une période de développement de durée fixe, généralement comprise entre deux et trois 
+semaines. Pendant un Sprint, l’équipe de développement réalise un ensemble de « User Stories » 
+sélectionnées à partir du Product Backlog. 
+Le Sprint Planning est une réunion essentielle dans Scrum. Elle marque le début de chaque Sprint et 
+permet de définir les fonctionnalités qui seront développées ainsi que le travail nécessaire pour les 
+réaliser. L’objectif principal du Sprint Planning est de planifier le travail à effectuer pendant le Sprint 
+et de définir un objectif clair à atteindre. 
+Dans le cadre d’un projet PFE, il est recommandé de fixer une durée de Sprint de deux semaines. 
+Chaque Sprint produit un incrément, c’est-à-dire une version fonctionnelle du système contenant de 
+nouvelles fonctionnalités. 
+Lors du Sprint Planning, les User Stories sont sélectionnées à partir du Product Backlog en respectant 
+leur ordre de priorité. Le nombre de « User Stories » sélectionnées dépend de : 
+
+• La durée du Sprint ; 
+
+• La complexité des User Stories ; 
+
+• La capacité de travail de l’étudiant. 
+
+Les User Stories sélectionnées doivent être réalisables pendant le Sprint. 
+Le Sprint Goal est un objectif clair et précis qui décrit ce que le Sprint doit permettre d’accomplir. Le 
+Sprint Goal permet de guider le travail pendant le Sprint. 
+
+Exemple de Sprint Goal : 
+« Implémenter le module de gestion des clients permettant d’ajouter, modifier et consulter les 
+clients. » 
+
+Exemple de planification des Sprints : 
+
+Identifiant Objectif Durée 
+
+Implémenter les modules d’authentification et de 
+Sprint 1 2 semaines 
+
+gestion de comptes 
+
+7 
+ 
+
+
+
+Implémenter les modules de gestion des clients 
+Sprint 2 2 semaines 
+
+et gestion des modèles 
+
+Implémenter les modules de gestion de 
+Sprint 3 3 semaines 
+
+commandes et gestion de stock 
+
+Implémenter les modules de gestion des 
+Sprint 4 3 semaines 
+
+notifications, statistiques et tableau de bord 
+
+Dans un projet PFE réalisé selon la méthodologie Scrum, l’étape suivante consiste à définir un Sprint 
+0, également appelé phase d’initialisation ou phase de conception initiale. Cette phase a pour objectif 
+de préparer l’environnement de développement et d’établir les bases techniques et fonctionnelles du 
+projet. Elle comprend notamment l’élaboration du diagramme global des cas d’utilisation, la 
+définition de l’architecture logique et de l’architecture physique, le choix des technologies à utiliser, 
+ainsi que la mise en place de l’environnement de développement. 
+Par la suite, chaque Sprint fera l’objet d’un chapitre distinct, dans lequel seront présentés les objectifs 
+fixés, les User Stories sélectionnées, les tâches réalisées, ainsi que les résultats obtenus. 
+
+7. Le Sprint Backlog 
+
+Le Sprint Backlog est la liste des User Stories sélectionnées pour le Sprint, ainsi que les tâches 
+associées (chaque User Story sélectionnée est décomposée en tâches techniques, une tâche correspond 
+à une activité technique nécessaire à la réalisation d’une User Story). Le Sprint Backlog contient : 
+
+• Les User Stories du Sprint ; 
+
+• Les tâches techniques ; 
+
+• La durée estimée de chaque tâche. 
+
+Exemple de spécification de tâches par User Story : 
+
+User Story : Ajouter un client 
+
+Tâches : 
+
+• Concevoir l’interface utilisateur ; 
+
+• Créer la collection clients dans la base de données ; 
+
+• Développer la fonctionnalité d’ajout ; 
+
+• Tester la fonctionnalité. 
+
+Exemple de Sprint Backlog : 
+
+Id 
+Id User Story Tache Durée 
+
+tache 
+
+En tant qu’employé, je veux T1 Concevoir l’interface utilisateur 1h 
+
+ajouter un nouveau client, Créer la collection clients dans la base de 
+T2 15 min 
+
+US1 afin d’enregistrer ses données 
+informations dans le T3 Développer la fonctionnalité d’ajout 2h 
+
+système. T4 Tester la fonctionnalité 15 min 
+T1 Concevoir l’interface d’authentification 1h 
+
+En tant qu’administrateur, je 
+Configurer Firebase Auth, activer méthode 
+
+veux m’authentifier via un 
+T2 Email / Password et créer un utilisateur admin 15 min 
+
+US9 login et un mot de passe, 
+dans Firebase 
+
+afin d’accéder à mon espace 
+T3 Développer la fonctionnalité de login 1h30 
+
+administrateur 
+T4 Tester la fonctionnalité 15 min 
+
+8 
+ 
+
+
+
+8. La conception d’un Sprint  
+
+Après l’élaboration du Sprint Backlog, le sprint entre dans sa phase de conception et de réalisation. 
+Cette phase consiste à transformer les éléments identifiés dans le backlog en composants fonctionnels 
+et documentés. Dans ce cadre, le travail effectué comprend : 
+
+• La réalisation du diagramme des cas d’utilisation détaillé, représentant les fonctionnalités 
+ciblées par le sprint et leurs interactions avec les acteurs du système. 
+
+• La description des scénarios d’exécution pour chaque cas d’utilisation, permettant de préciser 
+le comportement attendu du système dans différentes situations. 
+
+• L’élaboration du diagramme de classes, qui définit la structure statique des objets et leurs 
+relations pour le sprint considéré. 
+
+• La conception des diagrammes de séquence correspondant à chaque cas d’utilisation, afin 
+d’illustrer la chronologie des interactions entre objets et acteurs. 
+
+• La présentation d’un aperçu des interfaces développées, à travers des captures d’écran 
+représentatives, afin de visualiser l’état d’avancement concret du sprint. 
+
+La phase se conclut par le Sprint Review, au cours de laquelle les fonctionnalités réalisées sont 
+présentées et évaluées par les parties prenantes, suivie du Sprint Retrospective, visant à analyser les 
+réussites, identifier les difficultés rencontrées et proposer des améliorations pour les sprints suivants. 
+N’oubliez pas qu’à la fin de chaque Sprint, un incrément (une version fonctionnelle du produit) doit 
+être livrée. 
+
+ 
+
+ 
+
+9

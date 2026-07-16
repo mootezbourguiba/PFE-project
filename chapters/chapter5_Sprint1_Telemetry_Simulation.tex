@@ -1,0 +1,47 @@
+\chapter{Sprint 1: Telemetry Simulation}
+
+\section*{Introduction to Chapter 5}
+\addcontentsline{toc}{section}{Introduction to Chapter 5}
+
+This chapter presents Sprint 1, which focuses on telemetry simulation and data generation. The chapter describes the implementation of the data pipeline, including CSV data ingestion, preprocessing, and the generation of simulated telemetry data for motor current and temperature. The implementation details, challenges encountered, and solutions are discussed.
+
+\section{Sprint 1 Objectives}
+
+The primary objectives of Sprint 1 were:
+\begin{itemize}
+    \item Implement CSV data ingestion functionality
+    \item Develop data preprocessing pipeline (cleaning, normalization)
+    \item Generate simulated telemetry dataset for motor current and temperature
+    \item Validate data quality and format
+\end{itemize}
+
+\section{Implementation}
+
+\subsection{CSV Data Ingestion}
+
+The data ingestion module was implemented using Python's pandas library. The module reads CSV files containing telemetry data and validates the format before processing.
+
+\subsection{Data Preprocessing}
+
+The preprocessing pipeline includes:
+\begin{itemize}
+    \item Null value removal
+    \item Outlier filtering using statistical methods
+    \item Data normalization using Min-Max scaling
+    \item Feature engineering with rolling averages
+\end{itemize}
+
+\subsection{Simulated Data Generation}
+
+A telemetry simulator was developed to generate realistic current and temperature data. The simulator incorporates:
+\begin{itemize}
+    \item Baseline current values for normal operation
+    \item Temperature calculations based on thermal dynamics (Ploss = I²R)
+    \item Gradual degradation patterns to simulate bearing wear
+    \item Random noise to simulate real-world sensor variations
+\end{itemize}
+
+\section*{Conclusion to Chapter 5}
+\addcontentsline{toc}{section}{Conclusion to Chapter 5}
+
+This chapter presented Sprint 1 implementation, focusing on telemetry simulation and data generation. The CSV ingestion, preprocessing pipeline, and simulated data generator were successfully implemented. The generated dataset provides a foundation for training the anomaly detection model in Sprint 2. The next chapter will present Sprint 2: Anomaly Detection Engine.

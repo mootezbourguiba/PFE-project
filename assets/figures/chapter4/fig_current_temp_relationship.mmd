@@ -1,0 +1,11 @@
+graph TD
+    BW[Bearing Wear] --> FRI[Increased<br/>Mechanical Friction]
+    FRI --> CUR[Increased<br/>Current Draw]
+    CUR --> HEAT[Increased Heat<br/>Generation<br/>Ploss = I²R]
+    HEAT --> TEMP[Increased<br/>Temperature]
+    TEMP --> AD[Anomaly Detection<br/>by Isolation Forest]
+    
+    style BW fill:#ff9999
+    style AD fill:#99ff99
+    style CUR fill:#ffff99
+    style TEMP fill:#ffff99

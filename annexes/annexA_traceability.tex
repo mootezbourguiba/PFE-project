@@ -1,0 +1,79 @@
+\chapter{Recommended traceability tables}
+
+\section{Requirements Traceability Matrix}
+
+\begin{table}[H]
+\centering
+\caption{Requirements Traceability Matrix}
+\begin{tabular}{|p{2cm}|p{2cm}|p{6cm}|}
+\hline
+\textbf{Requirement} & \textbf{Design choice} & \textbf{Implemented element} \\
+\hline
+FR-01 & JWT authentication & FastAPI login endpoint \\
+\hline
+FR-02 & User management & Admin dashboard, user CRUD operations \\
+\hline
+FR-03 & Data simulation & Telemetry simulator module \\
+\hline
+FR-04 & Database storage & SQLite with User, FlightSession, TelemetryReading tables \\
+\hline
+FR-05 & Model training & Isolation Forest training pipeline \\
+\hline
+FR-06 & Real-time detection & Anomaly inference module \\
+\hline
+FR-07 & Data visualization & Streamlit line charts \\
+\hline
+FR-08 & Alert system & Dashboard alert panel \\
+\hline
+FR-09 & Explainability & Feature importance analysis \\
+\hline
+FR-10 & Historical data & Flight selector and data viewer \\
+\hline
+FR-11 & Role-based access & JWT token with role claims \\
+\hline
+FR-12 & Restricted views & Dashboard view filtering by role \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Concept Comparison Matrix}
+
+\begin{table}[H]
+\centering
+\caption{Technology comparison matrix}
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{3cm}|}
+\hline
+\textbf{Criterion} & \textbf{Option 1} & \textbf{Option 2} & \textbf{Option 3} & \textbf{Final choice} \\
+\hline
+Performance & FastAPI & Flask & Django & FastAPI \\
+\hline
+Simplicity & Streamlit & React.js & Angular & Streamlit \\
+\hline
+Database & SQLite & PostgreSQL & MongoDB & SQLite \\
+\hline
+ML Library & Scikit-learn & TensorFlow & PyTorch & Scikit-learn \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{Validation Summary Table}
+
+\begin{table}[H]
+\centering
+\caption{Validation summary}
+\begin{tabular}{|p{2cm}|p{3cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+\textbf{Test} & \textbf{Objective} & \textbf{Indicator} & \textbf{Expected} & \textbf{Obtained} & \textbf{Conclusion} \\
+\hline
+T1 & Data ingestion & Success rate & 100\% & 100\% & OK \\
+\hline
+T2 & Anomaly detection & F1-Score & >85\% & 90\% & OK \\
+\hline
+T3 & API response & Response time & <2s & 0.5s & OK \\
+\hline
+T4 & Dashboard updates & Update interval & 5s & 5s & OK \\
+\hline
+T5 & Authentication & Security & JWT valid & JWT valid & OK \\
+\hline
+\end{tabular}
+\end{table}

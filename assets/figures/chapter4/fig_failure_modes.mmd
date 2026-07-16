@@ -1,0 +1,14 @@
+graph TD
+    ROOT[Motor Failure Modes] --> INST[Instantaneous Failures]
+    ROOT --> PROG[Progressive Failures]
+    
+    INST --> BP[Broken Propeller]
+    INST --> EB[ESC Burnout]
+    INST --> WD[Wire Disconnection]
+    INST --> RD[Rotor Demagnetisation]
+    
+    PROG --> BW[Bearing Wear]
+    
+    style BW fill:#ff6666,stroke:#ff0000,stroke-width:3px
+    style PROG fill:#ffff99
+    style INST fill:#cccccc

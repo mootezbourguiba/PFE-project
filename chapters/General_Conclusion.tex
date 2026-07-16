@@ -1,0 +1,37 @@
+\chapter*{General conclusion and perspectives}
+\addcontentsline{toc}{chapter}{General conclusion and perspectives}
+
+This project addressed the problem related to avionics system reliability and the need for predictive maintenance in UAV operations. The work carried out led to the development of an Intelligent Avionics Health Monitoring and Predictive Maintenance Platform that analyzes time-series data from motor current and temperature sensors to detect bearing wear anomalies before catastrophic failure occurs.
+
+The objectives achieved include in particular:
+\begin{itemize}
+    \item Design and implementation of a complete software architecture for avionics health monitoring
+    \item Development of a telemetry data pipeline with preprocessing capabilities
+    \item Implementation of an Isolation Forest-based anomaly detection engine achieving 90\% F1-score
+    \item Creation of a real-time web dashboard for visualization and alerting
+    \item Integration of authentication and authorization for secure access control
+    \item Validation of the system through comprehensive testing protocols
+\end{itemize}
+
+While some limitations remain, especially:
+\begin{itemize}
+    \item The system was validated using simulated data rather than real aircraft telemetry
+    \item The focus on bearing wear detection excludes other potential failure modes
+    \item SQLite database limitations may affect performance with concurrent users
+    \item The 8\% false positive rate may require optimization for production deployment
+\end{itemize}
+
+From both an academic and professional perspective, this work highlights the mobilized competencies of analysis, design, validation, critical thinking, and autonomy. The project demonstrated the successful application of machine learning techniques to real-world engineering problems, following the Scrum agile methodology for structured development and delivery.
+
+The future perspectives concern:
+\begin{itemize}
+    \item Integration with real aircraft telemetry data for validation in operational conditions
+    \item Expansion to detect additional failure modes beyond bearing wear
+    \item Migration from SQLite to PostgreSQL for improved concurrency and scalability
+    \item Implementation of more interpretable machine learning models for better explainability
+    \item Addition of edge computing capabilities for on-board anomaly detection
+    \item Integration with AVIONAV's existing maintenance management systems
+    \item Deployment to production environment with monitoring and logging infrastructure
+\end{itemize}
+
+The prototype developed in this project demonstrates the feasibility of data-driven predictive maintenance for UAV propulsion systems. The architecture and implementation provide a solid foundation for future industrial deployment, supporting AVIONAV's transition toward predictive maintenance strategies as the company continues its growth trajectory in the aerospace sector.

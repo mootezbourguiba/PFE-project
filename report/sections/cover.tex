@@ -1,0 +1,49 @@
+\begin{titlepage}
+\selectlanguage{english}
+\thispagestyle{empty}
+\begin{center}
+
+% --- Top Header ---
+{\Large \DegreeName}\\[0.4cm]
+{\large Academic year \AcademicYear}\\[0.8cm]
+
+% --- School Logo ---
+\IfFileExists{\EsprimLogoPath}{
+    \includegraphics[width=0.7\textwidth]{\EsprimLogoPath}\\[0.8cm]
+}{
+    \fbox{\parbox[c][2.8cm][c]{7cm}{\centering ESPRIM logo}}\\[0.8cm]
+}
+
+% --- Engineering Fields ---
+{\large \DepartmentName}\\[0.2cm]
+{\large \SpecialityName}\\[1.0cm]
+
+% --- Report Type ---
+{\Large \textbf{Final-Year Engineering Project Report}}\\[0.6cm]
+
+% --- Title Box ---
+\rule{\textwidth}{1pt}\\[0.5cm]
+{\Huge \bfseries \ReportTitleEN}\\[0.5cm]
+{\large \itshape \ReportTitleFR}\\[0.5cm]
+\rule{\textwidth}{1pt}\\[1.2cm]
+
+% --- Information Section ---
+% Adjusted column widths to match the image alignment
+\begin{tabular}{>{\bfseries}p{5cm}l}
+Prepared by           & \StudentName \\
+Host organization     & \CompanyName \\
+Industrial supervisor & \IndustrialSupervisor \\
+Academic supervisor   & \AcademicSupervisor \\
+\end{tabular}
+
+\vfill % Pushes the Jury section to the bottom
+
+% --- Jury Section ---
+
+\end{center}
+\end{titlepage}
+
+% --- Writing Guide (remains the same) ---
+\guided{%
+This page should remain formal, sober and institutionally consistent. The official school logo is already integrated in the template. If the project is confidential, prepare an academic version that preserves the scientific logic while masking sensitive elements.
+}

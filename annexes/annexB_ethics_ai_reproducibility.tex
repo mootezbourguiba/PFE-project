@@ -1,0 +1,33 @@
+\chapter{Scientific integrity, generative AI and reproducibility}
+
+\section{Declaration of generative AI usage}
+
+Generative AI tools (ChatGPT) were used in this project for the following purposes:
+\begin{itemize}
+    \item To suggest the overall report structure and section organization
+    \item To rephrase and improve clarity of certain technical sentences
+    \item To provide code examples and debug syntax for FastAPI and Streamlit components
+    \item To help format LaTeX tables and BibTeX entries
+\end{itemize}
+
+All technical implementation (data simulation, anomaly detection algorithms, API development, dashboard creation), all testing and validation, and all final content verification were performed by the author. The author assumes full scientific and academic responsibility for the final work.
+
+\section{Minimum reproducibility expectations}
+
+\begin{itemize}
+    \item \textbf{Datasets:} Simulated telemetry data generated using Python scripts, available in the project repository. Source code for data generation is documented in Chapter 5.
+    \item \textbf{Tools:} Python 3.9, scikit-learn 1.0, FastAPI 0.68, Streamlit 1.12, SQLAlchemy 1.4. All dependencies listed in requirements.txt.
+    \item \textbf{Hardware environment:} Tested on Windows 10 with Intel Core i5 processor and 8 GB RAM.
+    \item \textbf{Critical parameters:} Isolation Forest contamination parameter: 0.05; Sampling frequency: 10 Hz; Anomaly threshold: determined during training.
+    \item \textbf{Validation elements:} Test scripts available in repository; configuration files documented; model weights saved as pickle files.
+    \item \textbf{Confidentiality:} No confidential data used; all data is simulated for prototype demonstration.
+\end{itemize}
+
+\section{Compliance reminders}
+
+\begin{itemize}
+    \item \textbf{✓} Every borrowed figure, table, code excerpt or idea must be attributed.
+    \item \textbf{✓} Results must be interpreted critically.
+    \item \textbf{●} An excessively high similarity rate may compromise report acceptability.
+    \item \textbf{●} Fluent text is not scientific evidence if it is not linked to a method and verifiable results.
+\end{itemize}

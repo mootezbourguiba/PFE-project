@@ -1,0 +1,671 @@
+﻿Technical Specification & Engineering Report
+
+Intelligent Avionics Health Monitoring
+and Predictive Maintenance Platform
+
+Focus on UAV Electric Propulsion Systems
+
+Mootez Bourguiba
+Final Year Software Engineering Student
+
+ESPRIM
+
+Academic Year 2025–2026
+April 13, 2026
+
+
+
+Contents
+
+1 Introduction and System Context 5
+1.1 General Context . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+1.2 Problem Statement . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+1.3 Project Objectives . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+
+2 Scrum Project Management 6
+2.1 Agile Methodology Overview . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.2 Identification of Actors . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+2.3 Identification of System Needs . . . . . . . . . . . . . . . . . . . . . . . 6
+
+2.3.1 Functional Requirements . . . . . . . . . . . . . . . . . . . . . . 7
+2.3.2 Non-Functional Requirements . . . . . . . . . . . . . . . . . . . 7
+
+2.4 Identification of Scrum Roles . . . . . . . . . . . . . . . . . . . . . . . . 7
+2.5 Product Backlog: Epics and User Stories . . . . . . . . . . . . . . . . . 7
+
+2.5.1 Defined Epics . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+2.5.2 User Stories . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+
+2.6 Sprint Planning . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+
+3 Sprint 0: UAV Conceptual Design and Architecture 9
+3.1 Sprint Objective . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.2 UAV Configuration Selection . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.3 Aerodynamic Sizing . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+3.4 Propulsion System and Energy Sizing . . . . . . . . . . . . . . . . . . . 10
+3.5 3D CAD Modeling Results . . . . . . . . . . . . . . . . . . . . . . . . . 10
+3.6 Global System Architecture . . . . . . . . . . . . . . . . . . . . . . . . 12
+
+4 Sprint 1: Data Acquisition and Simulation 13
+4.1 Sprint Objective . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.2 Sprint 1 UML Conception . . . . . . . . . . . . . . . . . . . . . . . . . 13
+4.3 Simulation Methodology and Physics . . . . . . . . . . . . . . . . . . . 14
+4.4 Simulation Results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+4.5 Sprint Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 16
+
+5 Sprint 2: Predictive Maintenance AI Engine 17
+5.1 Sprint Objective . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 17
+5.2 Algorithm Selection: Isolation Forest . . . . . . . . . . . . . . . . . . . 17
+5.3 Model Training and Execution . . . . . . . . . . . . . . . . . . . . . . . 17
+5.4 Results and Early Warning Evaluation . . . . . . . . . . . . . . . . . . 17
+
+1
+
+
+
+6 Sprint 3: Web Dashboard and Integration 19
+6.1 Sprint Objective . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+6.2 User Story Realization . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
+6.3 Technical Conception: Sequence Diagram . . . . . . . . . . . . . . . . . 19
+6.4 Functional Realization and Results . . . . . . . . . . . . . . . . . . . . 19
+
+6.4.1 Nominal Monitoring State . . . . . . . . . . . . . . . . . . . . . 20
+6.4.2 Degradation Alerting and AI Inference . . . . . . . . . . . . . . 20
+
+6.5 Sprint Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 20
+
+7 Conclusion 23
+
+Bibliography 24
+
+2
+
+
+
+List of Figures
+
+3.1 Isometric view of the Blended Wing Body UAV platform . . . . . . . . 10
+3.2 Top view showcasing the swept wing geometry . . . . . . . . . . . . . . 11
+3.3 Rear view showing the pusher motor mount and wing profile . . . . . . 11
+3.4 Global Architecture of the Predictive Maintenance Platform . . . . . . 12
+
+4.1 Use Case Diagram for the Digital Twin Simulator . . . . . . . . . . . . 14
+4.2 Sequence Diagram of the Simulation Pipeline . . . . . . . . . . . . . . . 14
+4.3 Simulated Motor Electrical Current: Healthy vs. Degrading Flights . . 15
+4.4 Simulated Motor Temperature: Healthy vs. Degrading Flights . . . . . 16
+
+5.1 Isolation Forest Anomaly Detection on Degrading Motor Telemetry . . 18
+
+6.1 Sequence Diagram of the Dashboard Integration . . . . . . . . . . . . . 20
+6.2 Platform Interface during a Nominal Flight (Flight 1) . . . . . . . . . . 21
+6.3 Emergency Alert: System detecting Critical Bearing Degradation . . . 22
+6.4 Detailed AI Anomaly analysis on Flight 6 Telemetry . . . . . . . . . . 22
+
+3
+
+
+
+List of Tables
+
+2.1 Extract of the Product Backlog User Stories . . . . . . . . . . . . . . . 8
+2.2 Project Sprint Schedule . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+
+4
+
+
+
+Chapter 1
+
+Introduction and System Context
+
+1.1 General Context
+Unmanned Aerial Vehicles (UAVs) have become essential tools in modern aerospace
+applications, including surveillance, environmental monitoring, and infrastructure in-
+spection. However, the aviation industry relies heavily on the reliability and avail-
+ability of avionics and propulsion systems. Unexpected in-flight failures can lead to
+catastrophic crashes, operational disruptions, and severe safety risks.
+
+1.2 Problem Statement
+Modern aircraft generate large volumes of operational data. Traditionally, maintenance
+is performed either reactively (after a failure) or preventively (on a strict time schedule,
+which is often inefficient). To maximize UAV safety, there is a critical need to transition
+to Predictive Maintenance—leveraging real-time telemetry data to detect abnormal
+behaviors before critical failures occur.
+
+Because an entire UAV contains thousands of components, this project focuses
+specifically on the Propulsion System (Brushless DC Motor and ESC). The
+motor is the most critical mechanical component of a fixed-wing UAV. Slow mechanical
+degradation, such as bearing wear, generates measurable precursors (e.g., increased
+electrical current, rising temperatures, and vibrations) making it the ideal candidate
+for predictive analysis.
+
+1.3 Project Objectives
+The objective of this project is to develop a modular and scalable software platform
+capable of:
+
+• Designing a conceptual UAV platform to serve as the physical baseline.
+
+• Simulating and acquiring avionics time-series data (Current, Voltage, Tempera-
+ture).
+
+• Detecting abnormal motor degradation patterns using Machine Learning anomaly
+detection.
+
+• Visualizing the motor’s health status through an interactive web dashboard.
+
+5
+
+
+
+Chapter 2
+
+Scrum Project Management
+
+2.1 Agile Methodology Overview
+To organize the development process of the proposed system, the Scrum agile method-
+ology was adopted instead of a traditional waterfall approach. Scrum relies on an
+iterative and incremental development cycle, emphasizing continuous adaptation and
+progressive delivery of functional components.
+
+2.2 Identification of Actors
+Before defining the system functionalities, it is essential to identify the actors who will
+interact with the system and specify the actions they can perform.
+
+• Maintenance Engineer: The primary user of the application. They use the
+system to ensure the daily monitoring of the drone fleet. The platform must
+allow them to:
+
+– Consult the real-time telemetry data (Voltage, Current, Temperature).
+– View the AI-generated "Health Score" of the motor.
+– Receive predictive alerts regarding impending bearing failures.
+– Consult the historical data of previous flights for post-mission analysis.
+
+• Drone Operator: A secondary user actively flying the UAV. The platform must
+allow them to:
+
+– Receive instantaneous critical alerts if an anomaly is detected mid-flight.
+– Make emergency landing decisions based on the AI’s early warnings.
+
+2.3 Identification of System Needs
+Based on the actor analysis, the system requirements are classified into functional and
+non-functional needs.
+
+6
+
+
+
+2.3.1 Functional Requirements
+The system must provide the following functionalities:
+
+• Data Ingestion: Read and process MAVLink/Telemetry time-series data.
+
+• Anomaly Detection: Run machine learning algorithms to detect deviations in
+the Current-Temperature relationship.
+
+• Dashboarding: Display interactive charts and motor health metrics.
+
+• Alerting: Trigger visual warnings when a degradation pattern is identified.
+
+2.3.2 Non-Functional Requirements
+The system must respect the following constraints:
+
+• Performance: The system must process time-series data and run AI predictions
+with minimal latency.
+
+• Usability: The dashboard must offer a simple, intuitive, and highly visual in-
+terface for the engineers.
+
+• Reliability: The system must minimize false negatives (missing a real failure)
+to ensure drone safety.
+
+• Maintainability: The codebase must be modular, primarily using Python, to
+allow future integration of new AI models.
+
+2.4 Identification of Scrum Roles
+In accordance with the Scrum framework, the project is structured around three main
+roles:
+
+• Product Owner: Assured by the Academic Supervisor, responsible for defin-
+ing the project needs, validating the functional increments, and prioritizing the
+objectives.
+
+• Scrum Master: Assured by the Student, responsible for organizing the work,
+applying Scrum principles, and ensuring the smooth execution of Sprints.
+
+• Development Team: Assured by the Student, responsible for the technical
+conception, Python development, AI training, and testing of the platform.
+
+2.5 Product Backlog: Epics and User Stories
+The system requirements were transformed into Epics (large functional modules) and
+User Stories.
+
+7
+
+
+
+2.5.1 Defined Epics
+• Epic 1: UAV Conceptualization and Sizing (Sprint 0).
+
+• Epic 2: Motor Telemetry Data Pipeline (Sprint 1).
+
+• Epic 3: Predictive Maintenance AI Engine (Sprint 2).
+
+• Epic 4: Interactive Streamlit Dashboard (Sprint 3).
+
+2.5.2 User Stories
+Table 2.1 presents an extract of the Product Backlog.
+
+ID Epic User Story Priority
+US1 Epic 1 (CAD) As an engineer, I want to conceptu- High
+
+alize the 3D UAV model to establish
+the physical constraints of the mo-
+tor.
+
+US2 Epic 2 (Data) As an engineer, I want to simulate High
+motor current and temperature data
+to train my algorithms.
+
+US3 Epic 3 (AI) As a maintenance engineer, I want High
+the system to detect gradual current
+drift to warn me of bearing degrada-
+tion.
+
+US4 Epic 4 (UI) As an operator, I want a Streamlit Medium
+Python dashboard to visualize real-
+time motor health scores.
+
+Table 2.1: Extract of the Product Backlog User Stories
+
+2.6 Sprint Planning
+The project timeline is divided into distinct Sprints, as shown in Table 2.2.
+
+Sprint Duration Objective / Deliverable
+Sprint 0 Weeks 1–2 UAV Conceptual Sizing, Configuration,
+
+and 3D CAD Modeling
+Sprint 1 Weeks 3–5 Backend setup and Motor Data
+
+Pipeline Simulation (Python)
+Sprint 2 Weeks 6–9 Implementation of the Anomaly Detec-
+
+tion AI Model
+Sprint 3 Weeks 10–14 Development of the Streamlit Python
+
+Dashboard
+
+Table 2.2: Project Sprint Schedule
+
+8
+
+
+
+Chapter 3
+
+Sprint 0: UAV Conceptual Design and
+Architecture
+
+3.1 Sprint Objective
+Sprint 0 represents the initialization phase. The objective is to define the physical drone
+platform that generates the avionics data. This includes selecting the aerodynamic
+configuration, performing mathematical sizing, and producing the 3D CAD model.
+
+3.2 UAV Configuration Selection
+After evaluating various aerodynamic layouts, a Blended Wing Body (BWB) /
+Flying Wing configuration with a rear-mounted pusher motor was selected. This
+advanced configuration offers significant advantages for avionics monitoring:
+
+• Avionics Payload Space: The thick central fuselage pod provides a large in-
+ternal volume to house the intelligent monitoring platform, flight controller, and
+batteries.
+
+• Aerodynamic Efficiency: Eliminating the traditional tail assembly reduces
+drag and structural weight, increasing flight endurance.
+
+3.3 Aerodynamic Sizing
+The aerodynamic sizing was performed using the standard lift equation:
+
+1
+L = ρV 2SCL (3.1)
+
+2
+At steady cruise flight, the lift (L) must balance the aircraft’s maximum takeoff
+
+weight (W ≈ 39.2 N for a 4 kg mass). Assuming an air density (ρ) of 1.225 kg/m3, a
+cruise speed (V ) of 15 m/s, and a typical cruise lift coefficient (CL) of 0.5, the required
+wing area (S) is calculated as:
+
+2W
+S = ≈ 0.5 m2 (3.2)
+
+ρV 2CL
+
+With a chosen aspect ratio (AR) of 8, the required wingspan (b) is determined by:
+√ √
+
+b = AR× S = 8× 0.5 = 2.0 m (3.3)
+
+9
+
+
+
+3.4 Propulsion System and Energy Sizing
+The propulsion system dictates the electrical parameters (Voltage, Current, Tempera-
+ture) that the predictive maintenance platform will monitor.
+
+Using a standard power-to-weight ratio of 200 W/kg for surveillance UAVs, the
+maximum required power for a 4 kg UAV is:
+
+Pmax = 4 kg × 200 W/kg = 800 W (3.4)
+
+To satisfy this requirement, a 3548-class brushless motor (900W) was selected. Oper-
+ating on a 4S power system (14.8 V nominal) with an estimated cruise power of 150
+W, the average cruise current is:
+
+150 W
+Icruise = ≈ 10.1 A (3.5)
+
+14.8 V
+To achieve a target endurance of 90 minutes (1.5 hours), a 4S4P Lithium-Ion (Li-Ion)
+21700 battery pack (16,000 mAh) was selected.
+
+3.5 3D CAD Modeling Results
+Based on these calculations, the UAV was modeled using computer-aided design (CAD)
+software. The resulting configuration is shown in the figures below.
+
+Figure 3.1: Isometric view of the Blended Wing Body UAV platform
+
+10
+
+
+
+Figure 3.2: Top view showcasing the swept wing geometry
+
+Figure 3.3: Rear view showing the pusher motor mount and wing profile
+
+11
+
+
+
+3.6 Global System Architecture
+To guide the software development in the upcoming Sprints, a global system architec-
+ture was defined. As illustrated in Figure 3.4, the system is composed of four main
+nodes: the UAV platform generating the telemetry, the data processing pipeline, the
+AI predictive engine, and the frontend dashboard.
+
+Figure 3.4: Global Architecture of the Predictive Maintenance Platform
+
+12
+
+
+
+Chapter 4
+
+Sprint 1: Data Acquisition and
+Simulation
+
+4.1 Sprint Objective
+With the physical parameters of the UAV motor defined in Sprint 0, Sprint 1 focuses
+on generating the operational telemetry data. In a real-world scenario, this data is
+extracted via MAVLink from the flight controller. For the scope of this project, a
+Python-based Digital Twin simulation pipeline was developed to generate a realistic
+dataset.
+
+4.2 Sprint 1 UML Conception
+In accordance with the Scrum methodology, the functional behavior and execution
+flow of the Digital Twin simulator were modeled using UML prior to implementation.
+Figure 4.1 presents the Use Case diagram, highlighting the Data Engineer’s interaction
+with the simulator.
+
+13
+
+
+
+Figure 4.1: Use Case Diagram for the Digital Twin Simulator
+
+Figure 4.2 details the Sequence diagram of the Python script, illustrating the
+chronological API calls to generate and export the dataset.
+
+Figure 4.2: Sequence Diagram of the Simulation Pipeline
+
+4.3 Simulation Methodology and Physics
+To train a predictive maintenance algorithm, the simulation must generate both "Healthy"
+and "Degrading" flight data. The primary failure mode modeled is motor bearing
+
+14
+
+
+
+degradation.
+The simulation logic follows physical electrical laws:
+
+1. Friction: As bearings wear out, mechanical friction increases.
+
+2. Current Draw: To overcome this friction and maintain a constant cruise speed
+of 5000 RPM, the Electronic Speed Controller (ESC) must supply more electrical
+current (I) to the motor.
+
+3. Thermal Dynamics: Electrical heat generation in the stator coils is propor-
+tional to the square of the current (Ploss = I2R). Therefore, as the current rises
+to fight friction, the motor temperature rises exponentially.
+
+Using Python, six 60-minute flights were simulated (1 data point per second).
+Flights 1 through 5 represent healthy baseline operations, while Flight 6 introduces
+an exponential friction multiplier to simulate an impending bearing failure.
+
+4.4 Simulation Results
+The resulting telemetry dataset (uav_motor_telemetry.csv) successfully captures the
+physical degradation of the motor.
+
+Figure 4.3 illustrates the electrical current draw. During the healthy flights, the
+current remains stable at approximately 10 Amps. However, during the degrading
+flight, the current steadily climbs toward 14 Amps to compensate for the simulated
+friction.
+
+Figure 4.3: Simulated Motor Electrical Current: Healthy vs. Degrading Flights
+
+Consequently, Figure 4.4 shows the thermal impact of this degradation. The healthy
+flights maintain a stable operating temperature near 50◦C. In contrast, the degrading
+flight shows a severe temperature increase, approaching 70◦C by the end of the flight
+time.
+
+15
+
+
+
+Figure 4.4: Simulated Motor Temperature: Healthy vs. Degrading Flights
+
+4.5 Sprint Conclusion
+The generated dataset successfully replicates the physical precursors of a motor failure.
+This time-series data provides the exact input features (Current, Voltage, Temperature,
+and RPM) required to train the Machine Learning anomaly detection model in Sprint
+2.
+
+16
+
+
+
+Chapter 5
+
+Sprint 2: Predictive Maintenance AI
+Engine
+
+5.1 Sprint Objective
+This Sprint focuses on the core artificial intelligence component of the platform. Using
+the time-series data generated in Sprint 1, an anomaly detection algorithm was im-
+plemented to identify early signs of motor bearing degradation before a catastrophic
+in-flight failure occurs.
+
+5.2 Algorithm Selection: Isolation Forest
+For this predictive maintenance task, the Isolation Forest algorithm (from the scikit-
+learn library) was selected. Unlike simple static thresholds (e.g., triggering an alarm
+only when temperature exceeds 65◦C), Isolation Forest is an unsupervised machine
+learning algorithm that excels at detecting anomalies in multi-dimensional time-series
+data. It works by isolating observations by randomly selecting a feature and then
+randomly selecting a split value. Because anomalies are "few and different," they are
+isolated closer to the root of the decision trees, allowing for rapid detection of subtle
+drifts in the Current-Temperature relationship.
+
+5.3 Model Training and Execution
+The AI model was trained exclusively on the baseline data from Flights 1 through
+5. During this phase, the algorithm learned the multidimensional boundaries of a
+"Healthy" motor operating at a cruise speed of 5000 RPM.
+
+Once trained, the model was tested against the telemetry data of Flight 6, which
+contained the simulated exponential bearing friction.
+
+5.4 Results and Early Warning Evaluation
+The Isolation Forest successfully detected the onset of mechanical degradation long
+before critical thermal limits were reached.
+
+17
+
+
+
+As shown in Figure 5.1, the algorithm flagged the first anomaly at approximately t =
+161 seconds. At this point, the motor temperature was still within nominal operating
+bounds (≈ 51◦C), meaning a traditional threshold alarm would not have triggered.
+
+Figure 5.1: Isolation Forest Anomaly Detection on Degrading Motor Telemetry
+
+By detecting the micro-deviations in the electrical current draw caused by the initial
+bearing wear, the AI provided the Drone Operator with over 3,400 seconds (approx.
+57 minutes) of early warning. This successful prediction validates the core objective
+of the Intelligent Avionics Health Monitoring Platform: enabling proactive maintenance
+and preventing catastrophic in-flight failures.
+
+18
+
+
+
+Chapter 6
+
+Sprint 3: Web Dashboard and
+Integration
+
+6.1 Sprint Objective
+The final Sprint focused on the development of the User Interface and the system
+integration. The objective was to create a web-based dashboard using Streamlit
+to transform the raw telemetry and AI predictions into a decision-support tool for
+maintenance personnel.
+
+6.2 User Story Realization
+As defined in the project backlog (Chapter 2), the following User Stories were realized
+in this sprint:
+
+• US3 (Engineer perspective): "I want to visualize real-time motor health
+scores." Realized via the status cards and interactive charts.
+
+• US4 (Operator perspective): "I want to receive alerts for bearing degrada-
+tion." Realized via the automated "Critical" warning system.
+
+6.3 Technical Conception: Sequence Diagram
+To ensure the correct integration of the modules developed in Sprints 1 and 2, a se-
+quence diagram was modeled (Figure 6.1). It illustrates the interaction between the
+user, the dashboard, the telemetry database (CSV), and the AI inference engine.
+
+The process begins when the Engineer selects a Flight ID. The dashboard filters
+the CSV data and passes the Current and Temperature features to the Isolation Forest
+model. The model returns an anomaly score, which the UI uses to trigger visual alerts.
+
+6.4 Functional Realization and Results
+The following results demonstrate the platform’s ability to distinguish between nominal
+and failing flights.
+
+19
+
+
+
+Figure 6.1: Sequence Diagram of the Dashboard Integration
+
+6.4.1 Nominal Monitoring State
+Figure 6.2 shows the platform during a healthy flight. The system remains in a green
+state, indicating that the telemetry aligns with the baseline behavior.
+
+6.4.2 Degradation Alerting and AI Inference
+During Flight 6, the system detects a significant drift. Figure 6.3 shows the high-
+visibility alert triggered at the onset of failure.
+
+Figures 6.4 illustrate the detailed AI analysis. The red markers indicate points
+where the Isolation Forest identifies abnormal micro-deviations in the electrical and
+thermal patterns.
+
+6.5 Sprint Conclusion
+Sprint 3 successfully bridged the gap between machine learning and the end-user, trans-
+forming complex telemetry into actionable safety recommendations.
+
+20
+
+
+
+Figure 6.2: Platform Interface during a Nominal Flight (Flight 1)
+
+21
+
+
+
+Figure 6.3: Emergency Alert: System detecting Critical Bearing Degradation
+
+(a) Current Anomaly Detection (b) Thermal Anomaly Detection
+
+Figure 6.4: Detailed AI Anomaly analysis on Flight 6 Telemetry
+
+22
+
+
+
+Chapter 7
+
+Conclusion
+
+This report documented the complete development of an Intelligent Avionics Health
+Monitoring and Predictive Maintenance Platform. By adopting the Agile
+Scrum methodology, the project was systematically executed through four distinct
+phases, moving from conceptual design to a fully functional AI-powered prototype.
+
+The project achieved three major technical objectives:
+
+1. Physical Modeling: The Blended Wing Body UAV was mathematically sized
+and validated as a physical baseline.
+
+2. Digital Twin Simulation: A physics-aware simulation was created, providing a
+dataset that successfully replicated the precursor signals of a mechanical failure.
+
+3. Predictive Intelligence: The Isolation Forest model demonstrated its ability
+to detect anomalies at an early stage, providing over 50 minutes of early warning
+in simulated scenarios.
+
+The final dashboard integrates these components into a unified interface, proving
+that machine learning can be effectively utilized to prevent catastrophic in-flight failures
+in the aerospace industry.
+
+Future Perspectives: The modular nature of this platform allows for future
+integration with real MAVLink data streams. Furthermore, the anomaly detection
+engine could be expanded to monitor other critical avionics components, such as battery
+health or flight controller vibration patterns.
+
+23
+
+
+
+Bibliography
+
+[1] Reg Austin. Unmanned Aircraft Systems: UAVS Design, Development and Deploy-
+ment. John Wiley & Sons, 2010.
+
+[2] H. M. Hashemian. State-of-the-art predictive maintenance techniques. IEEE Trans-
+actions on Instrumentation and Measurement, 60(1):226–236, 2011.
+
+[3] Fei Tony Liu, Kai Ming Ting, and Zhi-Hua Zhou. Isolation forest. In 2008 Eighth
+IEEE International Conference on Data Mining, pages 413–422. IEEE, 2008.
+
+[4] The pandas development team. pandas-dev/pandas: Pandas, February 2020.
+
+[5] F. Pedregosa, G. Varoquaux, A. Gramfort, et al. Scikit-learn: Machine learning in
+Python. Journal of Machine Learning Research, 12:2825–2830, 2011.
+
+[6] Ken Schwaber. Agile Project Management with Scrum. Microsoft Press, 2012.
+
+[7] Streamlit Inc. Streamlit Documentation: Building Data Apps, 2024.
+
+24

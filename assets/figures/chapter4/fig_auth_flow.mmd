@@ -1,0 +1,21 @@
+sequenceDiagram
+    participant User
+    participant Dashboard
+    participant API
+    participant DB
+    
+    User->>Dashboard: Enter credentials
+    Dashboard->>API: POST /api/auth/login
+    API->>DB: Query user by username
+    DB-->>API: User record
+    API->>API: Verify password (bcrypt)
+    API->>API: Generate JWT token
+    API-->>Dashboard: JWT token
+    Dashboard->>Dashboard: Store token
+    
+    User->>Dashboard: Access protected resource
+    Dashboard->>API: GET /api/resource<br/>Authorization: Bearer <token>
+    API->>API: Validate JWT signature
+    API->>API: Check token expiration
+    API->>API: Extract user role
+    API-->>Dashboard: Resource data

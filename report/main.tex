@@ -1,0 +1,224 @@
+\documentclass[12pt,a4paper,oneside]{report}
+
+% ----------------------------------------------------------
+% Core packages - Overleaf compatible (pdfLaTeX)
+% ----------------------------------------------------------
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{array,booktabs,tabularx,longtable,multirow}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{bookmark}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{siunitx}
+\usepackage{csquotes}
+\usepackage{etoolbox}
+\usepackage{ifthen}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tocloft}
+\usepackage{emptypage}
+\usepackage{pifont}
+\usepackage{tcolorbox}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{pdfpages}
+\usepackage{appendix}
+\usepackage{float}
+\usepackage{afterpage}
+
+\input{config.tex}
+
+% ----------------------------------------------------------
+% Page layout
+% ----------------------------------------------------------
+\geometry{top=2.5cm,bottom=2.5cm,left=3cm,right=2.5cm}
+\setstretch{1.5}
+\setlength{\parskip}{0.3em}
+\setlength{\parindent}{0pt}
+\setlength{\headheight}{14pt}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{2}
+
+% ----------------------------------------------------------
+% Colors and styles
+% ----------------------------------------------------------
+\definecolor{EsprimRed}{RGB}{166,28,33}
+\definecolor{EsprimDark}{RGB}{45,45,45}
+\definecolor{EsprimGrey}{RGB}{95,95,95}
+\definecolor{GuideBlue}{RGB}{232,241,251}
+\definecolor{GuideBorder}{RGB}{74,122,178}
+\definecolor{GoodGreen}{RGB}{15,110,60}
+\definecolor{WarnOrange}{RGB}{180,110,0}
+
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries\Huge\color{EsprimDark}}
+  {\filleft\MakeUppercase{Chapter \thechapter}}
+  {0.8ex}
+  {\titlerule[0.8pt]\vspace{1ex}\filright}
+
+\titleformat{\section}
+  {\normalfont\bfseries\Large\color{EsprimDark}}
+  {\thesection}{0.8em}{}
+
+\titleformat{\subsection}
+  {\normalfont\bfseries\large\color{EsprimDark}}
+  {\thesubsection}{0.8em}{}
+
+\captionsetup[figure]{labelfont=bf,textfont=small,position=below,justification=centering}
+\captionsetup[table]{labelfont=bf,textfont=small,position=above,justification=centering}
+
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+\counterwithin{equation}{chapter}
+
+% ----------------------------------------------------------
+% Header / footer
+% ----------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\nouppercase{\leftmark}}
+\fancyhead[R]{\small \SchoolShort{} -- Final Project Report}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ----------------------------------------------------------
+% Hyperlinks
+% ----------------------------------------------------------
+\hypersetup{
+  colorlinks=true,
+  linkcolor=EsprimRed,
+  citecolor=EsprimRed,
+  urlcolor=blue,
+  pdftitle={\ReportTitleEN},
+  pdfauthor={\StudentName},
+  pdfsubject={\PDFSubject},
+  pdfkeywords={\PDFKeywords}
+}
+
+% ----------------------------------------------------------
+% Listings and pseudo-code
+% ----------------------------------------------------------
+\lstset{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  numbers=left,
+  numberstyle=\tiny,
+  captionpos=b,
+  tabsize=2,
+  showstringspaces=false
+}
+
+% ----------------------------------------------------------
+% Guidance boxes
+% ----------------------------------------------------------
+\newtcolorbox{guidebox}{
+  colback=GuideBlue,
+  colframe=GuideBorder,
+  boxrule=0.7pt,
+  arc=1.5mm,
+  left=2mm,right=2mm,top=1.5mm,bottom=1.5mm,
+  title=Writing and compliance guide
+}
+
+\newcommand{\guided}[1]{\ifshowguide\begin{guidebox}#1\end{guidebox}\fi}
+\newcommand{\todo}[1]{\textcolor{EsprimRed}{\textbf{[To complete: #1]}}}
+\newcommand{\okitem}{\textcolor{GoodGreen}{\ding{51}}}
+\newcommand{\warnitem}{\textcolor{WarnOrange}{\ding{108}}}
+
+% ----------------------------------------------------------
+% Discipline-specific reminders
+% ----------------------------------------------------------
+\newcommand{\disciplinehint}{%
+\ifstrequal{\disciplinecode}{ds}{
+Data Science / AI-oriented project: clarify data sources, dataset quality, experimental protocol, metrics, reproducibility, bias analysis and model limitations.
+}{
+\ifstrequal{\disciplinecode}{eet}{
+EET-oriented project: make the hardware/software architecture, interfaces, real-time constraints, safety aspects, protocols, relevant standards, measurements and test bench explicit.
+}{
+Mechatronics-oriented project: explain system decomposition, mechanical-electronic-control coupling, CAD aspects, kinematics/dynamics, integration strategy, performance testing and operational safety.
+}}
+}
+
+% ----------------------------------------------------------
+% Start document
+% ----------------------------------------------------------
+\begin{document}
+\selectlanguage{english}
+
+% ---------------- Front matter ----------------
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\input{sections/cover.tex}
+\cleardoublepage
+\input{sections/dedication.tex}
+\cleardoublepage
+\input{sections/acknowledgements.tex}
+\cleardoublepage
+\input{sections/abstracts.tex}
+\cleardoublepage
+
+\tableofcontents
+\addcontentsline{toc}{chapter}{Table of contents}
+\cleardoublepage
+
+\listoffigures
+\addcontentsline{toc}{chapter}{List of figures}
+\cleardoublepage
+
+\listoftables
+\addcontentsline{toc}{chapter}{List of tables}
+\cleardoublepage
+
+\input{sections/abbreviations.tex}
+\cleardoublepage
+
+\ifshowguide
+\input{sections/integrated_referential.tex}
+\cleardoublepage
+\fi
+
+% ---------------- Main body ----------------
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\input{sections/introduction.tex}
+\include{chapters/chapter1_Company_Presentation_AVIONAV.tex}
+\include{chapters/chapter2_State_of_the_Art_and_Project_Positioning.tex}
+\include{chapters/chapter3_Requirements_Analysis_and_Scrum_Methodology.tex}
+\include{chapters/chapter4_Sprint0_Initialization_and_Architecture.tex}
+\include{chapters/chapter5_Sprint1_Telemetry_Simulation.tex}
+\include{chapters/chapter6_Sprint2_Anomaly_Detection_Engine.tex}
+\include{chapters/chapter7_Sprint3_Dashboard_and_Integration.tex}
+\include{chapters/chapter8_Testing_Validation_and_Discussion.tex}
+\include{chapters/General_Conclusion.tex}
+
+% ---------------- Bibliography ----------------
+\cleardoublepage
+\addcontentsline{toc}{chapter}{References}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+% ---------------- Appendices ----------------
+\begin{appendices}
+\input{annexes/annexA_traceability.tex}
+\input{annexes/annexB_ethics_ai_reproducibility.tex}
+\input{annexes/annexC_final_checklist.tex}
+\end{appendices}
+
+\end{document}

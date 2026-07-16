@@ -1,0 +1,18 @@
+graph TB
+    SERVER[Single Server<br/>Local Development]
+    
+    SERVER --> DASH[Streamlit Dashboard<br/>Port 8501]
+    SERVER --> API[FastAPI Backend<br/>Port 8000]
+    SERVER --> DB[SQLite Database<br/>File Storage]
+    SERVER --> AI[AI Engine<br/>Python Module]
+    
+    DASH <--> API
+    API <--> DB
+    API <--> AI
+    AI <--> DB
+    
+    style SERVER fill:#cccccc
+    style DASH fill:#9999ff
+    style API fill:#ff9999
+    style DB fill:#99ff99
+    style AI fill:#ffff99

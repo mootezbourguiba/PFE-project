@@ -1,0 +1,98 @@
+\chapter{State of the art and project positioning}
+
+\section*{Introduction to Chapter 2}
+\addcontentsline{toc}{section}{Introduction to Chapter 2}
+
+This chapter presents the scientific and technical background necessary to understand the project. It then reviews existing UAV motor maintenance methods and their limitations. Finally, it positions the proposed project by explaining the focus on bearing wear and the use of machine learning for predictive maintenance.
+
+\section{Scientific and technical context}
+
+Avionics is a term that merges two words: electronics and aviation. So avionics systems are the electronic systems used in aircraft that are used in many operations, such as navigation, communication, flight control, monitoring and safety. As examples, we mention: radar systems, flight control systems, communication systems, autopilot systems, detecting system, and safety control systems.
+
+We need to monitor them for many reasons, including reducing downtime, supporting predictive maintenance, detecting abnormal cases before unexpected failure occurs, guaranteeing safety, and avoiding costly maintenance interventions.
+
+This project aims to monitor avionics-related parameters such as voltage levels, current measurements, temperature degrees, error rate counters, and communication frequency.
+
+\section{Critical analysis of existing work}
+
+Nowadays, UAV motor maintenance is mostly reactive or scheduled, and is done through manual monitoring, routine inspections, and replacing components after a failure appears. Maintenance methods vary depending on the UAV type, whether it is military, civilian, or used for photography.
+
+\subsection*{Current maintenance methods}
+
+\begin{enumerate}
+    \item \textbf{Lubricating bearings:} Bearings are among the most failure-prone parts. Technicians regularly lubricate them to reduce friction. If abnormal noise appears, technicians replace the bearings completely.
+    
+    \item \textbf{Cleaning the motor:} UAV motors are frequently exposed to dust, moisture, sand, and insects, especially after flying in desert or agricultural environments. Therefore, technicians and users clean them using compressed air, small brushes, and electronic cleaning alcohol.
+    
+    \item \textbf{Monitoring temperature:} Operators sometimes measure the temperature of components including the motor, propeller, ESC, and wires. Since the more current the motor consumes, the more its temperature rises (according to Ploss = I² × R), technicians also monitor current consumption. High temperature may indicate heavy loads, because drone motors are small and lightweight, making them unable to carry heavy cameras or fly in hot environments for long durations.
+    
+    \item \textbf{Routine visual inspection:} Technicians and operators regularly inspect components to check for issues such as propeller cracks, damaged magnets, internal mechanical issues, and loose screws. They also look for sand, dust, or dirt, especially after flying in desert or agricultural environments.
+    
+    \item \textbf{Testing vibrations and sound:} Operators, technicians, and users monitor for abnormal sounds or vibrations, then process them to identify the source. This may indicate issues such as bearing wear. This method depends heavily on the technician's or operator's experience.
+    
+    \item \textbf{Replacing the motor after a problem appears:} In many cases, maintenance is reactive. The motor is completely replaced after it gets damaged. Often, the entire motor is discarded instead of repairing only the damaged part, especially in professional or industrial drones where the cost of repair may exceed the cost of replacement.
+    
+    \item \textbf{Using flight data (in advanced systems):} Some modern UAVs record information such as flight hours, RPM, current consumption, and error logs. Companies such as DJI and Parrot use this data to determine maintenance timing.
+\end{enumerate}
+
+\subsection*{Weaknesses of current methods}
+
+The traditional methods listed above have several weaknesses:
+
+\begin{itemize}
+    \item \textbf{Maintenance is mostly reactive or scheduled, not predictive.} Reactive maintenance means the motor is replaced only after failure. This is hazardous because the drone can crash during flight, leading to financial losses. Scheduled maintenance means replacing the motor after a specific number of flight hours. This is also a financial loss because the motor may be replaced unnecessarily. Therefore, maintenance should be predictive.
+    
+    \item \textbf{Heavy dependence on humans.} From the traditional methods, we can conclude that maintenance depends completely on human observation and experience. This can lead to differences in diagnostic accuracy.
+    
+    \item \textbf{Continuous vibrations} can lead to loose screws, reduced motor lifespan, and structural fatigue.
+    
+    \item \textbf{The motor is replaced completely after failure} instead of repairing only the damaged part. This creates electronic waste and results in unsustainable maintenance practices.
+    
+    \item \textbf{Excessive heat} reduces motor efficiency and can cause damage.
+    
+    \item \textbf{Current methods cannot detect early degradation.} Issues such as bearing wear, increased friction, and rising current are not noticed until the motor fails or overheats.
+\end{itemize}
+
+The main weakness of current methods is that they cannot detect early degradation. Bearing wear, increased friction, and rising current are not noticed until the motor fails or overheats. This is why predictive maintenance using AI is needed.
+
+\subsection*{Current direction in UAV motor maintenance}
+
+The field is currently moving toward:
+\begin{itemize}
+    \item Predictive maintenance using AI
+    \item Automated vibration analysis
+    \item Real-time temperature monitoring
+    \item Failure detection before breakdown
+    \item Digital twin technology
+    \item Cloud-based flight data analysis
+\end{itemize}
+
+These current directions aim to prevent drone crashes and reduce maintenance costs by predicting motor failure before it happens. This is considered one of the most important current research areas in UAV systems.
+
+\section{Project positioning}
+
+This project focuses on an unmanned aerial vehicle (UAV) – a fixed-wing drone. The most critical component of a fixed-wing drone is the propulsion system (brushless DC motor and electronic speed controller (ESC)), because the drone crashes if the motor fails.
+
+A brushless motor can fail in different ways:
+\begin{itemize}
+    \item A broken propeller blade – causes massive, immediate vibration.
+    \item A burnt ESC MOSFET – the motor stops instantly after losing power.
+    \item A disconnected wire phase – the motor stutters and will not spin.
+    \item Demagnetised rotor magnets – happens if the motor gets too hot and loses torque.
+    \item Bearing wear – mechanical friction increases gradually over time.
+\end{itemize}
+
+We chose to focus on bearing wear because it is a progressive mechanical failure. The other failures (broken propeller, burnt ESC, disconnected wire) are instantaneous. If a wire disconnects or the ESC blows up, the drone crashes immediately. We cannot predict a wire snapping – that requires reactive maintenance (fixing after it breaks). If a propeller chips during flight, the vibration is instantaneous and obvious.
+
+Bearing wear is different. It happens slowly. The bearings take hours or days to lose lubrication, become scratched, and increase friction. This slow, creeping mechanical failure generates time-series data – a slowly rising current and a slowly rising temperature. This gradual deterioration is exactly the type of time-series anomaly that predictive maintenance AI is designed to detect before a catastrophic failure occurs. Machine learning algorithms, including Isolation Forest, are built to detect exactly this kind of gradual drift.
+
+The motor continuously generates current and heat. When bearings wear out, mechanical friction increases. To overcome this friction and maintain a cruise speed of 5000 RPM (revolutions per minute), we must supply more electrical current to the motor. According to thermal dynamics, electrical heat generation in the stator coils is proportional to the square of the current (Ploss = I² × R). Therefore, the temperature rises exponentially.
+
+These precursors – increased electrical current, rising temperature, and vibrations – allow us to detect motor degradation before a critical failure occurs. Therefore, the best choice is to monitor current and temperature.
+
+My initial technical specification proposed monitoring five parameters. However, after discussion with my industrial supervisor, I focused on the UAV propulsion system. The motor is the most critical component. I monitor current and temperature to detect gradual degradation (bearing wear).
+
+\section*{Conclusion to Chapter 2}
+\addcontentsline{toc}{section}{Conclusion to Chapter 2}
+
+This chapter has presented the scientific background of avionics monitoring and UAV motor maintenance. It has reviewed existing maintenance methods, including visual inspections, temperature monitoring, vibration testing, and flight data recording. The analysis revealed that current methods are mostly reactive or scheduled, heavily dependent on human experience, and unable to detect early degradation such as bearing wear. The chapter then positioned the proposed project, explaining why bearing wear was chosen as the focus and how monitoring current and temperature enables early anomaly detection using machine learning. The next chapter will present the requirements analysis and Scrum methodology.

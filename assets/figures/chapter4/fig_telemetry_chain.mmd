@@ -1,0 +1,14 @@
+graph LR
+    CS[Current Sensor] --> SC1[Signal<br/>Conditioning]
+    TS[Temperature Sensor] --> SC2[Signal<br/>Conditioning]
+    SC1 --> ADC[Analog-to-Digital<br/>Converter<br/>10 Hz]
+    SC2 --> ADC
+    ADC --> MCU[Microcontroller/<br/>Flight Computer]
+    MCU --> CSV[CSV Storage]
+    CSV --> PREP[Data Preprocessing]
+    PREP --> AI[AI Pipeline]
+    
+    style CS fill:#ff9999
+    style TS fill:#ff9999
+    style CSV fill:#99ff99
+    style AI fill:#9999ff

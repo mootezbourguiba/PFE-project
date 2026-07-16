@@ -1,0 +1,14 @@
+graph LR
+    CSV[Flight Telemetry<br/>CSV File] --> API[FastAPI Backend<br/>REST API]
+    API --> AI[Isolation Forest<br/>Anomaly Detection]
+    AI --> DB[SQLite Database]
+    DB --> API
+    API --> DASH[Streamlit Dashboard]
+    DASH --> ENG[Maintenance Engineer]
+    
+    style CSV fill:#cccccc
+    style API fill:#ff9999
+    style AI fill:#ffff99
+    style DB fill:#99ff99
+    style DASH fill:#9999ff
+    style ENG fill:#ffcc99
