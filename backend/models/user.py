@@ -49,13 +49,13 @@ class User(BaseModel):
     )
     """User role determining access permissions."""
     
-    # Relationship to FlightSession
-    flight_sessions = relationship(
-        "FlightSession",
-        back_populates="user",
-        cascade="all, delete-orphan"
-    )
-    """One-to-many relationship with FlightSession."""
+    # TODO Sprint 2:
+# Relationship will be enabled once FlightSession model exists.
+# flight_sessions = relationship(
+#     "FlightSession",
+#     back_populates="user",
+#     cascade="all, delete-orphan"
+# )
     
     def __repr__(self):
         """String representation of the user."""
