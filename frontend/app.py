@@ -1,30 +1,23 @@
 import streamlit as st
 
+from components.theme import load_css
+from components.theme import page_header
+
 st.set_page_config(
-    page_title="Avionics Health Monitoring Platform",
+    page_title="AVIONAV",
     page_icon="✈️",
     layout="wide",
 )
 
-st.title("✈️ Intelligent Avionics Health Monitoring Platform")
+load_css()
 
-st.markdown("---")
-
-st.subheader("Welcome")
-
-st.write(
-    """
-This prototype was developed for the Final Year Project (PFE).
-
-Current implementation:
-
-- ✅ Authentication System
-- ✅ User Roles
-- ✅ Telemetry Simulation
-- ✅ Isolation Forest Model
-- ✅ REST API
-- 🔄 Streamlit Dashboard (under development)
-"""
+page_header(
+    "✈️ AVIONAV",
+    "Intelligent UAV Health Monitoring Platform",
 )
 
-st.info("Sprint 4 - Frontend Development")
+st.write("---")
+
+st.info(
+    "Sprint 4 UI is now under construction."
+)
