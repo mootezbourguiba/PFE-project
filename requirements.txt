@@ -35,3 +35,11 @@ mypy==1.7.1
 
 # Development
 ipython==8.18.1
+
+# Frontend
+streamlit==1.31.0
+plotly==5.18.0
+requests==2.31.0
+pillow==10.1.0
+streamlit-extras==0.3.5
+starlette==0.27.0

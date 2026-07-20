@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Enum as SQLEnum
+from sqlalchemy import Column, String, Boolean, Text, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 import enum
 from backend.models.base import BaseModel
@@ -30,6 +30,8 @@ class User(BaseModel):
         email: Unique email address for contact and login
         hashed_password: Bcrypt hash of user password (never plain text)
         role: User role determining access permissions
+        disabled: Account disabled status (for soft delete)
+        disabled_reason: Reason for disabling the account
         flight_sessions: Relationship to user's flight sessions
     """
     
@@ -48,6 +50,12 @@ class User(BaseModel):
         default=UserRole.MAINTENANCE_ENGINEER
     )
     """User role determining access permissions."""
+    
+    disabled = Column(Boolean, default=False, nullable=False)
+    """Account disabled status. True if account is disabled, False otherwise."""
+    
+    disabled_reason = Column(Text, nullable=True)
+    """Reason for disabling the account (optional)."""
     
     # TODO Sprint 2:
 # Relationship will be enabled once FlightSession model exists.
