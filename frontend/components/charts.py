@@ -1,7 +1,7 @@
 """
-Charts Component Module
+Charts Component
 
-This module provides reusable Plotly charts for data visualization.
+This module provides reusable Plotly chart components for data visualization.
 """
 
 import streamlit as st
@@ -11,178 +11,214 @@ from typing import List, Dict, Any
 import pandas as pd
 
 
-def line_chart(title: str, x_data: List, y_data: List, x_label: str = "", y_label: str = "", color: str = "#00d4ff") -> None:
+def line_chart(title: str, data: pd.DataFrame, x_col: str, y_col: str, color: str = "#00D4FF") -> None:
     """
-    Render a line chart using Plotly.
+    Render a line chart.
     
     Args:
         title: Chart title
-        x_data: X-axis data
-        y_data: Y-axis data
-        x_label: X-axis label
-        y_label: Y-axis label
-        color: Line color
+        data: DataFrame with chart data
+        x_col: Column name for x-axis
+        y_col: Column name for y-axis
+        color: Line color (default: cyan)
     """
     fig = go.Figure()
     
     fig.add_trace(go.Scatter(
-        x=x_data,
-        y=y_data,
+        x=data[x_col],
+        y=data[y_col],
         mode='lines',
-        name=title,
+        name=y_col,
         line=dict(color=color, width=2),
         fill='tozeroy',
         fillcolor=f'rgba({int(color[1:3], 16)}, {int(color[3:5], 16)}, {int(color[5:7], 16)}, 0.1)'
     ))
     
     fig.update_layout(
-        title=dict(text=title, font=dict(color='#ffffff', size=18)),
-        xaxis=dict(title=x_label, color='#8892b0', gridcolor='#1e3a5f'),
-        yaxis=dict(title=y_label, color='#8892b0', gridcolor='#1e3a5f'),
-        plot_bgcolor='#0d1b2a',
-        paper_bgcolor='#0d1b2a',
-        font=dict(color='#8892b0'),
-        margin=dict(l=50, r=50, t=50, b=50),
+        title=dict(text=title, font=dict(color='#FFFFFF', size=16)),
+        xaxis=dict(title=x_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        yaxis=dict(title=y_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        plot_bgcolor='#0D1B2A',
+        paper_bgcolor='#0D1B2A',
+        font=dict(color='#B0B0B0'),
+        margin=dict(l=0, r=0, t=40, b=0),
         height=300
     )
     
     st.plotly_chart(fig, use_container_width=True)
 
 
-def bar_chart(title: str, labels: List, values: List, color: str = "#00d4ff") -> None:
+def bar_chart(title: str, data: pd.DataFrame, x_col: str, y_col: str, color: str = "#00D4FF") -> None:
     """
-    Render a bar chart using Plotly.
+    Render a bar chart.
     
     Args:
         title: Chart title
-        labels: Bar labels
-        values: Bar values
-        color: Bar color
+        data: DataFrame with chart data
+        x_col: Column name for x-axis
+        y_col: Column name for y-axis
+        color: Bar color (default: cyan)
     """
-    fig = go.Figure(data=[go.Bar(
-        x=labels,
-        y=values,
-        marker=dict(color=color),
-        text=values,
-        textposition='auto'
-    )])
+    fig = go.Figure()
+    
+    fig.add_trace(go.Bar(
+        x=data[x_col],
+        y=data[y_col],
+        marker_color=color,
+        marker_line_color=color,
+        marker_line_width=2
+    ))
     
     fig.update_layout(
-        title=dict(text=title, font=dict(color='#ffffff', size=18)),
-        xaxis=dict(color='#8892b0', gridcolor='#1e3a5f'),
-        yaxis=dict(color='#8892b0', gridcolor='#1e3a5f'),
-        plot_bgcolor='#0d1b2a',
-        paper_bgcolor='#0d1b2a',
-        font=dict(color='#8892b0'),
-        margin=dict(l=50, r=50, t=50, b=50),
+        title=dict(text=title, font=dict(color='#FFFFFF', size=16)),
+        xaxis=dict(title=x_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        yaxis=dict(title=y_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        plot_bgcolor='#0D1B2A',
+        paper_bgcolor='#0D1B2A',
+        font=dict(color='#B0B0B0'),
+        margin=dict(l=0, r=0, t=40, b=0),
         height=300
     )
     
     st.plotly_chart(fig, use_container_width=True)
 
 
-def pie_chart(title: str, labels: List, values: List, colors: List = None) -> None:
+def pie_chart(title: str, data: pd.DataFrame, names_col: str, values_col: str) -> None:
     """
-    Render a pie chart using Plotly.
+    Render a pie chart.
     
     Args:
         title: Chart title
-        labels: Pie slice labels
-        values: Pie slice values
-        colors: Custom colors (optional)
+        data: DataFrame with chart data
+        names_col: Column name for pie slices
+        values_col: Column name for values
     """
-    if colors is None:
-        colors = ['#00d4ff', '#00ff88', '#ff9800', '#ff4444', '#9c27b0']
+    colors = ['#00D4FF', '#00FF00', '#FFA500', '#FF0000', '#FF00FF', '#FFFF00']
     
     fig = go.Figure(data=[go.Pie(
-        labels=labels,
-        values=values,
-        marker=dict(colors=colors),
+        labels=data[names_col],
+        values=data[values_col],
+        hole=0.3,
+        marker=dict(colors=colors[:len(data)]),
         textinfo='label+percent',
-        hole=0.3
+        textfont=dict(color='#FFFFFF')
     )])
     
     fig.update_layout(
-        title=dict(text=title, font=dict(color='#ffffff', size=18)),
-        paper_bgcolor='#0d1b2a',
-        font=dict(color='#8892b0'),
-        margin=dict(l=50, r=50, t=50, b=50),
+        title=dict(text=title, font=dict(color='#FFFFFF', size=16)),
+        paper_bgcolor='#0D1B2A',
+        font=dict(color='#B0B0B0'),
+        margin=dict(l=0, r=0, t=40, b=0),
         height=300
     )
     
     st.plotly_chart(fig, use_container_width=True)
 
 
-def scatter_chart(title: str, x_data: List, y_data: List, x_label: str = "", y_label: str = "", color: str = "#00d4ff") -> None:
+def scatter_chart(title: str, data: pd.DataFrame, x_col: str, y_col: str, color: str = "#00D4FF") -> None:
     """
-    Render a scatter chart using Plotly.
+    Render a scatter chart.
     
     Args:
         title: Chart title
-        x_data: X-axis data
-        y_data: Y-axis data
-        x_label: X-axis label
-        y_label: Y-axis label
-        color: Point color
+        data: DataFrame with chart data
+        x_col: Column name for x-axis
+        y_col: Column name for y-axis
+        color: Point color (default: cyan)
     """
     fig = go.Figure()
     
     fig.add_trace(go.Scatter(
-        x=x_data,
-        y=y_data,
+        x=data[x_col],
+        y=data[y_col],
         mode='markers',
-        name=title,
-        marker=dict(color=color, size=8)
+        marker=dict(color=color, size=8, line=dict(color='#FFFFFF', width=1))
     ))
     
     fig.update_layout(
-        title=dict(text=title, font=dict(color='#ffffff', size=18)),
-        xaxis=dict(title=x_label, color='#8892b0', gridcolor='#1e3a5f'),
-        yaxis=dict(title=y_label, color='#8892b0', gridcolor='#1e3a5f'),
-        plot_bgcolor='#0d1b2a',
-        paper_bgcolor='#0d1b2a',
-        font=dict(color='#8892b0'),
-        margin=dict(l=50, r=50, t=50, b=50),
+        title=dict(text=title, font=dict(color='#FFFFFF', size=16)),
+        xaxis=dict(title=x_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        yaxis=dict(title=y_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        plot_bgcolor='#0D1B2A',
+        paper_bgcolor='#0D1B2A',
+        font=dict(color='#B0B0B0'),
+        margin=dict(l=0, r=0, t=40, b=0),
         height=300
     )
     
     st.plotly_chart(fig, use_container_width=True)
 
 
-def multi_line_chart(title: str, data: Dict[str, List], x_label: str = "", y_label: str = "") -> None:
+def multi_line_chart(title: str, data: pd.DataFrame, x_col: str, y_cols: List[str], colors: List[str] = None) -> None:
     """
-    Render a multi-line chart using Plotly.
+    Render a multi-line chart.
     
     Args:
         title: Chart title
-        data: Dictionary with series names as keys and values as lists
-        x_label: X-axis label
-        y_label: Y-axis label
+        data: DataFrame with chart data
+        x_col: Column name for x-axis
+        y_cols: List of column names for y-axis
+        colors: List of colors for each line (default: cyan theme)
     """
-    colors = ['#00d4ff', '#00ff88', '#ff9800', '#ff4444', '#9c27b0']
+    if colors is None:
+        colors = ['#00D4FF', '#00FF00', '#FFA500', '#FF0000', '#FF00FF']
     
     fig = go.Figure()
     
-    for i, (name, values) in enumerate(data.items()):
+    for i, y_col in enumerate(y_cols):
         color = colors[i % len(colors)]
         fig.add_trace(go.Scatter(
-            x=list(range(len(values))),
-            y=values,
+            x=data[x_col],
+            y=data[y_col],
             mode='lines',
-            name=name,
+            name=y_col,
             line=dict(color=color, width=2)
         ))
     
     fig.update_layout(
-        title=dict(text=title, font=dict(color='#ffffff', size=18)),
-        xaxis=dict(title=x_label, color='#8892b0', gridcolor='#1e3a5f'),
-        yaxis=dict(title=y_label, color='#8892b0', gridcolor='#1e3a5f'),
-        plot_bgcolor='#0d1b2a',
-        paper_bgcolor='#0d1b2a',
-        font=dict(color='#8892b0'),
-        margin=dict(l=50, r=50, t=50, b=50),
+        title=dict(text=title, font=dict(color='#FFFFFF', size=16)),
+        xaxis=dict(title=x_col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        yaxis=dict(title='Value', gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        plot_bgcolor='#0D1B2A',
+        paper_bgcolor='#0D1B2A',
+        font=dict(color='#B0B0B0'),
+        margin=dict(l=0, r=0, t=40, b=0),
         height=300,
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def histogram(title: str, data: pd.DataFrame, col: str, color: str = "#00D4FF") -> None:
+    """
+    Render a histogram.
+    
+    Args:
+        title: Chart title
+        data: DataFrame with chart data
+        col: Column name for histogram
+        color: Bar color (default: cyan)
+    """
+    fig = go.Figure()
+    
+    fig.add_trace(go.Histogram(
+        x=data[col],
+        marker_color=color,
+        marker_line_color=color,
+        marker_line_width=2,
+        nbinsx=20
+    ))
+    
+    fig.update_layout(
+        title=dict(text=title, font=dict(color='#FFFFFF', size=16)),
+        xaxis=dict(title=col, gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        yaxis=dict(title='Count', gridcolor='#1E3A5F', tickcolor='#B0B0B0'),
+        plot_bgcolor='#0D1B2A',
+        paper_bgcolor='#0D1B2A',
+        font=dict(color='#B0B0B0'),
+        margin=dict(l=0, r=0, t=40, b=0),
+        height=300
     )
     
     st.plotly_chart(fig, use_container_width=True)

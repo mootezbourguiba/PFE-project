@@ -7,8 +7,8 @@ JWT tokens, and role-based access control.
 
 import streamlit as st
 import jwt
+from typing import Optional
 from datetime import datetime
-from typing import Optional, Dict, Any
 
 
 # JWT configuration (must match backend)
@@ -20,90 +20,76 @@ def init_session_state() -> None:
     """
     Initialize session state variables for authentication.
     
-    This function ensures all required session state variables are initialized
-    to prevent KeyError exceptions during authentication flow.
+    This should be called at the start of the app to ensure all
+    session state variables are initialized.
     """
-    if "token" not in st.session_state:
-        st.session_state.token = None
-    if "token_type" not in st.session_state:
-        st.session_state.token_type = None
-    if "user_id" not in st.session_state:
-        st.session_state.user_id = None
-    if "username" not in st.session_state:
-        st.session_state.username = None
-    if "role" not in st.session_state:
-        st.session_state.role = None
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
-    if "page" not in st.session_state:
-        st.session_state.page = "login"
+    
+    if "token" not in st.session_state:
+        st.session_state.token = None
+    
+    if "user" not in st.session_state:
+        st.session_state.user = None
+    
+    if "role" not in st.session_state:
+        st.session_state.role = None
+    
+    if "user_id" not in st.session_state:
+        st.session_state.user_id = None
+    
+    if "current_page" not in st.session_state:
+        st.session_state.current_page = "login"
 
 
 def login(username: str, password: str) -> bool:
     """
-    Authenticate user with backend and store session data.
+    Authenticate user and store session information.
     
     Args:
         username: User username
         password: User password
         
     Returns:
-        True if authentication succeeds, False otherwise
+        True if login successful, False otherwise
     """
-    from frontend.utils.api import login as api_login
+    from utils.api import login as api_login
     
-    # Attempt login via API
-    response = api_login(username, password)
-    
-    if response and "access_token" in response:
-        # Decode JWT token to extract user information
+    if api_login(username, password):
+        # Decode JWT token to get user information
         try:
             payload = jwt.decode(
-                response["access_token"],
+                st.session_state.token,
                 SECRET_KEY,
                 algorithms=[ALGORITHM]
             )
             
-            # Store user information in session state
-            st.session_state.token = response["access_token"]
-            st.session_state.token_type = response.get("token_type", "bearer")
+            st.session_state.user = payload.get("sub")
             st.session_state.user_id = payload.get("user_id")
-            st.session_state.username = payload.get("username")
             st.session_state.role = payload.get("role")
-            st.session_state.authenticated = True
             
             return True
             
-        except jwt.PyJWTError as e:
-            st.error(f"Token decoding error: {str(e)}")
+        except jwt.PyJWTError:
+            st.error("Failed to decode token. Please try again.")
+            logout()
             return False
-    
-    return False
+    else:
+        return False
 
 
 def logout() -> None:
     """
-    Log out the current user by clearing session state.
-    
-    This function removes all authentication-related data from session state
-    and redirects to the login page.
+    Clear user session and redirect to login.
     """
-    # Clear authentication data
-    st.session_state.token = None
-    st.session_state.token_type = None
-    st.session_state.user_id = None
-    st.session_state.username = None
-    st.session_state.role = None
-    st.session_state.authenticated = False
-    st.session_state.page = "login"
+    from utils.api import logout as api_logout
     
-    # Rerun the application to redirect to login
-    st.rerun()
+    api_logout()
 
 
 def is_authenticated() -> bool:
     """
-    Check if the current user is authenticated.
+    Check if user is authenticated.
     
     Returns:
         True if user is authenticated, False otherwise
@@ -111,36 +97,39 @@ def is_authenticated() -> bool:
     return st.session_state.get("authenticated", False)
 
 
-def current_user() -> Optional[Dict[str, Any]]:
+def current_user() -> Optional[str]:
     """
-    Get information about the current authenticated user.
+    Get current username.
     
     Returns:
-        Dictionary containing user information or None if not authenticated
+        Current username or None if not authenticated
     """
-    if not is_authenticated():
-        return None
-    
-    return {
-        "user_id": st.session_state.user_id,
-        "username": st.session_state.username,
-        "role": st.session_state.role
-    }
+    return st.session_state.get("user")
 
 
 def current_role() -> Optional[str]:
     """
-    Get the role of the current authenticated user.
+    Get current user role.
     
     Returns:
-        User role string or None if not authenticated
+        Current user role or None if not authenticated
     """
     return st.session_state.get("role")
 
 
+def current_user_id() -> Optional[int]:
+    """
+    Get current user ID.
+    
+    Returns:
+        Current user ID or None if not authenticated
+    """
+    return st.session_state.get("user_id")
+
+
 def is_administrator() -> bool:
     """
-    Check if the current user is an administrator.
+    Check if current user is an administrator.
     
     Returns:
         True if user is administrator, False otherwise
@@ -150,7 +139,7 @@ def is_administrator() -> bool:
 
 def is_maintenance_engineer() -> bool:
     """
-    Check if the current user is a maintenance engineer.
+    Check if current user is a maintenance engineer.
     
     Returns:
         True if user is maintenance engineer, False otherwise
@@ -160,7 +149,7 @@ def is_maintenance_engineer() -> bool:
 
 def is_drone_operator() -> bool:
     """
-    Check if the current user is a drone operator.
+    Check if current user is a drone operator.
     
     Returns:
         True if user is drone operator, False otherwise
@@ -168,69 +157,54 @@ def is_drone_operator() -> bool:
     return current_role() == "drone_operator"
 
 
+def require_role(required_role: str) -> bool:
+    """
+    Check if current user has the required role.
+    
+    Args:
+        required_role: Required role (administrator, maintenance_engineer, drone_operator)
+        
+    Returns:
+        True if user has required role, False otherwise
+    """
+    return current_role() == required_role
+
+
 def require_authentication() -> None:
     """
-    Require authentication for the current page.
+    Require user to be authenticated. Redirect to login if not.
     
-    If the user is not authenticated, this function displays an error message
-    and stops execution. This should be called at the beginning of protected pages.
+    This function should be called at the beginning of any page
+    that requires authentication.
     """
     if not is_authenticated():
-        st.error("Authentication required. Please log in.")
-        st.stop()
+        st.session_state.current_page = "login"
+        st.rerun()
 
 
 def require_administrator() -> None:
     """
-    Require administrator role for the current page.
+    Require user to be an administrator. Show error if not.
     
-    If the user is not an administrator, this function displays an error message
-    and stops execution. This should be called at the beginning of admin-only pages.
+    This function should be called at the beginning of any page
+    that requires administrator access.
     """
     require_authentication()
     
     if not is_administrator():
-        st.error("Administrator access required.")
-        st.stop()
-
-
-def require_maintenance_engineer() -> None:
-    """
-    Require maintenance engineer role for the current page.
-    
-    If the user is not a maintenance engineer, this function displays an error message
-    and stops execution. This should be called at the beginning of maintenance-only pages.
-    """
-    require_authentication()
-    
-    if not is_maintenance_engineer():
-        st.error("Maintenance Engineer access required.")
-        st.stop()
-
-
-def require_drone_operator() -> None:
-    """
-    Require drone operator role for the current page.
-    
-    If the user is not a drone operator, this function displays an error message
-    and stops execution. This should be called at the beginning of operator-only pages.
-    """
-    require_authentication()
-    
-    if not is_drone_operator():
-        st.error("Drone Operator access required.")
+        st.error("Access denied. Administrator access required.")
         st.stop()
 
 
 def get_role_display_name(role: Optional[str]) -> str:
     """
-    Get a human-readable display name for a user role.
+    Get display name for a role.
     
     Args:
-        role: Role string (e.g., "administrator")
+        role: Role string (administrator, maintenance_engineer, drone_operator)
         
     Returns:
-        Human-readable role name
+        Display name for the role
     """
     role_names = {
         "administrator": "Administrator",
@@ -243,13 +217,13 @@ def get_role_display_name(role: Optional[str]) -> str:
 
 def get_role_icon(role: Optional[str]) -> str:
     """
-    Get an icon for a user role.
+    Get icon for a role.
     
     Args:
-        role: Role string
+        role: Role string (administrator, maintenance_engineer, drone_operator)
         
     Returns:
-        Emoji icon for the role
+        Icon emoji for the role
     """
     role_icons = {
         "administrator": "👤",

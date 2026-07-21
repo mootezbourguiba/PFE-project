@@ -1,104 +1,257 @@
-"""
-AVIONAV Platform - Main Application
-
-This is the main entry point for the AVIONAV Intelligent UAV Health Monitoring Platform.
-It handles role-based navigation and routing to different dashboard pages.
-"""
-
 import streamlit as st
-import sys
+from PIL import Image
 from pathlib import Path
 
-# Add parent directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# -------------------------------------------------------
+# Page Configuration
+# -------------------------------------------------------
 
-from frontend.utils.auth import init_session_state, is_authenticated, current_role, is_administrator, is_maintenance_engineer, is_drone_operator
+st.set_page_config(
+    page_title="AVIONAV Platform",
+    page_icon="✈️",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
+# -------------------------------------------------------
+# Assets
+# -------------------------------------------------------
 
-def main() -> None:
+ASSETS = Path(__file__).parent / "assets"
+
+logo = Image.open(ASSETS / "images" / "avionav_logo.png")
+banner = Image.open(ASSETS / "images" / "banner.jpg")
+
+# -------------------------------------------------------
+# Custom CSS
+# -------------------------------------------------------
+
+st.markdown("""
+<style>
+
+.block-container{
+    padding-top:1rem;
+    padding-bottom:2rem;
+}
+
+h1,h2,h3{
+    color:#0B3C5D;
+}
+
+.metric-card{
+    background:#F7F9FB;
+    padding:20px;
+    border-radius:12px;
+    border-left:6px solid #0B3C5D;
+    box-shadow:0px 4px 10px rgba(0,0,0,.08);
+    text-align:center;
+}
+
+.section-title{
+    font-size:28px;
+    font-weight:bold;
+    color:#0B3C5D;
+}
+
+.footer{
+    text-align:center;
+    color:gray;
+    padding-top:40px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+# -------------------------------------------------------
+# Header
+# -------------------------------------------------------
+
+c1, c2 = st.columns([1,5])
+
+with c1:
+    st.image(logo, width=150)
+
+with c2:
+    st.title("AVIONAV")
+    st.subheader("Intelligent UAV Health Monitoring & Predictive Maintenance Platform")
+
+st.divider()
+
+# -------------------------------------------------------
+# Banner
+# -------------------------------------------------------
+
+st.image(
+    banner,
+    use_container_width=True
+)
+
+# -------------------------------------------------------
+# Hero
+# -------------------------------------------------------
+
+st.markdown(
+"""
+# Intelligent Avionics Monitoring
+
+The AVIONAV platform is designed to monitor UAV propulsion health in
+real time using Artificial Intelligence.
+
+The system continuously analyses motor current and temperature,
+detects abnormal behaviour and assists maintenance engineers
+before failures occur.
+
+"""
+)
+
+st.divider()
+
+# -------------------------------------------------------
+# KPI Cards
+# -------------------------------------------------------
+
+st.markdown(
+'<p class="section-title">Platform Overview</p>',
+unsafe_allow_html=True
+)
+
+c1,c2,c3,c4=st.columns(4)
+
+with c1:
+    st.markdown(
     """
-    Main application function that handles navigation and routing.
-    
-    This function:
-    - Sets page configuration
-    - Initializes session state
-    - Routes users to appropriate pages based on authentication status and role
-    - Handles page navigation
-    """
-    # Set page configuration (must be first Streamlit command)
-    st.set_page_config(
-        page_title="AVIONAV Platform",
-        page_icon="✈️",
-        layout="wide",
-        initial_sidebar_state="expanded"
+    <div class="metric-card">
+    <h2>👥</h2>
+    <h3>Users</h3>
+    <h1>3</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
     )
-    
-    # Initialize session state
-    init_session_state()
-    
-    # Custom CSS for dark avionics theme
-    st.markdown("""
-    <style>
-    .stApp {
-        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a5f 100%);
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Page routing based on authentication and role
-    if not is_authenticated():
-        # Show login page
-        from frontend.pages.login import show as show_login
-        show_login()
-    else:
-        # Get current page from session state
-        current_page = st.session_state.get("page", "dashboard")
-        
-        # Route to appropriate page based on role
-        if current_page == "login":
-            # Redirect authenticated users to dashboard
-            st.session_state.page = "dashboard"
-            st.rerun()
-        
-        elif current_page == "dashboard":
-            # Route to role-specific dashboard
-            if is_administrator():
-                from frontend.pages.dashboard_admin import show as show_admin_dashboard
-                show_admin_dashboard()
-            elif is_maintenance_engineer():
-                from frontend.pages.dashboard_maintenance import show as show_maintenance_dashboard
-                show_maintenance_dashboard()
-            elif is_drone_operator():
-                from frontend.pages.dashboard_operator import show as show_operator_dashboard
-                show_operator_dashboard()
-            else:
-                st.error("Unknown role. Please contact administrator.")
-        
-        elif current_page == "users":
-            # User management page (admin only)
-            from frontend.pages.users import show as show_users
-            show_users()
-        
-        elif current_page == "telemetry":
-            # Telemetry page
-            from frontend.pages.telemetry import show as show_telemetry
-            show_telemetry()
-        
-        elif current_page == "history":
-            # History page
-            from frontend.pages.history import show as show_history
-            show_history()
-        
-        elif current_page == "settings":
-            # Settings page (admin only)
-            from frontend.pages.settings import show as show_settings
-            show_settings()
-        
-        else:
-            # Default to dashboard
-            st.session_state.page = "dashboard"
-            st.rerun()
 
+with c2:
+    st.markdown(
+    """
+    <div class="metric-card">
+    <h2>✈️</h2>
+    <h3>Flights</h3>
+    <h1>0</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
 
-if __name__ == "__main__":
-    main()
+with c3:
+    st.markdown(
+    """
+    <div class="metric-card">
+    <h2>🚨</h2>
+    <h3>Alerts</h3>
+    <h1>0</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
+
+with c4:
+    st.markdown(
+    """
+    <div class="metric-card">
+    <h2>🤖</h2>
+    <h3>AI Models</h3>
+    <h1>1</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
+
+st.divider()
+
+# -------------------------------------------------------
+# Platform Modules
+# -------------------------------------------------------
+
+st.markdown(
+'<p class="section-title">Platform Modules</p>',
+unsafe_allow_html=True
+)
+
+left,right=st.columns(2)
+
+with left:
+
+    st.info("👤 **Administrator**")
+    st.write("""
+- Manage users
+- Configure the platform
+- View system statistics
+- Manage roles
+""")
+
+    st.info("🛠 **Maintenance Engineer**")
+    st.write("""
+- Monitor telemetry
+- Detect anomalies
+- Review flight history
+- Analyse AI predictions
+""")
+
+with right:
+
+    st.info("🎮 **Drone Operator**")
+    st.write("""
+- Monitor flight status
+- View alerts
+- Check motor health
+- Receive warnings
+""")
+
+    st.info("🤖 **Artificial Intelligence**")
+    st.write("""
+- Isolation Forest
+- Bearing wear detection
+- Real-time anomaly detection
+- Predictive maintenance
+""")
+
+st.divider()
+
+# -------------------------------------------------------
+# Technologies
+# -------------------------------------------------------
+
+st.markdown(
+'<p class="section-title">Technology Stack</p>',
+unsafe_allow_html=True
+)
+
+st.columns(6)
+
+c1,c2,c3,c4,c5,c6=st.columns(6)
+
+c1.success("🐍 Python")
+
+c2.success("⚡ FastAPI")
+
+c3.success("🎈 Streamlit")
+
+c4.success("🗄 SQLite")
+
+c5.success("🤖 Scikit-Learn")
+
+c6.success("📊 Plotly")
+
+st.divider()
+
+st.markdown(
+"""
+<div class="footer">
+
+© 2026 AVIONAV • Intelligent UAV Health Monitoring Platform
+
+Developed as a Final Year Engineering Project
+
+</div>
+""",
+unsafe_allow_html=True
+)

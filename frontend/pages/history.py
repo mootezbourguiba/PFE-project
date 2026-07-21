@@ -1,108 +1,96 @@
 """
-History Page Module
+History Page
 
-This module provides historical data viewing including:
-- Flight history
-- Telemetry history
-- Predictions history
-- Alerts history
-- Filtering and search
+This module provides the flight and telemetry history interface.
 """
 
 import streamlit as st
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
-from frontend.utils.auth import require_authentication, init_session_state
-from frontend.components.header import render_header
-from frontend.components.sidebar import render_sidebar
-from frontend.components.cards import metric_card, info_card
-from frontend.components.charts import line_chart, bar_chart
+from utils.auth import require_authentication, init_session_state
+from components.sidebar import render_sidebar
+from components.header import render_header
+from components.cards import metric_card
+from components.charts import bar_chart, line_chart
 
 
 def show() -> None:
     """
-    Display the History page.
-    
-    This function renders:
-    - Flight history
-    - Telemetry history
-    - Predictions history
-    - Alerts history
-    - Filtering and search capabilities
+    Display the history page.
     """
     # Initialize session state and require authentication
     init_session_state()
     require_authentication()
     
-    # Page configuration is handled in app.py
+    # Page configuration
+    st.set_page_config(
+        page_title="History",
+        page_icon="📜",
+        layout="wide"
+    )
     
     # Custom CSS for dark avionics theme
     st.markdown("""
     <style>
     .stApp {
-        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a5f 100%);
+        background: linear-gradient(135deg, #0D1B2A 0%, #1E3A5F 100%);
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Render sidebar and header
+    # Render sidebar
     render_sidebar()
-    render_header("Historical Data")
+    
+    # Render header
+    render_header("Flight & Telemetry History")
     
     # Tabs for different history views
-    tab1, tab2, tab3, tab4 = st.tabs(["✈️ Flight History", "📈 Telemetry History", "🤖 Predictions", "🚨 Alerts"])
+    tab1, tab2, tab3 = st.tabs(["✈ Flight History", "📊 Telemetry History", "🚨 Alert History"])
     
     # Tab 1: Flight History
     with tab1:
         st.markdown("### Flight History")
         
         # Filters
-        col1, col2, col3 = st.columns(3)
-        
+        col1, col2 = st.columns(2)
         with col1:
-            date_range = st.date_input(
-                "Date Range",
-                value=(datetime.now() - timedelta(days=30), datetime.now()),
-                max_value=datetime.now()
-            )
-        
+            start_date = st.date_input("Start Date", pd.to_datetime('2026-07-01'))
         with col2:
-            status_filter = st.selectbox("Flight Status", ["All", "Completed", "In Progress", "Failed"])
-        
-        with col3:
-            search_flight = st.text_input("Search Flight ID", placeholder="Enter flight ID")
+            end_date = st.date_input("End Date", pd.to_datetime('2026-07-21'))
         
         st.markdown("---")
         
-        # Summary metrics
+        # Flight statistics
         col1, col2, col3, col4 = st.columns(4)
         
         with col1:
-            metric_card("Total Flights", "24", "✈️", "#00d4ff")
+            metric_card("Total Flights", "24", "✈", "#00D4FF")
         
         with col2:
-            metric_card("Completed", "22", "✅", "#00ff88")
+            metric_card("Total Hours", "18.5", "⏱", "#00FF00")
         
         with col3:
-            metric_card("In Progress", "1", "🔄", "#ff9800")
+            metric_card("Avg Duration", "46 min", "📏", "#FFA500")
         
         with col4:
-            metric_card("Failed", "1", "❌", "#ff4444")
+            metric_card("Success Rate", "95.8%", "✅", "#FF00FF")
         
         st.markdown("---")
         
-        # Flight history table (sample data)
-        flight_data = {
-            "Flight ID": ["FLT-2026-001", "FLT-2026-002", "FLT-2026-003", "FLT-2026-004", "FLT-2026-005"],
-            "Date": ["2026-07-15", "2026-07-16", "2026-07-17", "2026-07-18", "2026-07-19"],
-            "Duration": ["01:23:45", "00:45:30", "02:15:20", "01:05:10", "00:58:45"],
-            "Status": ["Completed", "Completed", "Completed", "Failed", "In Progress"],
-            "Distance (km)": [2.4, 1.8, 3.2, 1.5, 2.1]
-        }
+        # Flight history table
+        st.markdown("### Flight Records")
         
-        df_flights = pd.DataFrame(flight_data)
-        st.dataframe(df_flights, use_container_width=True, hide_index=True)
+        # Generate sample flight data
+        flight_data = pd.DataFrame({
+            'Flight ID': [f'FLT-2026-{i:03d}' for i in range(1, 11)],
+            'Date': pd.date_range(start=start_date, periods=10, freq='2D'),
+            'Duration (min)': np.random.randint(30, 60, 10),
+            'Distance (km)': np.random.randint(2, 5, 10),
+            'Status': ['Completed'] * 9 + ['Aborted'],
+            'Health Score': np.random.randint(80, 100, 10)
+        })
+        
+        st.dataframe(flight_data, use_container_width=True)
     
     # Tab 2: Telemetry History
     with tab2:
@@ -110,141 +98,91 @@ def show() -> None:
         
         # Filters
         col1, col2 = st.columns(2)
-        
         with col1:
-            telemetry_date = st.date_input("Select Date", value=datetime.now())
-        
+            flight_id = st.selectbox("Select Flight", [f'FLT-2026-{i:03d}' for i in range(1, 11)])
         with col2:
-            motor_select = st.selectbox("Select Motor", ["All", "Motor 1", "Motor 2", "Motor 3", "Motor 4"])
+            metric_type = st.selectbox("Metric Type", ["Motor Current", "Temperature", "Battery", "RPM"])
         
         st.markdown("---")
         
-        # Historical telemetry charts
-        col1, col2 = st.columns(2)
+        # Telemetry chart
+        time_data = pd.date_range(start='2026-07-21 10:00:00', periods=50, freq='1min')
         
-        with col1:
-            # Generate sample historical data
-            time_points = list(range(100))
-            current_data = [2.0 + 0.5 * np.sin(i/10) + 0.3 * np.random.randn() for i in time_points]
-            line_chart("Motor Current History", time_points, current_data, "Time (s)", "Current (A)", "#00d4ff")
-        
-        with col2:
-            temp_data = [40 + 10 * np.sin(i/10) + 4 * np.random.randn() for i in time_points]
-            line_chart("Motor Temperature History", time_points, temp_data, "Time (s)", "Temperature (°C)", "#ff9800")
+        if metric_type == "Motor Current":
+            data = np.random.normal(12, 2, 50)
+            chart_data = pd.DataFrame({'Time': time_data, 'Motor Current (A)': data})
+            line_chart(f"Motor Current - {flight_id}", chart_data, 'Time', 'Motor Current (A)', "#00D4FF")
+        elif metric_type == "Temperature":
+            data = np.random.normal(60, 8, 50)
+            chart_data = pd.DataFrame({'Time': time_data, 'Temperature (°C)': data})
+            line_chart(f"Temperature - {flight_id}", chart_data, 'Time', 'Temperature (°C)', "#FFA500")
+        elif metric_type == "Battery":
+            data = np.random.normal(75, 10, 50)
+            chart_data = pd.DataFrame({'Time': time_data, 'Battery (%)': data})
+            line_chart(f"Battery Level - {flight_id}", chart_data, 'Time', 'Battery (%)', "#00FF00")
+        else:
+            data = np.random.normal(4200, 200, 50)
+            chart_data = pd.DataFrame({'Time': time_data, 'RPM': data})
+            line_chart(f"RPM - {flight_id}", chart_data, 'Time', 'RPM', "#FF00FF")
         
         st.markdown("---")
         
-        # Statistics
+        # Telemetry statistics
         st.markdown("### Telemetry Statistics")
-        col1, col2, col3, col4 = st.columns(4)
-        
-        with col1:
-            metric_card("Avg Current", "2.3 A", "⚡", "#00d4ff")
-        
-        with col2:
-            metric_card("Avg Temperature", "42°C", "🌡️", "#ff9800")
-        
-        with col3:
-            metric_card("Max Current", "3.8 A", "⚡", "#00d4ff")
-        
-        with col4:
-            metric_card("Max Temperature", "58°C", "🌡️", "#ff9800")
+        stats_data = pd.DataFrame({
+            'Metric': ['Avg Current', 'Max Current', 'Avg Temperature', 'Max Temperature', 'Avg Battery', 'Min Battery'],
+            'Value': [12.3, 15.2, 62.5, 78.3, 76.2, 45.1],
+            'Unit': ['A', 'A', '°C', '°C', '%', '%']
+        })
+        st.dataframe(stats_data, use_container_width=True)
     
-    # Tab 3: Predictions
+    # Tab 3: Alert History
     with tab3:
-        st.markdown("### AI Prediction History")
-        
-        # Filters
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            prediction_date = st.date_input("Prediction Date", value=datetime.now())
-        
-        with col2:
-            result_filter = st.selectbox("Prediction Result", ["All", "Normal", "Anomaly"])
-        
-        st.markdown("---")
-        
-        # Summary
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            metric_card("Total Predictions", "156", "🤖", "#9c27b0")
-        
-        with col2:
-            metric_card("Normal", "142", "✅", "#00ff88")
-        
-        with col3:
-            metric_card("Anomalies", "14", "⚠️", "#ff9800")
-        
-        st.markdown("---")
-        
-        # Prediction history chart
-        prediction_counts = [12, 15, 8, 10, 14, 11, 13, 9, 16, 12]
-        days = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5", "Day 6", "Day 7", "Day 8", "Day 9", "Day 10"]
-        bar_chart("Predictions per Day", days, prediction_counts, "#9c27b0")
-        
-        st.markdown("---")
-        
-        # Prediction history table
-        prediction_data = {
-            "Timestamp": ["2026-07-19 10:30", "2026-07-19 11:15", "2026-07-19 12:00", "2026-07-19 13:45", "2026-07-19 14:30"],
-            "Current (A)": [2.3, 2.5, 3.8, 2.1, 2.4],
-            "Temperature (°C)": [42, 45, 58, 40, 43],
-            "Result": ["Normal", "Normal", "Anomaly", "Normal", "Normal"],
-            "Confidence": [0.92, 0.88, 0.95, 0.91, 0.89]
-        }
-        
-        df_predictions = pd.DataFrame(prediction_data)
-        st.dataframe(df_predictions, use_container_width=True, hide_index=True)
-    
-    # Tab 4: Alerts
-    with tab4:
         st.markdown("### Alert History")
         
-        # Filters
+        # Alert statistics
         col1, col2, col3 = st.columns(3)
         
         with col1:
-            alert_date = st.date_input("Alert Date", value=datetime.now())
+            metric_card("Total Alerts", "15", "🚨", "#FF0000")
         
         with col2:
-            severity_filter = st.selectbox("Severity", ["All", "Critical", "Warning", "Info"])
+            metric_card("Warnings", "12", "⚠️", "#FFA500")
         
         with col3:
-            alert_type_filter = st.selectbox("Alert Type", ["All", "Motor", "Battery", "GPS", "Communication"])
-        
-        st.markdown("---")
-        
-        # Summary
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            metric_card("Total Alerts", "8", "🚨", "#ff4444")
-        
-        with col2:
-            metric_card("Critical", "2", "❌", "#ff4444")
-        
-        with col3:
-            metric_card("Warnings", "6", "⚠️", "#ff9800")
+            metric_card("Critical", "3", "❌", "#FF0000")
         
         st.markdown("---")
         
         # Alert history table
-        alert_data = {
-            "Timestamp": ["2026-07-19 09:15", "2026-07-19 10:30", "2026-07-19 11:45", "2026-07-19 13:00", "2026-07-19 14:15"],
-            "Type": ["Motor", "Battery", "GPS", "Communication", "Motor"],
-            "Severity": ["Critical", "Warning", "Warning", "Info", "Warning"],
-            "Message": ["High temperature detected", "Low battery level", "Weak GPS signal", "Connection lost", "Current spike detected"],
-            "Status": ["Resolved", "Resolved", "Active", "Resolved", "Active"]
-        }
+        st.markdown("### Alert Records")
         
-        df_alerts = pd.DataFrame(alert_data)
-        st.dataframe(df_alerts, use_container_width=True, hide_index=True)
+        # Generate sample alert data
+        alert_data = pd.DataFrame({
+            'Timestamp': pd.date_range(start='2026-07-21 10:00:00', periods=10, freq='30min'),
+            'Type': ['Warning', 'Warning', 'Critical', 'Warning', 'Warning', 'Critical', 'Warning', 'Warning', 'Warning', 'Critical'],
+            'Message': [
+                'Motor 2 temperature high',
+                'Battery level low',
+                'Motor 1 current spike',
+                'Motor 3 temperature warning',
+                'Battery level warning',
+                'Motor 2 failure detected',
+                'Motor 1 temperature warning',
+                'Battery level low',
+                'Motor 3 current warning',
+                'Communication loss'
+            ],
+            'Status': ['Resolved', 'Resolved', 'Resolved', 'Resolved', 'Resolved', 'Resolved', 'Resolved', 'Resolved', 'Resolved', 'Resolved']
+        })
+        
+        st.dataframe(alert_data, use_container_width=True)
         
         st.markdown("---")
         
         # Alert distribution chart
-        alert_types = ["Motor", "Battery", "GPS", "Communication"]
-        alert_counts = [3, 2, 2, 1]
-        bar_chart("Alerts by Type", alert_types, alert_counts, "#ff4444")
+        alert_counts = pd.DataFrame({
+            'Type': ['Warning', 'Critical'],
+            'Count': [12, 3]
+        })
+        bar_chart("Alert Distribution", alert_counts, 'Type', 'Count', "#FF0000")

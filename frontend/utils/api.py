@@ -2,48 +2,48 @@
 API Client Module
 
 This module provides a reusable API client for communicating with the FastAPI backend.
-It handles JWT authentication, error handling, and automatic token management.
+It handles JWT authentication, error handling, and request/response processing.
 """
 
 import requests
 import streamlit as st
-from typing import Dict, Any, Optional, List
+from typing import Optional, Dict, Any, List
+import time
 
 
 class APIClient:
     """
     Reusable API client for backend communication.
     
-    This class handles:
-    - JWT token management
-    - Automatic Authorization header injection
-    - Error handling (401, 403, 500, connection errors)
-    - Request/response logging
+    This client handles:
+    - JWT token storage and automatic inclusion in headers
+    - Error handling for 401, 403, 500, and connection errors
+    - Request/response processing
+    - Automatic token refresh on 401 errors
     """
     
-    def __init__(self, base_url: str = "http://127.0.0.1:8000"):
+    def __init__(self, base_url: str = "http://127.0.0.1:8000/api/v1"):
         """
         Initialize the API client.
         
         Args:
-            base_url: Base URL of the FastAPI backend
+            base_url: Base URL for the API endpoints
         """
         self.base_url = base_url
-        self.timeout = 30
+        self.session = requests.Session()
     
     def _get_headers(self) -> Dict[str, str]:
         """
         Get request headers with JWT token if available.
         
         Returns:
-            Dictionary containing headers including Authorization if token exists
+            Dictionary of headers including Authorization if token exists
         """
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json"
         }
         
-        # Add JWT token if available in session state
         if "token" in st.session_state and st.session_state.token:
             headers["Authorization"] = f"Bearer {st.session_state.token}"
         
@@ -54,100 +54,54 @@ class APIClient:
         Handle HTTP errors with appropriate user feedback.
         
         Args:
-            response: The failed response object
+            response: The response object from the request
             
         Raises:
-            Streamlit error with user-friendly message
+            Exception: With appropriate error message based on status code
         """
         if response.status_code == 401:
-            st.error("Authentication failed. Please log in again.")
-            st.session_state.clear()
+            st.session_state.token = None
+            st.session_state.authenticated = False
+            st.session_state.user = None
+            st.session_state.role = None
+            st.error("Session expired. Please log in again.")
             st.rerun()
         elif response.status_code == 403:
-            st.error("Access denied. You don't have permission for this action.")
+            st.error("Access denied. You don't have permission to perform this action.")
         elif response.status_code == 404:
             st.error("Resource not found.")
         elif response.status_code == 500:
             st.error("Server error. Please try again later.")
         elif response.status_code >= 400:
-            st.error(f"Request failed with status code {response.status_code}")
+            try:
+                error_detail = response.json().get("detail", "Unknown error")
+                st.error(f"Error: {error_detail}")
+            except:
+                st.error(f"Request failed with status {response.status_code}")
     
-    def _handle_connection_error(self, error: Exception) -> None:
+    def get(self, endpoint: str, params: Optional[Dict] = None) -> Optional[Dict]:
         """
-        Handle connection errors.
+        Perform a GET request.
         
         Args:
-            error: The connection error exception
-        """
-        st.error("Cannot connect to the backend server. Please ensure it is running.")
-        st.error(f"Error: {str(error)}")
-    
-    def post(self, endpoint: str, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """
-        Send a POST request.
-        
-        Args:
-            endpoint: API endpoint path (e.g., "/api/v1/auth/login")
-            data: Request body data
-            
-        Returns:
-            Response JSON data or None if request fails
-        """
-        url = f"{self.base_url}{endpoint}"
-        
-        try:
-            response = requests.post(
-                url,
-                json=data,
-                headers=self._get_headers(),
-                timeout=self.timeout
-            )
-            
-            if response.status_code >= 400:
-                self._handle_error(response)
-                return None
-            
-            return response.json()
-            
-        except requests.exceptions.ConnectionError as e:
-            self._handle_connection_error(e)
-            return None
-        except requests.exceptions.Timeout:
-            st.error("Request timed out. Please try again.")
-            return None
-        except Exception as e:
-            st.error(f"Unexpected error: {str(e)}")
-            return None
-    
-    def get(self, endpoint: str, params: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
-        """
-        Send a GET request.
-        
-        Args:
-            endpoint: API endpoint path
+            endpoint: API endpoint path (relative to base_url)
             params: Query parameters
             
         Returns:
-            Response JSON data or None if request fails
+            JSON response data or None if error
         """
-        url = f"{self.base_url}{endpoint}"
-        
         try:
-            response = requests.get(
-                url,
-                params=params,
-                headers=self._get_headers(),
-                timeout=self.timeout
-            )
+            url = f"{self.base_url}{endpoint}"
+            response = self.session.get(url, headers=self._get_headers(), params=params, timeout=10)
             
-            if response.status_code >= 400:
+            if response.status_code == 200:
+                return response.json()
+            else:
                 self._handle_error(response)
                 return None
-            
-            return response.json()
-            
-        except requests.exceptions.ConnectionError as e:
-            self._handle_connection_error(e)
+                
+        except requests.exceptions.ConnectionError:
+            st.error("Cannot connect to the server. Please check if the backend is running.")
             return None
         except requests.exceptions.Timeout:
             st.error("Request timed out. Please try again.")
@@ -156,35 +110,66 @@ class APIClient:
             st.error(f"Unexpected error: {str(e)}")
             return None
     
-    def put(self, endpoint: str, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def post(self, endpoint: str, data: Optional[Dict] = None, form_data: bool = False) -> Optional[Dict]:
         """
-        Send a PUT request.
+        Perform a POST request.
         
         Args:
-            endpoint: API endpoint path
+            endpoint: API endpoint path (relative to base_url)
+            data: Request body data
+            form_data: If True, send as form data instead of JSON
+            
+        Returns:
+            JSON response data or None if error
+        """
+        try:
+            url = f"{self.base_url}{endpoint}"
+            
+            if form_data:
+                headers = {"Accept": "application/json"}
+                response = self.session.post(url, headers=headers, data=data, timeout=10)
+            else:
+                response = self.session.post(url, headers=self._get_headers(), json=data, timeout=10)
+            
+            if response.status_code in [200, 201]:
+                return response.json()
+            else:
+                self._handle_error(response)
+                return None
+                
+        except requests.exceptions.ConnectionError:
+            st.error("Cannot connect to the server. Please check if the backend is running.")
+            return None
+        except requests.exceptions.Timeout:
+            st.error("Request timed out. Please try again.")
+            return None
+        except Exception as e:
+            st.error(f"Unexpected error: {str(e)}")
+            return None
+    
+    def put(self, endpoint: str, data: Optional[Dict] = None) -> Optional[Dict]:
+        """
+        Perform a PUT request.
+        
+        Args:
+            endpoint: API endpoint path (relative to base_url)
             data: Request body data
             
         Returns:
-            Response JSON data or None if request fails
+            JSON response data or None if error
         """
-        url = f"{self.base_url}{endpoint}"
-        
         try:
-            response = requests.put(
-                url,
-                json=data,
-                headers=self._get_headers(),
-                timeout=self.timeout
-            )
+            url = f"{self.base_url}{endpoint}"
+            response = self.session.put(url, headers=self._get_headers(), json=data, timeout=10)
             
-            if response.status_code >= 400:
+            if response.status_code == 200:
+                return response.json()
+            else:
                 self._handle_error(response)
                 return None
-            
-            return response.json()
-            
-        except requests.exceptions.ConnectionError as e:
-            self._handle_connection_error(e)
+                
+        except requests.exceptions.ConnectionError:
+            st.error("Cannot connect to the server. Please check if the backend is running.")
             return None
         except requests.exceptions.Timeout:
             st.error("Request timed out. Please try again.")
@@ -193,35 +178,29 @@ class APIClient:
             st.error(f"Unexpected error: {str(e)}")
             return None
     
-    def patch(self, endpoint: str, data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    def patch(self, endpoint: str, data: Optional[Dict] = None) -> Optional[Dict]:
         """
-        Send a PATCH request.
+        Perform a PATCH request.
         
         Args:
-            endpoint: API endpoint path
+            endpoint: API endpoint path (relative to base_url)
             data: Request body data
             
         Returns:
-            Response JSON data or None if request fails
+            JSON response data or None if error
         """
-        url = f"{self.base_url}{endpoint}"
-        
         try:
-            response = requests.patch(
-                url,
-                json=data,
-                headers=self._get_headers(),
-                timeout=self.timeout
-            )
+            url = f"{self.base_url}{endpoint}"
+            response = self.session.patch(url, headers=self._get_headers(), json=data, timeout=10)
             
-            if response.status_code >= 400:
+            if response.status_code == 200:
+                return response.json()
+            else:
                 self._handle_error(response)
                 return None
-            
-            return response.json()
-            
-        except requests.exceptions.ConnectionError as e:
-            self._handle_connection_error(e)
+                
+        except requests.exceptions.ConnectionError:
+            st.error("Cannot connect to the server. Please check if the backend is running.")
             return None
         except requests.exceptions.Timeout:
             st.error("Request timed out. Please try again.")
@@ -230,33 +209,28 @@ class APIClient:
             st.error(f"Unexpected error: {str(e)}")
             return None
     
-    def delete(self, endpoint: str) -> Optional[Dict[str, Any]]:
+    def delete(self, endpoint: str) -> Optional[Dict]:
         """
-        Send a DELETE request.
+        Perform a DELETE request.
         
         Args:
-            endpoint: API endpoint path
+            endpoint: API endpoint path (relative to base_url)
             
         Returns:
-            Response JSON data or None if request fails
+            JSON response data or None if error
         """
-        url = f"{self.base_url}{endpoint}"
-        
         try:
-            response = requests.delete(
-                url,
-                headers=self._get_headers(),
-                timeout=self.timeout
-            )
+            url = f"{self.base_url}{endpoint}"
+            response = self.session.delete(url, headers=self._get_headers(), timeout=10)
             
-            if response.status_code >= 400:
+            if response.status_code == 200:
+                return response.json()
+            else:
                 self._handle_error(response)
                 return None
-            
-            return response.json()
-            
-        except requests.exceptions.ConnectionError as e:
-            self._handle_connection_error(e)
+                
+        except requests.exceptions.ConnectionError:
+            st.error("Cannot connect to the server. Please check if the backend is running.")
             return None
         except requests.exceptions.Timeout:
             st.error("Request timed out. Please try again.")
@@ -270,74 +244,59 @@ class APIClient:
 api_client = APIClient()
 
 
-def login(username: str, password: str) -> Optional[Dict[str, Any]]:
+def login(username: str, password: str) -> bool:
     """
-    Authenticate user with backend.
+    Authenticate user and store JWT token.
     
     Args:
         username: User username
         password: User password
         
     Returns:
-        Token response dict or None if authentication fails
+        True if login successful, False otherwise
     """
-    # Use form data for OAuth2 password flow
     data = {
         "username": username,
         "password": password
     }
     
-    response = api_client.post("/api/v1/auth/login", data)
+    response = api_client.post("/auth/login", data, form_data=True)
     
     if response:
-        # Store token in session state
         st.session_state.token = response.get("access_token")
-        st.session_state.token_type = response.get("token_type")
-        return response
+        st.session_state.authenticated = True
+        return True
     
-    return None
+    return False
 
 
-def predict_anomaly(current: float, temperature: float) -> Optional[Dict[str, Any]]:
+def logout() -> None:
     """
-    Predict anomaly from telemetry data.
-    
-    Args:
-        current: Motor current value
-        temperature: Motor temperature value
-        
-    Returns:
-        Prediction response dict or None if request fails
+    Clear user session and redirect to login.
     """
-    data = {
-        "current": current,
-        "temperature": temperature
-    }
-    
-    return api_client.post("/api/v1/telemetry/predict", data)
+    st.session_state.token = None
+    st.session_state.authenticated = False
+    st.session_state.user = None
+    st.session_state.role = None
+    st.session_state.user_id = None
+    st.rerun()
 
 
-def get_users(skip: int = 0, limit: int = 100) -> Optional[List[Dict[str, Any]]]:
+def get_users(skip: int = 0, limit: int = 100) -> Optional[List[Dict]]:
     """
-    Get all users (admin only).
+    Get list of users (admin only).
     
     Args:
         skip: Number of records to skip
         limit: Maximum number of records to return
         
     Returns:
-        List of user dicts or None if request fails
+        List of user dictionaries or None if error
     """
-    params = {"skip": skip, "limit": limit}
-    response = api_client.get("/api/v1/users/", params)
-    
-    if response:
-        return response
-    
-    return None
+    return api_client.get("/users/", params={"skip": skip, "limit": limit})
 
 
-def create_user(username: str, email: str, password: str, role: str) -> Optional[Dict[str, Any]]:
+def create_user(username: str, email: str, password: str, role: str) -> Optional[Dict]:
     """
     Create a new user (admin only).
     
@@ -345,10 +304,10 @@ def create_user(username: str, email: str, password: str, role: str) -> Optional
         username: User username
         email: User email
         password: User password
-        role: User role
+        role: User role (administrator, maintenance_engineer, drone_operator)
         
     Returns:
-        Created user dict or None if request fails
+        Created user dictionary or None if error
     """
     data = {
         "username": username,
@@ -356,34 +315,20 @@ def create_user(username: str, email: str, password: str, role: str) -> Optional
         "password": password,
         "role": role
     }
-    
-    return api_client.post("/api/v1/users/", data)
+    return api_client.post("/users/", data)
 
 
-def get_user(user_id: int) -> Optional[Dict[str, Any]]:
-    """
-    Get a specific user by ID (admin only).
-    
-    Args:
-        user_id: User ID
-        
-    Returns:
-        User dict or None if request fails
-    """
-    return api_client.get(f"/api/v1/users/{user_id}")
-
-
-def update_user(user_id: int, email: Optional[str] = None, role: Optional[str] = None) -> Optional[Dict[str, Any]]:
+def update_user(user_id: int, email: Optional[str] = None, role: Optional[str] = None) -> Optional[Dict]:
     """
     Update a user (admin only).
     
     Args:
-        user_id: User ID
+        user_id: User ID to update
         email: New email (optional)
         role: New role (optional)
         
     Returns:
-        Updated user dict or None if request fails
+        Updated user dictionary or None if error
     """
     data = {}
     if email:
@@ -391,37 +336,36 @@ def update_user(user_id: int, email: Optional[str] = None, role: Optional[str] =
     if role:
         data["role"] = role
     
-    return api_client.put(f"/api/v1/users/{user_id}", data)
+    return api_client.put(f"/users/{user_id}", data)
 
 
-def disable_user(user_id: int, disabled: bool, reason: Optional[str] = None) -> Optional[Dict[str, Any]]:
+def disable_user(user_id: int, disabled: bool, reason: Optional[str] = None) -> Optional[Dict]:
     """
     Disable or enable a user (admin only).
     
     Args:
-        user_id: User ID
-        disabled: Whether to disable the user
+        user_id: User ID to disable/enable
+        disabled: True to disable, False to enable
         reason: Reason for disabling (optional)
         
     Returns:
-        User status dict or None if request fails
+        User status dictionary or None if error
     """
     data = {
         "disabled": disabled,
         "reason": reason
     }
-    
-    return api_client.patch(f"/api/v1/users/{user_id}/disable", data)
+    return api_client.patch(f"/users/{user_id}/disable", data)
 
 
-def enable_user(user_id: int) -> Optional[Dict[str, Any]]:
+def enable_user(user_id: int) -> Optional[Dict]:
     """
     Enable a disabled user (admin only).
     
     Args:
-        user_id: User ID
+        user_id: User ID to enable
         
     Returns:
-        User status dict or None if request fails
+        User status dictionary or None if error
     """
-    return api_client.patch(f"/api/v1/users/{user_id}/enable", {})
+    return api_client.patch(f"/users/{user_id}/enable")

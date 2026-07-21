@@ -1,204 +1,189 @@
 """
-User Management Page Module
+User Management Page
 
-This module provides user management functionality for administrators including:
-- View all users
-- Create new users
-- Edit existing users
-- Disable/enable users
-- Search and filter users
+This module provides the user management interface for administrators.
 """
 
 import streamlit as st
 import pandas as pd
-from frontend.utils.auth import require_administrator, init_session_state, get_role_display_name
-from frontend.components.header import render_header
-from frontend.components.sidebar import render_sidebar
-from frontend.components.cards import alert_card
-from frontend.utils.api import get_users, create_user, update_user, disable_user, enable_user
+from utils.auth import require_administrator, init_session_state
+from components.sidebar import render_sidebar
+from components.header import render_header
+from utils.api import get_users, create_user, update_user, disable_user, enable_user
 
 
 def show() -> None:
     """
-    Display the User Management page.
-    
-    This function renders:
-    - User table with search and filters
-    - Create user form
-    - Edit user form
-    - Disable/enable user functionality
-    - Status badges
+    Display the user management page.
     """
     # Initialize session state and require authentication
     init_session_state()
     require_administrator()
     
-    # Page configuration is handled in app.py
+    # Page configuration
+    st.set_page_config(
+        page_title="User Management",
+        page_icon="👥",
+        layout="wide"
+    )
     
     # Custom CSS for dark avionics theme
     st.markdown("""
     <style>
     .stApp {
-        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a5f 100%);
+        background: linear-gradient(135deg, #0D1B2A 0%, #1E3A5F 100%);
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Render sidebar and header
+    # Render sidebar
     render_sidebar()
+    
+    # Render header
     render_header("User Management")
     
-    # Tabs for different actions
+    # Tabs for different operations
     tab1, tab2, tab3 = st.tabs(["📋 View Users", "➕ Create User", "✏️ Edit User"])
     
     # Tab 1: View Users
     with tab1:
         st.markdown("### All Users")
         
-        # Search and filters
-        col1, col2, col3 = st.columns(3)
-        
+        # Search and filter
+        col1, col2 = st.columns(2)
         with col1:
-            search_query = st.text_input("🔍 Search", placeholder="Search by username or email")
-        
+            search = st.text_input("🔍 Search users", placeholder="Search by username or email")
         with col2:
-            role_filter = st.selectbox("🎭 Filter by Role", ["All", "Administrator", "Maintenance Engineer", "Drone Operator"])
+            role_filter = st.selectbox("🎭 Filter by role", ["All", "administrator", "maintenance_engineer", "drone_operator"])
         
-        with col3:
-            status_filter = st.selectbox("📊 Filter by Status", ["All", "Active", "Disabled"])
-        
-        # Load users from backend
+        # Fetch users
         users = get_users()
         
         if users:
-            # Convert to DataFrame for display
-            df = pd.DataFrame(users)
+            users_df = pd.DataFrame(users)
             
             # Apply filters
-            if search_query:
-                df = df[df['username'].str.contains(search_query, case=False) | 
-                       df['email'].str.contains(search_query, case=False)]
+            if search:
+                users_df = users_df[
+                    users_df['username'].str.contains(search, case=False) |
+                    users_df['email'].str.contains(search, case=False)
+                ]
             
             if role_filter != "All":
-                df = df[df['role'] == role_filter.lower()]
+                users_df = users_df[users_df['role'] == role_filter]
             
-            if status_filter != "All":
-                if status_filter == "Active":
-                    df = df[df['disabled'] == False]
-                else:
-                    df = df[df['disabled'] == True]
-            
-            # Display user table
-            if not df.empty:
-                # Format data for display
-                display_df = df.copy()
-                display_df['role'] = display_df['role'].apply(get_role_display_name)
-                display_df['status'] = display_df['disabled'].apply(lambda x: "🔴 Disabled" if x else "🟢 Active")
+            # Display users table
+            if not users_df.empty:
+                display_df = users_df[['id', 'username', 'email', 'role', 'disabled', 'created_at']].copy()
+                display_df.columns = ['ID', 'Username', 'Email', 'Role', 'Disabled', 'Created At']
+                display_df['Disabled'] = display_df['Disabled'].apply(lambda x: '❌ Yes' if x else '✅ No')
+                display_df['Role'] = display_df['Role'].replace({
+                    'administrator': '👤 Administrator',
+                    'maintenance_engineer': '🔧 Maintenance Engineer',
+                    'drone_operator': '🚁 Drone Operator'
+                })
                 
-                st.dataframe(
-                    display_df[['id', 'username', 'email', 'role', 'status', 'created_at']],
-                    use_container_width=True,
-                    hide_index=True
-                )
-                
-                # User actions
-                st.markdown("### User Actions")
-                selected_user_id = st.selectbox(
-                    "Select User",
-                    options=df['id'].tolist(),
-                    format_func=lambda x: f"ID: {x} - {df[df['id'] == x]['username'].values[0]}"
-                )
-                
-                col1, col2, col3 = st.columns(3)
-                
-                with col1:
-                    if st.button("✏️ Edit User", use_container_width=True):
-                        st.session_state.edit_user_id = selected_user_id
-                        st.session_state.page = "users"
-                        st.rerun()
-                
-                with col2:
-                    if st.button("🔒 Disable User", use_container_width=True):
-                        if disable_user(selected_user_id, True, "Disabled by administrator"):
-                            st.success("User disabled successfully")
-                            st.rerun()
-                
-                with col3:
-                    if st.button("🔓 Enable User", use_container_width=True):
-                        if enable_user(selected_user_id):
-                            st.success("User enabled successfully")
-                            st.rerun()
+                st.dataframe(display_df, use_container_width=True)
             else:
-                st.info("No users found matching the filters.")
+                st.info("No users match your search criteria.")
         else:
-            alert_card(
-                "No Users Found",
-                "Unable to load users from the backend. Please check your connection and try again.",
-                "error"
-            )
+            st.info("No users found in the system.")
     
     # Tab 2: Create User
     with tab2:
         st.markdown("### Create New User")
         
         with st.form("create_user_form"):
-            col1, col2 = st.columns(2)
+            username = st.text_input("Username", placeholder="Enter username")
+            email = st.text_input("Email", placeholder="Enter email address")
+            password = st.text_input("Password", type="password", placeholder="Enter password")
+            confirm_password = st.text_input("Confirm Password", type="password", placeholder="Confirm password")
+            role = st.selectbox("Role", ["maintenance_engineer", "drone_operator", "administrator"])
             
-            with col1:
-                new_username = st.text_input("Username*", placeholder="Enter username")
-                new_email = st.text_input("Email*", placeholder="Enter email address")
+            submitted = st.form_submit_button("Create User", type="primary")
             
-            with col2:
-                new_password = st.text_input("Password*", type="password", placeholder="Enter password")
-                new_role = st.selectbox("Role*", ["administrator", "maintenance_engineer", "drone_operator"])
-            
-            submit_create = st.form_submit_button("Create User", use_container_width=True, type="primary")
-            
-            if submit_create:
-                if not new_username or not new_email or not new_password:
+            if submitted:
+                if not username or not email or not password:
                     st.error("Please fill in all required fields.")
+                elif password != confirm_password:
+                    st.error("Passwords do not match.")
+                elif len(password) < 8:
+                    st.error("Password must be at least 8 characters long.")
                 else:
-                    if create_user(new_username, new_email, new_password, new_role):
-                        st.success("User created successfully!")
-                        st.rerun()
-                    else:
-                        st.error("Failed to create user. Username or email may already exist.")
+                    with st.spinner("Creating user..."):
+                        result = create_user(username, email, password, role)
+                        if result:
+                            st.success(f"User '{username}' created successfully!")
+                            st.rerun()
+                        else:
+                            st.error("Failed to create user. Username or email may already exist.")
     
     # Tab 3: Edit User
     with tab3:
         st.markdown("### Edit User")
         
-        # Select user to edit
         users = get_users()
         
         if users:
-            user_options = {user['id']: f"{user['username']} ({user['email']})" for user in users}
-            selected_id = st.selectbox("Select User to Edit", options=list(user_options.keys()), format_func=lambda x: user_options[x])
-            
-            selected_user = next((user for user in users if user['id'] == selected_id), None)
+            user_options = {f"{u['username']} ({u['email']})": u['id'] for u in users}
+            selected_user = st.selectbox("Select user to edit", list(user_options.keys()))
             
             if selected_user:
-                with st.form("edit_user_form"):
+                user_id = user_options[selected_user]
+                user = next((u for u in users if u['id'] == user_id), None)
+                
+                if user:
                     col1, col2 = st.columns(2)
                     
                     with col1:
-                        edit_username = st.text_input("Username", value=selected_user['username'], disabled=True)
-                        edit_email = st.text_input("Email", value=selected_user['email'])
+                        st.markdown("#### User Information")
+                        st.info(f"**Username:** {user['username']}")
+                        st.info(f"**Email:** {user['email']}")
+                        st.info(f"**Role:** {user['role']}")
+                        st.info(f"**Status:** {'Disabled' if user['disabled'] else 'Active'}")
                     
                     with col2:
-                        edit_role = st.selectbox(
-                            "Role",
-                            ["administrator", "maintenance_engineer", "drone_operator"],
-                            index=["administrator", "maintenance_engineer", "drone_operator"].index(selected_user['role'])
-                        )
-                    
-                    submit_edit = st.form_submit_button("Update User", use_container_width=True, type="primary")
-                    
-                    if submit_edit:
-                        if update_user(selected_id, email=edit_email, role=edit_role):
-                            st.success("User updated successfully!")
-                            st.rerun()
+                        st.markdown("#### Actions")
+                        
+                        # Update user form
+                        with st.form("update_user_form"):
+                            new_email = st.text_input("New Email", value=user['email'])
+                            new_role = st.selectbox("New Role", ["administrator", "maintenance_engineer", "drone_operator"], 
+                                                   index=["administrator", "maintenance_engineer", "drone_operator"].index(user['role']))
+                            
+                            update_submitted = st.form_submit_button("Update User")
+                            
+                            if update_submitted:
+                                with st.spinner("Updating user..."):
+                                    result = update_user(user_id, email=new_email, role=new_role)
+                                    if result:
+                                        st.success("User updated successfully!")
+                                        st.rerun()
+                                    else:
+                                        st.error("Failed to update user.")
+                        
+                        # Disable/Enable user
+                        st.markdown("---")
+                        
+                        if not user['disabled']:
+                            if st.button("🔒 Disable User", type="secondary"):
+                                reason = st.text_input("Reason for disabling", placeholder="Enter reason")
+                                if st.button("Confirm Disable", type="primary"):
+                                    with st.spinner("Disabling user..."):
+                                        result = disable_user(user_id, disabled=True, reason=reason)
+                                        if result:
+                                            st.success("User disabled successfully!")
+                                            st.rerun()
+                                        else:
+                                            st.error("Failed to disable user.")
                         else:
-                            st.error("Failed to update user. Email may already be in use.")
+                            if st.button("🔓 Enable User", type="primary"):
+                                with st.spinner("Enabling user..."):
+                                    result = enable_user(user_id)
+                                    if result:
+                                        st.success("User enabled successfully!")
+                                        st.rerun()
+                                    else:
+                                        st.error("Failed to enable user.")
         else:
-            st.info("No users available to edit.")
+            st.info("No users found in the system.")
