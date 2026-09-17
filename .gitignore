@@ -54,3 +54,11 @@ alembic/versions/*.pyc
 
 # Logs
 *.log
+
+# Session artifacts & credentials
+_tokens.txt
+/=
+
+# Project virtual environments
+venv_backend/
+venv_frontend/
