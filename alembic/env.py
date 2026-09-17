@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 # Import database and models
 from backend.database import Base
 from backend.models.user import User
+from backend.models.telemetry import TelemetryReading
 from backend.models.base import BaseModel
 
 # this is the Alembic Config object

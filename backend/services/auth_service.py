@@ -43,6 +43,8 @@ class AuthService:
             return None
         if not verify_password(password, user.hashed_password):
             return None
+        if user.disabled:
+            return None
             
         return user
     

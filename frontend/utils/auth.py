@@ -38,8 +38,6 @@ def init_session_state() -> None:
     if "user_id" not in st.session_state:
         st.session_state.user_id = None
     
-    if "current_page" not in st.session_state:
-        st.session_state.current_page = "login"
 
 
 def login(username: str, password: str) -> bool:
@@ -67,6 +65,15 @@ def login(username: str, password: str) -> bool:
             st.session_state.user = payload.get("sub")
             st.session_state.user_id = payload.get("user_id")
             st.session_state.role = payload.get("role")
+            
+            # Set default page based on role
+            role = st.session_state.role
+            if role == "administrator":
+                st.session_state.current_page = "dashboard_admin"
+            elif role == "maintenance_engineer":
+                st.session_state.current_page = "dashboard_maintenance"
+            elif role == "drone_operator":
+                st.session_state.current_page = "dashboard_operator"
             
             return True
             
@@ -193,6 +200,34 @@ def require_administrator() -> None:
     
     if not is_administrator():
         st.error("Access denied. Administrator access required.")
+        st.stop()
+
+
+def require_maintenance_engineer() -> None:
+    """
+    Require user to be a maintenance engineer. Show error if not.
+    
+    This function should be called at the beginning of any page
+    that requires maintenance engineer access.
+    """
+    require_authentication()
+    
+    if not is_maintenance_engineer():
+        st.error("Access denied. Maintenance Engineer access required.")
+        st.stop()
+
+
+def require_drone_operator() -> None:
+    """
+    Require user to be a drone operator. Show error if not.
+    
+    This function should be called at the beginning of any page
+    that requires drone operator access.
+    """
+    require_authentication()
+    
+    if not is_drone_operator():
+        st.error("Access denied. Drone Operator access required.")
         st.stop()
 
 

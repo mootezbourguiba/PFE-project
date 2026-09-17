@@ -147,6 +147,42 @@ class APIClient:
             st.error(f"Unexpected error: {str(e)}")
             return None
     
+    def post_file(self, endpoint: str, files: Dict[str, Any]) -> Optional[Dict]:
+        """
+        Perform a multipart file upload POST request.
+
+        Args:
+            endpoint: API endpoint path (relative to base_url)
+            files: files dictionary compatible with requests
+
+        Returns:
+            JSON response data or None if error
+        """
+        try:
+            url = f"{self.base_url}{endpoint}"
+            headers = {"Accept": "application/json"}
+
+            if "token" in st.session_state and st.session_state.token:
+                headers["Authorization"] = f"Bearer {st.session_state.token}"
+
+            response = self.session.post(url, headers=headers, files=files, timeout=30)
+
+            if response.status_code in [200, 201]:
+                return response.json()
+            else:
+                self._handle_error(response)
+                return None
+
+        except requests.exceptions.ConnectionError:
+            st.error("Cannot connect to the server. Please check if the backend is running.")
+            return None
+        except requests.exceptions.Timeout:
+            st.error("Request timed out. Please try again.")
+            return None
+        except Exception as e:
+            st.error(f"Unexpected error: {str(e)}")
+            return None
+
     def put(self, endpoint: str, data: Optional[Dict] = None) -> Optional[Dict]:
         """
         Perform a PUT request.
@@ -369,3 +405,102 @@ def enable_user(user_id: int) -> Optional[Dict]:
         User status dictionary or None if error
     """
     return api_client.patch(f"/users/{user_id}/enable")
+
+
+def predict_telemetry(current: float, temperature: float) -> Optional[Dict]:
+    """
+    Predict anomaly detection for telemetry data.
+    
+    Args:
+        current: Motor current in Amperes
+        temperature: Motor temperature in Celsius
+        
+    Returns:
+        Prediction result dictionary or None if error
+    """
+    data = {
+        "current": current,
+        "temperature": temperature
+    }
+    return api_client.post("/telemetry/predict", data)
+
+
+def get_telemetry(limit: int = 1000) -> Optional[Dict]:
+    """
+    Get telemetry for the authenticated user.
+
+    Args:
+        limit: Maximum number of readings to retrieve
+
+    Returns:
+        Telemetry list dictionary or None if error
+    """
+    return api_client.get("/telemetry/", params={"limit": limit})
+
+
+def simulate_telemetry(
+    samples: int = 100,
+    scenario: str = "healthy",
+    wear_start: Optional[int] = None,
+    seed: Optional[int] = None,
+) -> Optional[Dict]:
+    """
+    Generate and store simulated telemetry on the backend.
+
+    Args:
+        samples: Number of samples to generate
+        scenario: 'healthy' or 'bearing_wear'
+        wear_start: Sample index at which bearing-wear begins
+        seed: Optional random seed for reproducibility
+
+    Returns:
+        Telemetry list dictionary or None if error
+    """
+    data = {
+        "samples": samples,
+        "scenario": scenario,
+        "wear_start": wear_start,
+        "seed": seed,
+    }
+    return api_client.post("/telemetry/simulate", data)
+
+
+def upload_telemetry_csv(file: Any) -> Optional[Dict]:
+    """
+    Upload a telemetry CSV file to the backend.
+
+    Args:
+        file: File-like object from st.file_uploader
+
+    Returns:
+        Telemetry list dictionary or None if error
+    """
+    files = {"file": (getattr(file, "name", "telemetry.csv"), file, "text/csv")}
+    return api_client.post_file("/telemetry/upload", files)
+
+
+def create_telemetry(readings: List[Dict]) -> Optional[Dict]:
+    """
+    Submit a JSON list of telemetry readings to the backend.
+
+    Args:
+        readings: List of telemetry dictionaries
+
+    Returns:
+        Telemetry list dictionary or None if error
+    """
+    return api_client.post("/telemetry/", readings)
+
+
+def get_telemetry_latest() -> Optional[Dict]:
+    """
+    Get the most recent telemetry reading with AI prediction.
+    """
+    return api_client.get("/telemetry/latest")
+
+
+def get_telemetry_stats() -> Optional[Dict]:
+    """
+    Get telemetry aggregate statistics.
+    """
+    return api_client.get("/telemetry/stats")

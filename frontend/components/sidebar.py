@@ -1,99 +1,142 @@
 """
 Sidebar Component
 
-This module provides a professional sidebar component for navigation.
+Professional AVIONAV navigation sidebar.
 """
 
 import streamlit as st
-from utils.auth import current_user, current_role, get_role_display_name, get_role_icon, logout
+from pathlib import Path
+from PIL import Image
+from utils.auth import current_user, current_role, get_role_icon, get_role_display_name, logout
+from components.theme import COLORS
 
 
-def render_sidebar() -> None:
-    """
-    Render the professional sidebar with navigation.
-    """
+def _nav_item(page_key: str, icon: str, label: str, current_page: str) -> None:
+    is_active = current_page == page_key
+
+    if is_active:
+        st.markdown(
+            f"""
+            <div style="
+                background: rgba(0, 194, 255, 0.10);
+                border-left: 3px solid {COLORS['primary']};
+                border-radius: 0 6px 6px 0;
+                padding: 10px 14px;
+                margin: 2px -16px;
+                color: {COLORS['white']};
+                font-weight: 600;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+            ">
+                <span style="margin-right: 10px; color: {COLORS['primary']};">{icon}</span>
+                {label}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        if st.button(
+            f"{icon}  {label}",
+            key=f"nav_{page_key}",
+            use_container_width=True,
+        ):
+            st.session_state.current_page = page_key
+            st.rerun()
+
+
+def show(page: str = "dashboard") -> None:
+    """Display the AVIONAV sidebar."""
     with st.sidebar:
-        # Logo and Brand
-        st.markdown("""
-        <div style='text-align: center; padding: 20px 0;'>
-            <h1 style='color: #00D4FF; font-size: 28px; margin: 0;'>✈ AVIONAV</h1>
-            <p style='color: #B0B0B0; font-size: 12px; margin: 5px 0;'>Intelligent UAV Health Monitoring</p>
+        # Branding
+        BASE_DIR = Path(__file__).parent.parent
+        LOGO = BASE_DIR / "assets" / "images" / "avionav_logo.png"
+
+        st.markdown(f"""
+        <div style="text-align: center; padding: 10px 0 4px 0;">
+            <div style="
+                color: {COLORS['primary']};
+                font-size: 22px;
+                font-weight: 700;
+                letter-spacing: 1px;
+            ">✈️ AVIONAV</div>
+            <div style="
+                color: {COLORS['text_muted']};
+                font-size: 10px;
+                letter-spacing: 0.8px;
+                text-transform: uppercase;
+                margin-top: 4px;
+            ">Intelligent UAV Health</div>
+            <div style="
+                color: {COLORS['text_muted']};
+                font-size: 10px;
+                letter-spacing: 0.8px;
+                text-transform: uppercase;
+            ">Monitoring</div>
         </div>
         """, unsafe_allow_html=True)
-        
+
         st.markdown("---")
-        
-        # User Information
+
+        # Navigation
+        st.markdown(f"""
+        <div style="
+            color: {COLORS['text_muted']};
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-left: 4px;
+        ">Navigation</div>
+        """, unsafe_allow_html=True)
+
+        role = current_role()
+
+        if role == "administrator":
+            _admin_navigation(page)
+        elif role == "maintenance_engineer":
+            _maintenance_navigation(page)
+        elif role == "drone_operator":
+            _operator_navigation(page)
+
+        st.markdown("---")
+
+        # User footer
         if current_user():
-            role_icon = get_role_icon(current_role())
-            role_name = get_role_display_name(current_role())
-            
             st.markdown(f"""
-            <div style='background: linear-gradient(135deg, #1E3A5F 0%, #0D1B2A 100%); 
-                       padding: 15px; border-radius: 10px; margin: 10px 0;'>
-                <div style='display: flex; align-items: center; gap: 10px;'>
-                    <span style='font-size: 24px;'>{role_icon}</span>
-                    <div>
-                        <div style='color: #FFFFFF; font-weight: bold; font-size: 14px;'>{current_user()}</div>
-                        <div style='color: #00D4FF; font-size: 11px;'>{role_name}</div>
-                    </div>
+            <div style="
+                background: {COLORS['card']};
+                border: 1px solid {COLORS['border']};
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 12px;
+            ">
+                <div style="color: {COLORS['white']}; font-weight: 600; font-size: 14px;">
+                    {get_role_icon(role)} {current_user()}
+                </div>
+                <div style="color: {COLORS['text_muted']}; font-size: 12px;">
+                    {get_role_display_name(role)}
                 </div>
             </div>
             """, unsafe_allow_html=True)
-        
-        st.markdown("---")
-        
-        # Navigation
-        st.markdown("### Navigation")
-        
-        # Dashboard
-        if current_role() == "administrator":
-            if st.button("📊 Dashboard", key="nav_dashboard", use_container_width=True):
-                st.session_state.current_page = "dashboard_admin"
-                st.rerun()
-        elif current_role() == "maintenance_engineer":
-            if st.button("📊 Dashboard", key="nav_dashboard", use_container_width=True):
-                st.session_state.current_page = "dashboard_maintenance"
-                st.rerun()
-        elif current_role() == "drone_operator":
-            if st.button("📊 Dashboard", key="nav_dashboard", use_container_width=True):
-                st.session_state.current_page = "dashboard_operator"
-                st.rerun()
-        
-        # Users (Admin only)
-        if current_role() == "administrator":
-            if st.button("👥 Users", key="nav_users", use_container_width=True):
-                st.session_state.current_page = "users"
-                st.rerun()
-        
-        # Telemetry
-        if current_role() in ["maintenance_engineer", "drone_operator"]:
-            if st.button("📈 Telemetry", key="nav_telemetry", use_container_width=True):
-                st.session_state.current_page = "telemetry"
-                st.rerun()
-        
-        # History
-        if current_role() in ["maintenance_engineer", "administrator"]:
-            if st.button("📜 History", key="nav_history", use_container_width=True):
-                st.session_state.current_page = "history"
-                st.rerun()
-        
-        # Settings
-        if st.button("⚙️ Settings", key="nav_settings", use_container_width=True):
-            st.session_state.current_page = "settings"
-            st.rerun()
-        
-        st.markdown("---")
-        
-        # Logout
-        if st.button("🚪 Logout", key="nav_logout", use_container_width=True, type="secondary"):
+
+        if st.button("🚪  Logout", key="sidebar_logout_button", use_container_width=True):
             logout()
-        
-        # Footer
-        st.markdown("---")
-        st.markdown("""
-        <div style='text-align: center; padding: 10px;'>
-            <p style='color: #606060; font-size: 10px; margin: 0;'>Version 1.0.0</p>
-            <p style='color: #404040; font-size: 9px; margin: 5px 0;'>© 2026 AVIONAV</p>
-        </div>
-        """, unsafe_allow_html=True)
+
+
+def _admin_navigation(current_page: str) -> None:
+    _nav_item("dashboard_admin", "🏠", "Dashboard", current_page)
+    _nav_item("users", "👥", "Users", current_page)
+    _nav_item("settings", "⚙", "Settings", current_page)
+
+
+def _maintenance_navigation(current_page: str) -> None:
+    _nav_item("dashboard_maintenance", "🏠", "Dashboard", current_page)
+    _nav_item("telemetry", "�", "Telemetry", current_page)
+    _nav_item("history", "�", "History", current_page)
+    _nav_item("settings", "⚙", "Settings", current_page)
+
+
+def _operator_navigation(current_page: str) -> None:
+    _nav_item("dashboard_operator", "🏠", "Dashboard", current_page)

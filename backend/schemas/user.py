@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from typing import Optional
 from datetime import datetime
 
@@ -34,8 +34,15 @@ class UserCreate(UserBase):
     password: str = Field(..., min_length=8, description="Password (min 8 characters)")
     role: str = Field(
         default="maintenance_engineer",
-        description="User role: administrator, maintenance_engineer, or drone_operator"
+        description="User role: maintenance_engineer or drone_operator"
     )
+
+    @field_validator("role")
+    @classmethod
+    def _reject_administrator_role(cls, v: str) -> str:
+        if v is not None and v == "administrator":
+            raise ValueError("Administrator role cannot be assigned through user management")
+        return v
 
 
 class UserUpdate(BaseModel):
@@ -52,8 +59,15 @@ class UserUpdate(BaseModel):
     email: Optional[EmailStr] = Field(None, description="New email address")
     role: Optional[str] = Field(
         None,
-        description="New role: administrator, maintenance_engineer, or drone_operator"
+        description="New role: maintenance_engineer or drone_operator"
     )
+
+    @field_validator("role")
+    @classmethod
+    def _reject_administrator_role(cls, v: Optional[str]) -> Optional[str]:
+        if v is not None and v == "administrator":
+            raise ValueError("Administrator role cannot be assigned through user management")
+        return v
 
 
 class UserResponse(UserBase):
@@ -68,11 +82,15 @@ class UserResponse(UserBase):
         username: Username
         email: Email address
         role: User role
+        disabled: Account disabled status
+        disabled_reason: Reason for disabling (if any)
         created_at: Account creation timestamp
         updated_at: Last update timestamp
     """
     id: int
     role: str
+    disabled: bool
+    disabled_reason: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 

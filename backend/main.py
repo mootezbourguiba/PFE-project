@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.api.v1.api import api_router
-from backend.database import engine, Base
+from backend.database import engine
 import os
 
 # Create FastAPI application
@@ -45,9 +45,8 @@ def startup_event():
     It initializes the database by creating all tables.
     In production, use Alembic migrations instead.
     """
-    # Create database tables
-    # Note: In production, use Alembic migrations instead
-    Base.metadata.create_all(bind=engine)
+    # Tables are created/managed by Alembic migrations.
+    # Ensure 'alembic upgrade head' is run before starting the app.
 
 
 @app.get("/")

@@ -1,37 +1,45 @@
 """
 Header Component
 
-This module provides a professional header component for the application.
+Professional top header for AVIONAV pages.
 """
 
 import streamlit as st
 from datetime import datetime
-from utils.auth import current_user, current_role, get_role_display_name
+from utils.auth import current_user, current_role, get_role_display_name, get_role_icon
+from components.theme import COLORS, header_style
 
 
-def render_header(page_title: str) -> None:
+def show(title: str, subtitle: str = "") -> None:
     """
-    Render the professional header with page title and user info.
-    
-    Args:
-        page_title: Title of the current page
+    Display the page header.
     """
-    # Current time
-    current_time = datetime.now().strftime("%H:%M:%S")
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    
-    st.markdown(f"""
-    <div style='background: linear-gradient(135deg, #1E3A5F 0%, #0D1B2A 100%); 
-               padding: 20px 30px; border-radius: 10px; margin-bottom: 20px;'>
-        <div style='display: flex; justify-content: space-between; align-items: center;'>
-            <div>
-                <h1 style='color: #FFFFFF; font-size: 24px; margin: 0;'>{page_title}</h1>
-                <p style='color: #B0B0B0; font-size: 12px; margin: 5px 0;'>{current_date} • {current_time}</p>
+    st.markdown(header_style(), unsafe_allow_html=True)
+
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    user = current_user() or "Guest"
+    role = current_role() or ""
+    role_display = get_role_display_name(role) if role else ""
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        st.markdown(
+            f"""
+            <div class="avionav-header">
+                <div>
+                    <div class="avionav-header-title">{title}</div>
+                    {f'<div class="avionav-header-subtitle">{subtitle}</div>' if subtitle else ''}
+                </div>
+                <div class="avionav-header-meta">
+                    <div style="margin-bottom: 4px;">
+                        <span class="avionav-status-dot" style="background: {COLORS['success']};"></span>
+                        SYSTEM OPERATIONAL
+                    </div>
+                    <div style="color: {COLORS['primary']}; font-weight: 600;">{get_role_icon(role)} {role_display}</div>
+                    <div>{user}</div>
+                    <div style="color: {COLORS['text_muted']}; margin-top: 2px;">{current_time}</div>
+                </div>
             </div>
-            <div style='text-align: right;'>
-                <p style='color: #00D4FF; font-size: 14px; margin: 0;'>{current_user() if current_user() else 'Guest'}</p>
-                <p style='color: #808080; font-size: 11px; margin: 5px 0;'>{get_role_display_name(current_role()) if current_role() else 'Not authenticated'}</p>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+            """,
+            unsafe_allow_html=True,
+        )

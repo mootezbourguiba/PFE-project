@@ -90,6 +90,13 @@ def create_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already exists"
         )
+
+    # Defense-in-depth: prevent creation of additional administrators
+    if user.role == "administrator":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Administrator role cannot be assigned through user management"
+        )
     
     # Create user
     db_user = crud_user.create_user(
@@ -183,7 +190,14 @@ def update_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    
+
+    # Protect the primary Administrator account from modification
+    if db_user.username == "admin":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The Administrator account cannot be modified"
+        )
+
     # If updating email, check if new email already exists
     if user_update.email:
         existing_email = crud_user.get_user_by_email(db, email=user_update.email)
@@ -192,7 +206,14 @@ def update_user(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already exists"
             )
-    
+
+    # Defense-in-depth: prevent promotion to administrator
+    if user_update.role and user_update.role == "administrator":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Administrator role cannot be assigned through user management"
+        )
+
     # Update user
     updated_user = crud_user.update_user(
         db=db,
@@ -202,7 +223,7 @@ def update_user(
     )
     db.commit()
     db.refresh(updated_user)
-    
+
     return updated_user
 
 
@@ -247,14 +268,21 @@ def disable_user(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    
+
+    # Protect the primary Administrator account from being disabled
+    if db_user.username == "admin" and user_disable.disabled:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The Administrator account cannot be disabled"
+        )
+
     # Prevent administrator from disabling themselves
     if db_user.id == current_user.id and user_disable.disabled:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot disable your own account"
         )
-    
+
     # Update user with disabled status
     updated_user = crud_user.update_user(
         db=db,
