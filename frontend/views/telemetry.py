@@ -185,7 +185,8 @@ def show() -> None:
                 )
                 if res:
                     st.success(f"Stored {res.get('total', 0)} readings")
-                    st.rerun()
+                    df = _to_dataframe(res.get("items", []))
+                    st.dataframe(df.head(20), use_container_width=True)
                 else:
                     alert_card("Failed to generate telemetry", "error")
 
